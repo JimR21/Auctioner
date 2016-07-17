@@ -5,18 +5,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ted.service.LoginService;
+import com.ted.service.JpaTesting;
 
 @Controller
-public class LoginController {
+public class TestingController {
 	
 	@Autowired
-	LoginService loginService;
+	JpaTesting jpaTesting;
 	
-	@RequestMapping(value = "/login")
-	public String loginPage(Model model) {
+	@RequestMapping("/showusers")
+	public String showUsers(Model model) {
 		
-		return("login");
+		model.addAttribute("users", jpaTesting.showUsers());
+		
+		return "showusers";
 		
 	}
 
