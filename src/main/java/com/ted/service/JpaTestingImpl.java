@@ -13,7 +13,7 @@ import com.ted.repository.UserRepository;
 public class JpaTestingImpl implements JpaTesting {
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 	@Transactional
 	public List<User> showUsers() {

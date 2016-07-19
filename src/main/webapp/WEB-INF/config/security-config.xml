@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- <http pattern="/login" security="none" />
+	<http pattern="/loginFailed" security="none" /> -->
+
+	<http auto-config="true">
+		<form-login login-page="/login" 
+			username-parameter="username"
+			password-parameter="password"
+			authentication-failure-url="/loginFailed" />
+		<logout logout-success-url="/logout"/>
+		<access-denied-handler error-page="/403"/>
+		<intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+		<intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+		<intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+		<intercept-url pattern="/403" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+		<intercept-url pattern="/**" access="ROLE_USER"/>
+		
+		<!-- 
+		<intercept-url pattern="/loginFailed" access="permitAll"/>
+		<intercept-url pattern="/logout" access="permitAll"/>
+		<intercept-url pattern="/403" access="permitAll"/>
+		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+		 -->
+	</http>
+
+	<authentication-manager>
+		<authentication-provider> 
+			<password-encoder hash="bcrypt" />
+			<jdbc-user-service data-source-ref="dataSource"
+			
+		users-by-username-query="
+         SELECT email, password, CASE ENABLED WHEN 1 THEN 'true' ELSE 'false' END 'enabled' 
+         FROM users 
+         WHERE email=?;"
+ 
+       authorities-by-username-query="
+        SELECT u.email, r.role
+        FROM users u, authorities r
+        WHERE u.userid = r.userid
+        AND u.email=?;"
+ 
+        />
+		</authentication-provider>
+		<authentication-provider>
+	        <user-service>
+	            <user name="admin" password="secret" authorities="ROLE_USER, ROLE_ADMIN" />
+	        </user-service>
+   		</authentication-provider>		
+	</authentication-manager>
+
+</beans:beans>

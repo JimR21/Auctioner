@@ -7,5 +7,6 @@ import com.ted.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+	
 
 }

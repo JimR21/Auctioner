@@ -7,8 +7,10 @@
 	<persistence-unit name="Auctioner">
 		<class>com.ted.model.AuctionBidding</class>
 		<class>com.ted.model.AuctionBiddingPK</class>
-		<class>com.ted.model.User</class>
 		<class>com.ted.model.Auction</class>
+		<class>com.ted.model.Authority</class>
+		<class>com.ted.model.AuthorityPK</class>
+		<class>com.ted.model.User</class>
 	</persistence-unit>
 	
 </persistence>

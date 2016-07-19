@@ -29,6 +29,9 @@ public class User implements Serializable {
 	@Column(nullable=false, length=255)
 	private String email;
 
+	@Column(nullable=false)
+	private byte enabled;
+
 	@Column(nullable=false, length=45)
 	private String name;
 
@@ -54,6 +57,10 @@ public class User implements Serializable {
 	//bi-directional many-to-one association to Auction
 	@OneToMany(mappedBy="user")
 	private List<Auction> auctions;
+
+	//bi-directional many-to-one association to Authority
+	@OneToMany(mappedBy="user")
+	private List<Authority> authorities;
 
 	public User() {
 	}
@@ -88,6 +95,14 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public byte getEnabled() {
+		return this.enabled;
+	}
+
+	public void setEnabled(byte enabled) {
+		this.enabled = enabled;
 	}
 
 	public String getName() {
@@ -180,6 +195,28 @@ public class User implements Serializable {
 		auction.setUser(null);
 
 		return auction;
+	}
+
+	public List<Authority> getAuthorities() {
+		return this.authorities;
+	}
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
+	public Authority addAuthority(Authority authority) {
+		getAuthorities().add(authority);
+		authority.setUser(this);
+
+		return authority;
+	}
+
+	public Authority removeAuthority(Authority authority) {
+		getAuthorities().remove(authority);
+		authority.setUser(null);
+
+		return authority;
 	}
 
 }

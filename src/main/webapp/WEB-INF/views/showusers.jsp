@@ -16,22 +16,14 @@
 <body>
 
 <table>
-
+	<tr>
+		<th>Name</th><th>LastName</th>
+	</tr>
+	<c:forEach items="${users}" var="user">
 		<tr>
-			<th>Name</th><th>LastName</th>
+			<td>${user.name}</td><td>${user.surname}</td>
 		</tr>
-	
-		<c:forEach items="${users}" var="user">
-		
-			<tr>
-				
-				<td>${user.name}</td><td>${user.surname}</td>
-				
-			</tr>
-		
-		</c:forEach>
-	
+	</c:forEach>
 	</table>
-
 </body>
 </html>

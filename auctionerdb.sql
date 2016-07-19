@@ -53,6 +53,22 @@ CREATE TABLE `auctions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `authorities`
+--
+
+DROP TABLE IF EXISTS `authorities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `authorities` (
+  `userid` int(11) NOT NULL,
+  `role` varchar(45) NOT NULL,
+  PRIMARY KEY (`userid`,`role`),
+  KEY `user_id_idx` (`userid`),
+  CONSTRAINT `userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `users`
 --
 
@@ -63,13 +79,14 @@ CREATE TABLE `users` (
   `userid` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `password` varchar(60) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` varchar(45) NOT NULL,
   `state` varchar(45) NOT NULL,
   `city` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
   `postal_code` varchar(45) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`userid`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -84,4 +101,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-17 19:19:14
+-- Dump completed on 2016-07-19 16:59:25

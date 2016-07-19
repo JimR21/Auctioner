@@ -11,7 +11,7 @@ import com.ted.service.JpaTesting;
 public class TestingController {
 	
 	@Autowired
-	JpaTesting jpaTesting;
+	private JpaTesting jpaTesting;
 	
 	@RequestMapping("/showusers")
 	public String showUsers(Model model) {
