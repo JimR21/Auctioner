@@ -46,7 +46,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index">Auctioner</a>
+                <a class="navbar-brand" href="home">Auctioner</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -90,31 +90,6 @@
         <!-- /.container -->
     </nav>
 
-    <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h1>Welcome <sec:authentication property="name" /></h1>
-                <p class="lead">Buy and Sell Anything!</p>
-            </div>
-        </div>
-        <!-- /.row -->
-
-    </div>
-
-    <footer class="footer" >
-        <div class="container text-center">
-            <p class="text-muted"> Copyright</p>
-        </div>
-    </footer>
-
-
-
-    <!-- /.container -->
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 </body>
 
