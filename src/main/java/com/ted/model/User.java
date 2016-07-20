@@ -2,6 +2,10 @@ package com.ted.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.List;
 
 
@@ -21,33 +25,42 @@ public class User implements Serializable {
 	private int userid;
 
 	@Column(nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.address}")
 	private String address;
 
 	@Column(nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.city}")
 	private String city;
 
 	@Column(nullable=false, length=255)
+	@NotEmpty(message = "{NotEmpty.user.email}")
 	private String email;
 
 	@Column(nullable=false)
 	private byte enabled;
 
 	@Column(nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.name}")
 	private String name;
 
 	@Column(nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.password}")
 	private String password;
 
 	@Column(nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.phone}")
 	private String phone;
 
 	@Column(name="postal_code", nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.postalCode}")
 	private String postalCode;
 
 	@Column(nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.state}")
 	private String state;
 
 	@Column(nullable=false, length=45)
+	@NotEmpty(message = "{NotEmpty.user.surname}")
 	private String surname;
 
 	//bi-directional many-to-one association to AuctionBidding

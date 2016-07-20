@@ -118,6 +118,11 @@
 		<artifactId>spring-security-taglibs</artifactId>
 		<version>${spring-security.version}</version>
 	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-validator</artifactId>
+		<version>${hibernate.version}</version>
+	</dependency>
 	
 	
 	
@@ -136,11 +141,6 @@
 		<scope>test</scope>
 	</dependency>
 	
-	<dependency>
-		<groupId>org.hibernate</groupId>
-		<artifactId>hibernate-validator</artifactId>
-		<version>${hibernate.version}</version>
-	</dependency>
 	
 	<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 	<dependency>

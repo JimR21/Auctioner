@@ -1,10 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
@@ -21,8 +18,7 @@
     <title>Auctioner - Admin Panel</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet">
-    <link href=<c:url value="/resources/css/style.css" /> rel="stylesheet">
+    <link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet"  type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

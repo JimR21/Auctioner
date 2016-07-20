@@ -1,9 +1,15 @@
 package com.ted.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.ted.model.User;
 
 @Controller
 public class LoginController {
@@ -26,6 +32,30 @@ public class LoginController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(Model model) {
 		return "logout";
+	}
+	
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	public String registrationGet(Model model) {
+		
+		User user = new User();
+		
+		model.addAttribute("user", user);
+		
+		return "registration";
+	}
+	
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public String registrationPost(@Valid @ModelAttribute("user") User user, BindingResult result) {
+		
+		System.out.println("result has errors: " + result.hasErrors());
+		
+		System.out.println("User to register: " + user.toString());
+		
+		if(result.hasErrors()) {
+			return "registration";
+		}
+		
+		return "registration";
 	}
 	
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
