@@ -10,7 +10,7 @@ Ted Project 2016
 
 #Turorials
 
-Λογαριασμό στο PluralSight μέσω DreamSpark - https://www.dreamspark.com/Product/Product.aspx?productid=21
+Ξ›ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΟΟ‚ PluralSight ΞΌΞ­ΟƒΟ‰ DreamSpark - https://www.dreamspark.com/Product/Product.aspx?productid=21
 
 1. Github and Spring STS - https://www.youtube.com/watch?v=ptK9-CNms98
 2. Introduction to Spring MVC - https://app.pluralsight.com/library/courses/springmvc-intro/table-of-contents
