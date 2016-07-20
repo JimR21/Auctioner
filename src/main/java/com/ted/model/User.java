@@ -38,6 +38,9 @@ public class User implements Serializable {
 
 	@Column(nullable=false)
 	private byte enabled;
+	
+	@Column(nullable=false)
+	private byte approved;
 
 	@Column(nullable=false, length=45)
 	@NotEmpty(message = "{NotEmpty.user.name}")
@@ -93,6 +96,15 @@ public class User implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	public byte getApproved() {
+		return approved;
+	}
+
+	public void setApproved(byte approved) {
+		this.approved = approved;
+	}
+
 
 	public String getCity() {
 		return this.city;

@@ -13,11 +13,13 @@
 
 	<div class="container"  style="max-width:400px" >
 		<c:if test="${not empty error}">
-			<div class="alert alert-danger">${error}</div>
+			<div class="alert alert-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</div>
 		</c:if>
 		<c:if test="${not empty msg}">
 			<div class="alert alert-info">${msg}</div>
 		</c:if>
+		<br/>
+		<br/>
 		<form name="loginForm" role="form" action="<c:url value='j_spring_security_check' />" method="POST">
 			 <div class="form-group">
 				 <label for="email">Email address:</label>

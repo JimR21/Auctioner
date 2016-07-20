@@ -2,6 +2,7 @@ package com.ted.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,9 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ted.model.User;
+import com.ted.service.LoginService;
 
 @Controller
 public class LoginController {
+	
+	@Autowired
+	LoginService loginService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login (Model model) {
@@ -25,7 +30,7 @@ public class LoginController {
 		
 		System.out.println("Login failed");
 		
-		model.addAttribute("error","Login failed. Please provide correct credentials");
+		model.addAttribute("error","Login failed. Please provide correct credentials." );
 		return "login";
 	}
 	
@@ -45,17 +50,25 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
-	public String registrationPost(@Valid @ModelAttribute("user") User user, BindingResult result) {
+	public String registrationPost(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 		
 		System.out.println("result has errors: " + result.hasErrors());
 		
-		System.out.println("User to register: " + user.toString());
+		System.out.println("User password: " + user.getPassword());
 		
 		if(result.hasErrors()) {
 			return "registration";
 		}
 		
-		return "registration";
+		if(loginService.checkEmail(user))	// Check if email already exists
+		{
+			model.addAttribute("msg", "Email already exists.");
+			return "registration";
+		}
+		
+		loginService.save(user);
+		
+		return "redirect:login";
 	}
 	
 	@RequestMapping(value = "/403", method = RequestMethod.GET)

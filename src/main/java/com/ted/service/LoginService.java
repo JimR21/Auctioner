@@ -6,4 +6,6 @@ public interface LoginService {
 	
 	User save(User user);
 
+	boolean checkEmail(User user);
+
 }
