@@ -25,7 +25,8 @@
 		<intercept-url pattern="/registration" access="permitAll"/>
 		<intercept-url pattern="/403" access="permitAll"/>
 		<intercept-url pattern="/resources/**" access="permitAll"/>
-		<intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+		<intercept-url pattern="/**" access="permitAll"/>
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
 		
 		<!-- 
 		<intercept-url pattern="/loginFailed" access="permitAll"/>

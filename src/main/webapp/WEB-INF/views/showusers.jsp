@@ -31,7 +31,7 @@
 
 <body>
 
-	<%@ include file="/resources/template/menu.jsp" %>
+	<%@ include file="/resources/template/menu-top.jsp" %>
 
 	<table>
 		<tr>

@@ -24,8 +24,10 @@
 
 </head>
 <body onload='document.loginForm.username.focus();'>
+	
+	 <%@ include file="/resources/template/menu-top-visitor.jsp" %>
 
-	<div class="container"  style="max-width:400px" >
+	<div class="container well login-form">
 		<c:if test="${not empty error}">
 			<div class="alert alert-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</div>
 		</c:if>
@@ -47,7 +49,7 @@
  			      <label><input type="checkbox"> Remember me</label>
 			 </div>
 	  		 <button name="submit" type="submit"
-					value="submit" class="btn btn-default">Submit</button>
+					value="submit" class="btn btn-success">Login</button>
 		</form>
 		<p>Not a member? Sign up <a href="registration">here</a><p>
 	</div>
