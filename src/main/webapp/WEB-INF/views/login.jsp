@@ -25,20 +25,22 @@
 </head>
 <body onload='document.loginForm.username.focus();'>
 	
-	 <%@ include file="/resources/template/menu-top-visitor.jsp" %>
-
-	<div class="container well login-form">
+ 	<%@ include file="/resources/template/menu-top-visitor.jsp" %>
+	
+	<div class="col-md-4 col-md-offset-4">
 		<c:if test="${not empty error}">
-			<div class="alert alert-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</div>
+		<div class="alert alert-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</div>
 		</c:if>
 		<c:if test="${not empty msg}">
 			<div class="alert alert-info">${msg}</div>
 		</c:if>
-		<br/>
-		<br/>
+	</div>
+	<br/>
+	<br/>
+	<div class="col-md-4 col-md-offset-4 well">
 		<form name="loginForm" role="form" action="<c:url value='j_spring_security_check' />" method="POST">
 			 <div class="form-group">
-				 <label for="email">Email address:</label>
+				 <label for="email">Username:</label>
 				 <input type="text" name='username' class="form-control" id="username">
 			 </div>
 			 <div class="form-group">
@@ -53,6 +55,9 @@
 		</form>
 		<p>Not a member? Sign up <a href="registration">here</a><p>
 	</div>
+	
+	<!-- Footer -->
+	<%@ include file="/resources/template/footer.jsp" %>
 	
 	<script src=<c:url value="/resources/js/jquery.min.js" />></script>
    	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>

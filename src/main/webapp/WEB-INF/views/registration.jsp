@@ -40,27 +40,32 @@
 			</c:if>
 		</div>
 		<form:form name="regForm" role="form" modelAttribute="user" method="POST">
-			<div class="row">
+			<div class="col-md-8 col-md-offset-2">
 				<div class="col-md-6">
 					<div class="form-group">
 						 <label for="firstname">First Name:</label>
-						 <form:input type="text" name='firstname' path="name" class="form-control" id="firstname" />
-						 <form:errors path="name" style="color:red" />
+						 <form:input type="text" name='firstname' path="firstName" class="form-control" id="firstname" />
+						 <form:errors path="firstName" style="color:red" />
 					 </div>
 					 <div class="form-group">
 						 <label for="lastname">Last Name:</label>
-						 <form:input type="text" name='lastname' path="surname" class="form-control" id="lastname" />
-						 <form:errors path="surname" style="color:red" />
+						 <form:input type="text" name='lastname' path="lastName" class="form-control" id="lastname" />
+						 <form:errors path="lastName" style="color:red" />
 					 </div>
 					 <div class="form-group">
-						 <label for="email">Email address:</label>
-						 <form:input type="text" name='email' path="email" class="form-control" id="email" />
-						 <form:errors path="email" style="color:red" />
+						 <label for="username">Username:</label>
+						 <form:input type="text" name='username' path="username" class="form-control" id="username" />
+						 <form:errors path="username" style="color:red" />
 					 </div>
 					 <div class="form-group">
 						  <label for="pwd">Password:</label>
 						  <form:input type="password" name='password' path="password" class="form-control" id="pwd" />
 						  <form:errors path="password" style="color:red" />
+					 </div>
+					  <div class="form-group">
+						 <label for="email">Email address:</label>
+						 <form:input type="text" name='email' path="email" class="form-control" id="email" />
+						 <form:errors path="email" style="color:red" />
 					 </div>
 					 <div class="form-group">
 						 <label for="phone">Phone:</label>
@@ -89,6 +94,11 @@
 						 <form:input type="text" name='postalCode' path="postalCode" class="form-control" id="postalCode" />
 						 <form:errors path="postalCode" style="color:red" />
 					 </div>
+					  <div class="form-group">
+						 <label for="afm">AFM:</label>
+						 <form:input type="text" name='afm' path="afm" class="form-control" id="afm" />
+						 <form:errors path="afm" style="color:red" />
+					 </div>
 					 <br>
 			 		 <button name="submit" type="submit"
 						     value="submit" class="btn btn-success">Submit</button>
@@ -96,6 +106,9 @@
 			</div>
 		</form:form>
 	</div>
+	
+	<!-- Footer -->
+	<%@ include file="/resources/template/footer.jsp" %>
 	
 	<script src=<c:url value="/resources/js/jquery.min.js" />></script>
    	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>

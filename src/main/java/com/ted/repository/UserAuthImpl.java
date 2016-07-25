@@ -1,12 +1,6 @@
 package com.ted.repository;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
-
-import com.ted.model.User;
 
 @Repository
 public class UserAuthImpl implements UserAuth {

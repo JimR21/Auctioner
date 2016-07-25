@@ -25,8 +25,10 @@ public class UserPersistenceTests {
 	@Transactional
 	public void testSaveAndGetAndDelete() throws Exception {
 		User user = new User();
-		user.setName("Dimitris");
-		user.setSurname("Kavva");
+		user.setUsername("Jimmy");
+		user.setAfm("123456987");
+		user.setFirstName("Dimitris");
+		user.setLastName("Kavva");
 		user.setAddress("Reas 8");
 		user.setCity("Athens");
 		user.setState("Attiki");
@@ -34,11 +36,13 @@ public class UserPersistenceTests {
 		user.setPassword("secret");
 		user.setPhone("6980796209");
 		user.setEmail("mitsos-r21@hotmai.gr");
+		user.setEnabled((byte)1);
+		user.setApproved((byte)0);
 		
 		userRepository.saveAndFlush(user);
 		
 		List<User> list = userRepository.findAll();
-		assertEquals("Dimitris", list.get(0).getName());
+		assertEquals("Dimitris", list.get(0).getFirstName());
 	}
 
 }

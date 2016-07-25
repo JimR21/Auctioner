@@ -4,7 +4,9 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns="http://www.springframework.org/schema/security"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
@@ -25,8 +27,9 @@
 		<intercept-url pattern="/registration" access="permitAll"/>
 		<intercept-url pattern="/403" access="permitAll"/>
 		<intercept-url pattern="/resources/**" access="permitAll"/>
-		<intercept-url pattern="/**" access="permitAll"/>
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/myprofile/**" access="hasRole('ROLE_USER')"/>
+		<intercept-url pattern="/**" access="permitAll"/>
 		
 		<!-- 
 		<intercept-url pattern="/loginFailed" access="permitAll"/>
@@ -42,15 +45,15 @@
 			<jdbc-user-service data-source-ref="dataSource"
 			
 		users-by-username-query="
-         SELECT email, password, CASE ENABLED WHEN 1 THEN 'true' ELSE 'false' END 'enabled' 
+         SELECT username, password, CASE ENABLED WHEN 1 THEN 'true' ELSE 'false' END 'enabled' 
          FROM users 
-         WHERE email=?;"
+         WHERE username=?;"
  
        authorities-by-username-query="
-        SELECT u.email, r.role
+        SELECT u.username, r.role
         FROM users u, authorities r
         WHERE u.userid = r.userid
-        AND u.email=?;"
+        AND u.username=?;"
  
         />
 		</authentication-provider>
@@ -60,5 +63,11 @@
 	        </user-service>
    		</authentication-provider>		
 	</authentication-manager>
+	
+	<mvc:annotation-driven>
+    <mvc:argument-resolvers>
+        <beans:bean class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver"/>
+    </mvc:argument-resolvers>
+</mvc:annotation-driven>
 
 </beans:beans>

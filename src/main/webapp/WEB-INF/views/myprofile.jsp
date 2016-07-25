@@ -43,14 +43,13 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#">Admin Control</a>
+	      <a class="navbar-brand" href="#"><sec:authentication property="name" /></a>
 	    </div>
 	    <div class="collapse navbar-collapse" id="myNavbar">
 	      <ul class="nav navbar-nav">
-	        <li class="active"><a data-toggle="pill" href="#section1">Dashboard</a></li>
+	        <li class="active"><a data-toggle="pill" href="#section1">Overview</a></li>
 	        <li><a data-toggle="pill" href="#section2">Messages</a></li>
-	        <li><a data-toggle="pill" href="#section3">Users</a></li>
-	        <li><a data-toggle="pill" href="#section4">Auctions</a></li>
+	        <li><a data-toggle="pill" href="#section3">Other Settings</a></li>
 	      </ul>
 	    </div>
 	  </div>
@@ -59,12 +58,11 @@
 	<div class="container">
 	  <div class="row content">
 	    <div class="col-sm-3 sidenav hidden-xs" id="myFullNavbar">
-	      <h2>Admin Control</h2>
+	      <h2><sec:authentication property="name" /></h2>
 	      <ul class="nav nav-pills nav-stacked">
-	        <li class="active"><a data-toggle="pill" href="#section1">Dashboard</a></li>
+	        <li class="active"><a data-toggle="pill" href="#section1">Overview</a></li>
 	        <li><a data-toggle="pill" href="#section2">Messages</a></li>
-	        <li><a data-toggle="pill" href="#section3">Users</a></li>
-	        <li><a data-toggle="pill" href="#section4">Auctions</a></li>
+	        <li><a data-toggle="pill" href="#section3">Other Settings</a></li>
 	      </ul><br>
 	    </div>
 	    <br>
@@ -152,45 +150,7 @@
 		    <div class="tab-pane fade" id="section3">
 			    <div class="col-sm-9">
 			      <div class="well">
-			      	<h4>All Users</h4>
-			        <table class="table table-hover table-condensed">
-			        	<thead>
-							<tr>
-								<th>Username</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>   </th><th>   </th>
-							</tr>
-						<thead>
-						<tbody>
-						<c:forEach items="${users}" var="user">
-						<tr">
-							<td>${user.username}</td><td>${user.firstName}</td><td>${user.lastName}</td><td>${user.email}</td>
-							<td><a class="btn btn-primary btn-sm" href="profile">More</a></td>
-							<td><button class="btn btn-success btn-sm" >Approve</a>
-						</tr>
-						</c:forEach>
-						</tbody>
-					</table>
-			      </div>
-				    <div class="row">
-				    	<div class="col-sm-6">
-				    		<div class="well">
-				    			<h4>New Users</h4>
-				    			<p>Some text...</p>
-				    		</div>
-				    	</div>
-				    	<div class="col-sm-6">
-				    		<div class="well">
-				    			<h4>Highest Rating Users</h4>
-				    			<p>Some text...</p>
-				    		</div>
-				    	</div>
-				    </div>
-			    </div>
-		    </div>
-		    
-		    <div class="tab-pane fade" id="section4">
-			    <div class="col-sm-9">
-			      <div class="well">
-			        <h4>Auctions</h4>
+			        <h4>Settings</h4>
 			        <p>Some text..</p>
 			      </div>
 			    </div>

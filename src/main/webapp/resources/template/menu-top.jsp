@@ -20,20 +20,21 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <sec:authorize ifAnyGranted="ROLE_ADMIN">
-	             	<li>
-	             		<a href="admin" style="color:orange">Admin Console</a>
-	             	</li>
+	             	<li><a href="admin" style="color:orange">Admin Console</a></li>
+	             	<li><a href="j_spring_security_logout">Logout</a></li>
             	</sec:authorize>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href=
-                    "#" id="account">My Acount <span class=
-                    "caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="account">Account Settings</a></li>
-                        <li><a href="myauctions">My Auctions</a></li>
-                        <li><a href="j_spring_security_logout">Logout</a></li>
-                    </ul>
-                </li>
+            	<sec:authorize ifNotGranted="ROLE_ADMIN">
+	                <li class="dropdown">
+	                    <a class="dropdown-toggle" data-toggle="dropdown" href=
+	                    "#" id="account">My Account (<sec:authentication property="name" />) <span class=
+	                    "caret"></span></a>
+	                    <ul class="dropdown-menu">
+	                        <li><a href="myprofile">Account Settings</a></li>
+	                        <li><a href="myauctions">My Auctions</a></li>
+	                        <li><a href="j_spring_security_logout">Logout</a></li>
+	                    </ul>
+	                </li>
+	           	</sec:authorize>
             </ul>
         </div>
     </div>
