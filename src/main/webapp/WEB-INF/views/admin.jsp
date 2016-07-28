@@ -152,28 +152,39 @@
 		    
 		    <div class="tab-pane fade" id="section3">
 			    <div class="col-sm-9">
-			      <div class="panel panel-primary">
-			      	<div class="panel-heading">
-			      		<h4 class="panel-title">All Users</h4>
-			      	</div>
-			      	<div class="panel-body">
-				        <table class="table table-striped table-hover table-condensed">
-				        	<thead>
-								<tr>
-									<th>Username</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Approved</th>
-								</tr>
-							<thead>
-							<tbody>
-							<c:forEach items="${users}" var="user">
-							<tr>
-								<td><c:out value="${user.username}"></c:out></td><td><c:out value="${user.firstName}"></c:out></td><td><c:out value="${user.lastName}"></c:out></td><td><c:out value="${user.email}"></c:out></td>
-								<td><input type="checkbox" id="approved" name="approved" value="approved"/></td>
-							</tr>
-							</c:forEach>
-							</tbody>
-						</table>
-					</div>
-			      </div>
+			    	<form id="authorize-form" method="GET">
+				      <div class="panel panel-primary">
+				      	<div class="panel-heading">
+				      		<h4 class="panel-title">All Users</h4>
+				      	</div>
+				      	<div class="panel-body">
+						        <table class="table table-striped table-hover table-condensed">
+						        	<thead>
+										<tr>
+											<th>Username</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Approved</th>
+										</tr>
+									<thead>
+									<tbody>
+									<c:forEach items="${users}" var="user">
+									<tr>
+										<td><c:out value="${user.username}"></c:out></td><td><c:out value="${user.firstName}"></c:out></td><td><c:out value="${user.lastName}"></c:out></td><td><c:out value="${user.email}"></c:out></td>
+										<td>
+											<input type="checkbox" id="approved" name="approved" value="${user.userid }" 
+												<c:if test="${user.approved==1}"> 
+													checked disabled="disabled"
+												</c:if>
+											/>
+										</td>
+									</tr>
+									</c:forEach>
+									</tbody>
+								</table>
+						</div>
+						<div class="panel-footer">
+							<input class="btn btn-success col-md-offset-10" type="submit" value="Approve"></input>
+						</div>
+				      </div>
+				    </form>
 				    <div class="row">
 				    	<div class="col-sm-6">
 				    		<div class="well">
@@ -210,20 +221,32 @@
     <!-- /.container -->
     
     <script src=<c:url value="/resources/js/jquery.min.js" />></script>
+    <script src=<c:url value="/resources/js/jquery.form.min.js" />></script>
    	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
    	
    	<script type="text/javascript">
+   	
+   		var namesToApprove = [];
    		
 	   	$(':checkbox').change(function() {
 			if(this.checked) {
 				$(this).closest('tr').addClass('success');
 			    var Name = $(this).closest('tr').find('td:eq(0)').text();
+			    namesToApprove.push(Name);
 			    $.ajax({
 				    data: {name: Name},
 				    type: 'POST',
 				    url: '/Auctioner/approveUser'
 				});
 			}
+	   	});
+	   	
+	   	$('#authorize-form').ajaxForm({
+	   		url: '/Auctioner/approveUsers',
+	   		type: 'POST',
+	   		data: {
+		    	names: namesToApprove
+		    }
 	   	});
    	
    	</script>
