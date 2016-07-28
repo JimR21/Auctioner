@@ -28,6 +28,7 @@
     <![endif]-->
     
     <title>Auctioner</title>
+    
 
 </head>
 
@@ -151,24 +152,27 @@
 		    
 		    <div class="tab-pane fade" id="section3">
 			    <div class="col-sm-9">
-			      <div class="well">
-			      	<h4>All Users</h4>
-			        <table class="table table-hover table-condensed">
-			        	<thead>
+			      <div class="panel panel-primary">
+			      	<div class="panel-heading">
+			      		<h4 class="panel-title">All Users</h4>
+			      	</div>
+			      	<div class="panel-body">
+				        <table class="table table-striped table-hover table-condensed">
+				        	<thead>
+								<tr>
+									<th>Username</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Approved</th>
+								</tr>
+							<thead>
+							<tbody>
+							<c:forEach items="${users}" var="user">
 							<tr>
-								<th>Username</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>   </th><th>   </th>
+								<td><c:out value="${user.username}"></c:out></td><td><c:out value="${user.firstName}"></c:out></td><td><c:out value="${user.lastName}"></c:out></td><td><c:out value="${user.email}"></c:out></td>
+								<td><input type="checkbox" id="approved" name="approved" value="approved"/></td>
 							</tr>
-						<thead>
-						<tbody>
-						<c:forEach items="${users}" var="user">
-						<tr">
-							<td>${user.username}</td><td>${user.firstName}</td><td>${user.lastName}</td><td>${user.email}</td>
-							<td><a class="btn btn-primary btn-sm" href="profile">More</a></td>
-							<td><button class="btn btn-success btn-sm" >Approve</a>
-						</tr>
-						</c:forEach>
-						</tbody>
-					</table>
+							</c:forEach>
+							</tbody>
+						</table>
+					</div>
 			      </div>
 				    <div class="row">
 				    	<div class="col-sm-6">
@@ -207,6 +211,22 @@
     
     <script src=<c:url value="/resources/js/jquery.min.js" />></script>
    	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
+   	
+   	<script type="text/javascript">
+   		
+	   	$(':checkbox').change(function() {
+			if(this.checked) {
+				$(this).closest('tr').addClass('success');
+			    var Name = $(this).closest('tr').find('td:eq(0)').text();
+			    $.ajax({
+				    data: {name: Name},
+				    type: 'POST',
+				    url: '/Auctioner/approveUser'
+				});
+			}
+	   	});
+   	
+   	</script>
 
 </body>
 

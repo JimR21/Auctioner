@@ -25,6 +25,15 @@
 
 	<title>Registration</title>
 	
+	<style>
+	
+	.error{
+		color:red;
+		font-size: 0.8em;
+	}
+	
+	</style>
+	
 </head>
 <body>
 
@@ -39,17 +48,17 @@
 				<div class="alert alert-info">${msg}</div>
 			</c:if>
 		</div>
-		<form:form name="regForm" role="form" modelAttribute="user" method="POST">
+		<form:form id="form" name="regForm" role="form" modelAttribute="user" method="POST">
 			<div class="col-md-8 col-md-offset-2">
 				<div class="col-md-6">
 					<div class="form-group">
-						 <label for="firstname">First Name:</label>
-						 <form:input type="text" name='firstname' path="firstName" class="form-control" id="firstname" />
-						 <form:errors path="firstName" style="color:red" />
+						 <label for="firstName">First Name:</label>
+						 <form:input type="text" name='firstName' path="firstName" class="form-control" />
+						 <form:errors path="firstName" cssClass="error" />
 					 </div>
 					 <div class="form-group">
-						 <label for="lastname">Last Name:</label>
-						 <form:input type="text" name='lastname' path="lastName" class="form-control" id="lastname" />
+						 <label for="lastName">Last Name:</label>
+						 <form:input type="text" name='lastName' path="lastName" class="form-control" id="lastName" />
 						 <form:errors path="lastName" style="color:red" />
 					 </div>
 					 <div class="form-group">
@@ -111,7 +120,54 @@
 	<%@ include file="/resources/template/footer.jsp" %>
 	
 	<script src=<c:url value="/resources/js/jquery.min.js" />></script>
+	<script src=<c:url value="/resources/js/jquery.validate.min.js" />></script>
    	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
+   	
+   	<script>
+   	
+ 	$('#form').validate({
+				
+		rules: {
+			firstName: {
+				required: true
+			},
+			lastName: {
+				required:true
+			},
+			username: {
+				required:true
+			},
+			email: {
+				required:true
+			},
+			password: {
+				required:true
+			},
+			phone: {
+				required:true
+			},
+			state: {
+				required:true
+			},
+			city: {
+				required:true
+			},
+			address: {
+				required:true
+			},
+			postalCode: {
+				required:true
+			},
+			afm: {
+				required:true
+			}
+		},
+		highlight: function(element, errorClass) {
+			$(element).closest('.form-group').addClass('has-error');
+		}
+	});
+   	
+   	</script>
 
 </body>
 </html>
