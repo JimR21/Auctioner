@@ -60,9 +60,10 @@ public class LoginController {
 			return "registration";
 		}
 		
-		if(loginService.checkEmail(user))	// Check if email already exists
+		String msg = loginService.checkEmailUsernameAfm(user);
+		if(msg != null)	// Check if email already exists
 		{
-			model.addAttribute("msg", "Email already exists.");
+			model.addAttribute("msg", msg);
 			return "registration";
 		}
 		

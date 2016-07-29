@@ -28,7 +28,9 @@
 		<intercept-url pattern="/403" access="permitAll"/>
 		<intercept-url pattern="/resources/**" access="permitAll"/>
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/myprofile/**" access="hasRole('ROLE_USER')"/>
+		<intercept-url pattern="/myprofile/**" access="hasRole('ROLE_BIDDER')"/>
+		<intercept-url pattern="/upgrade" access="hasRole('ROLE_BIDDER')"/>
+		<intercept-url pattern="/myauctions/**" access="hasRole('ROLE_SELLER')"/>
 		<intercept-url pattern="/**" access="permitAll"/>
 		
 		<!-- 

@@ -39,7 +39,7 @@ public class LoginServiceImpl implements LoginService {
 		
 		AuthorityPK authorityPK = new AuthorityPK();
 		authorityPK.setUserid(user.getUserid());
-		authorityPK.setRole("ROLE_USER");
+		authorityPK.setRole("ROLE_BIDDER");
 		
 		Authority authority = new Authority();
 		authority.setId(authorityPK);
@@ -51,12 +51,16 @@ public class LoginServiceImpl implements LoginService {
 		return user;
 	}
 
-	public boolean checkEmail(User user) {
+	public String checkEmailUsernameAfm(User user) {
 		
-		if(!userRepository.findByEmail(user.getEmail()).isEmpty())
-			return true;
+		if(userRepository.findByEmail(user.getEmail()) == null )
+			return "Email already in use";
+		if(userRepository.findByUsername(user.getUsername()) == null )
+			return "Username already in use";
+		if(userRepository.findByAfm(user.getAfm()) == null )
+			return "AFM already in use";
 		
-		return false;
+		return null;
 	}
 
 }

@@ -20,5 +20,11 @@ public class UserController {
 		return "myprofile";
 		
 	}
+	
+	@RequestMapping(value = "/upgrade", method = RequestMethod.GET)
+	public String getUpgrade(Model model) {
+		
+		return "upgrade";
+	}
 
 }

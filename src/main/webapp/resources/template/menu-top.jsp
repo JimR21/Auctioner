@@ -23,6 +23,9 @@
 	             	<li><a href="admin" style="color:orange">Admin Console</a></li>
 	             	<li><a href="j_spring_security_logout">Logout</a></li>
             	</sec:authorize>
+            	 <sec:authorize ifAnyGranted="ROLE_BIDDER">
+	             	<li><a href="upgrade" style="color:orange">Become An Auctioner</a></li>
+            	</sec:authorize>
             	<sec:authorize ifNotGranted="ROLE_ADMIN">
 	                <li class="dropdown">
 	                    <a class="dropdown-toggle" data-toggle="dropdown" href=
@@ -30,7 +33,10 @@
 	                    "caret"></span></a>
 	                    <ul class="dropdown-menu">
 	                        <li><a href="myprofile">Account Settings</a></li>
-	                        <li><a href="myauctions">My Auctions</a></li>
+	                        <sec:authorize ifAnyGranted="ROLE_SELLER">
+	                        	<li><a href="myauctions">My Auctions</a></li>
+	                        </sec:authorize>
+	                        <li class="divider"></li>
 	                        <li><a href="j_spring_security_logout">Logout</a></li>
 	                    </ul>
 	                </li>
