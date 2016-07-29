@@ -9,5 +9,7 @@ public interface UserService {
 	User getLoggedInUser();
 	
 	List<User> getAllUsers();
+	
+	void approveUsers(List<String> approved);
 
 }

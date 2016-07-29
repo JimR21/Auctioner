@@ -28,7 +28,6 @@
     <![endif]-->
     
     <title>Auctioner</title>
-    
 
 </head>
 
@@ -181,7 +180,7 @@
 								</table>
 						</div>
 						<div class="panel-footer">
-							<input class="btn btn-success col-md-offset-10" type="submit" value="Approve"></input>
+							<input class="btn btn-success col-md-offset-10" type="submit" value="Approve" id="appr-btn" disabled="disabled"></input>
 						</div>
 				      </div>
 				    </form>
@@ -223,34 +222,8 @@
     <script src=<c:url value="/resources/js/jquery.min.js" />></script>
     <script src=<c:url value="/resources/js/jquery.form.min.js" />></script>
    	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
+   	<script src=<c:url value="/resources/js/approve.js" />></script>
    	
-   	<script type="text/javascript">
-   	
-   		var namesToApprove = [];
-   		
-	   	$(':checkbox').change(function() {
-			if(this.checked) {
-				$(this).closest('tr').addClass('success');
-			    var Name = $(this).closest('tr').find('td:eq(0)').text();
-			    namesToApprove.push(Name);
-			    $.ajax({
-				    data: {name: Name},
-				    type: 'POST',
-				    url: '/Auctioner/approveUser'
-				});
-			}
-	   	});
-	   	
-	   	$('#authorize-form').ajaxForm({
-	   		url: '/Auctioner/approveUsers',
-	   		type: 'POST',
-	   		data: {
-		    	names: namesToApprove
-		    }
-	   	});
-   	
-   	</script>
-
 </body>
 
 </html>

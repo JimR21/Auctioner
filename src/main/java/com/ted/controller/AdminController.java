@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ted.service.UserService;
 
@@ -29,24 +30,17 @@ public class AdminController {
 		return "admin";
 	}
 	
-	@RequestMapping(value = "/approveUser", method = RequestMethod.POST)
-	public String approve(@ModelAttribute("name") String name) {
-		
-		System.out.println("User: " + name + " is approved!");
-		
-		return "Success!";
-		
-	}
-	
 	@RequestMapping(value = "/approveUsers", method = RequestMethod.POST)
-	public String approve(@RequestParam(value="names[]") List<String> approved) {
+	public @ResponseBody String approve(@RequestParam(value="names[]") List<String> approved) {
 		
 		System.out.println("approved size: " + approved.size());
 		
 		for(String id : approved)
 			System.out.println("User id: " + id + " is approved!");
 		
-		return "Success!";
+		userService.approveUsers(approved);
+		
+		return "200 OK";
 		
 	}
 }

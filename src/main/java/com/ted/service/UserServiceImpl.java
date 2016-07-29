@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ted.model.User;
 import com.ted.repository.UserRepository;
@@ -32,6 +33,18 @@ public class UserServiceImpl implements UserService {
 		
 		return userRepository.findAll();
 		
+	}
+
+	@Transactional
+	public void approveUsers(List<String> approved) {
+		
+		User user;
+		
+		for(String username : approved) {
+			user = userRepository.findByUsername(username);
+			user.setApproved((byte)1);
+			userRepository.save(user);
+		}
 	}
 	
 }
