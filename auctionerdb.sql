@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS `auctions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auctions` (
-  `auctionid` int(11) NOT NULL,
+  `auctionid` int(11) NOT NULL AUTO_INCREMENT,
   `seller_userid` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
   `summary` varchar(45) NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE `authorities` (
   `role` varchar(45) NOT NULL,
   PRIMARY KEY (`userid`,`role`),
   KEY `user_id_idx` (`userid`),
-  CONSTRAINT `userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -76,20 +76,25 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `userid` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `surname` varchar(45) NOT NULL,
+  `userid` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `email` varchar(55) NOT NULL,
   `password` varchar(60) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `afm` varchar(45) NOT NULL,
   `phone` varchar(45) NOT NULL,
   `state` varchar(45) NOT NULL,
   `city` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
   `postal_code` varchar(45) NOT NULL,
   `enabled` tinyint(1) NOT NULL,
+  `approved` tinyint(4) NOT NULL,
   PRIMARY KEY (`userid`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  UNIQUE KEY `afm_UNIQUE` (`afm`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -101,4 +106,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-19 16:59:25
+-- Dump completed on 2016-07-30 17:36:41
