@@ -11,5 +11,7 @@ public interface UserService {
 	List<User> getAllUsers();
 	
 	void approveUsers(List<String> approved);
+	
+	User getUserByUsername(String username);
 
 }
