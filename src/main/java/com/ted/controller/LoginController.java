@@ -67,7 +67,7 @@ public class LoginController {
 			return "registration";
 		}
 		
-		loginService.save(user);
+		loginService.saveUser(user);
 		
 		return "redirect:login";
 	}

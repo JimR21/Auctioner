@@ -84,9 +84,9 @@
 				 </div>
 				 <div class="col-md-6">
 					 <div class="form-group">
-						 <label for="state">State:</label>
-						 <form:input type="text" name='state' path="state" class="form-control" id="state" />
-						 <form:errors path="state" style="color:red" />
+						 <label for="country">Country:</label>
+						 <form:input type="text" name='country' path="country" class="form-control" id="country" />
+						 <form:errors path="country" style="color:red" />
 					 </div>
 					  <div class="form-group">
 						 <label for="city">City:</label>
@@ -146,7 +146,7 @@
 			phone: {
 				required:true
 			},
-			state: {
+			country: {
 				required:true
 			},
 			city: {

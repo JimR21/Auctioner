@@ -20,7 +20,7 @@ public class LoginServiceImpl implements LoginService {
 	private AuthorityRepository authorityRepository;
 
 	@Transactional
-	public User save(User user) {
+	public User saveUser(User user) {
 		
 		// Enabled = true 
 		user.setEnabled((byte)1);
@@ -32,6 +32,10 @@ public class LoginServiceImpl implements LoginService {
 		
 		// Approved = false until admin checks it
 		user.setApproved((byte)0);
+		
+		// User Rating
+		user.setBidderRating(null);
+		user.setSellerRating(null);
 		
 		// Persist user
 		user = userRepository.saveAndFlush(user);
@@ -53,11 +57,11 @@ public class LoginServiceImpl implements LoginService {
 
 	public String checkEmailUsernameAfm(User user) {
 		
-		if(userRepository.findByEmail(user.getEmail()) == null )
+		if(userRepository.findByEmail(user.getEmail()) != null )
 			return "Email already in use";
-		if(userRepository.findByUsername(user.getUsername()) == null )
+		if(userRepository.findByUsername(user.getUsername()) != null )
 			return "Username already in use";
-		if(userRepository.findByAfm(user.getAfm()) == null )
+		if(userRepository.findByAfm(user.getAfm()) != null )
 			return "AFM already in use";
 		
 		return null;

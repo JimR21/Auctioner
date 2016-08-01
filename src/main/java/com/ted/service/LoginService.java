@@ -4,7 +4,7 @@ import com.ted.model.User;
 
 public interface LoginService {
 	
-	User save(User user);
+	User saveUser(User user);
 
 	String checkEmailUsernameAfm(User user);
 
