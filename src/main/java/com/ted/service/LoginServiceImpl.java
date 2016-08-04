@@ -40,7 +40,7 @@ public class LoginServiceImpl implements LoginService {
 		// Persist user
 		user = userRepository.saveAndFlush(user);
 		
-		
+		// Authority Role
 		AuthorityPK authorityPK = new AuthorityPK();
 		authorityPK.setUserid(user.getUserid());
 		authorityPK.setRole("ROLE_BIDDER");

@@ -1,13 +1,21 @@
 package com.ted.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import java.util.List;
 
 /**
  * The persistent class for the users database table.
@@ -79,7 +87,7 @@ public class User implements Serializable {
 	private List<Auction> auctions;
 
 	// bi-directional many-to-one association to Authority
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Authority> authorities;
 
 	public User() {
@@ -136,17 +144,17 @@ public class User implements Serializable {
 		return this.authorities;
 	}
 
-	@XmlTransient
+	@XmlAttribute(name = "Rating")
 	public String getBidderRating() {
 		return this.bidderRating;
 	}
 
-	@XmlElement(name = "location")
+	@XmlElement(name = "Location")
 	public String getCity() {
 		return this.city;
 	}
 
-	@XmlElement(name = "country")
+	@XmlElement(name = "Country")
 	public String getCountry() {
 		return this.country;
 	}
@@ -191,12 +199,12 @@ public class User implements Serializable {
 		return this.sellerRating;
 	}
 
-	@XmlAttribute
+	@XmlTransient
 	public int getUserid() {
 		return this.userid;
 	}
 
-	@XmlAttribute
+	@XmlAttribute(name = "UserID")
 	public String getUsername() {
 		return this.username;
 	}

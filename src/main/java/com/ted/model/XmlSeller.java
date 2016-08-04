@@ -11,12 +11,12 @@ public class XmlSeller {
 	
 	private String rating;
 
-	@XmlAttribute
+	@XmlAttribute(name = "Rating")
 	public String getRating() {
 		return rating;
 	}
 
-	@XmlAttribute
+	@XmlAttribute(name = "UserID")
 	public String getUsername() {
 		return username;
 	}

@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name = "auctions")
 @NamedQuery(name = "Auction.findAll", query = "SELECT a FROM Auction a")
 @XmlType(propOrder = {"name", "categories", "currently", "buyPrice", "firstBid", "numberOfBids", 
-		"auctionBiddings", "location", "country", "started", "ends", "xmlSeller", "description"})
+		"auctionBiddings", "location", "country", "xmlStarted", "xmlEnds", "xmlSeller", "description"})
 @XmlRootElement(name = "item")
 public class Auction implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +54,8 @@ public class Auction implements Serializable {
 	@Column(nullable = false, length = 45)
 	private String currently;
 
-	@Column(nullable = false, length = 45)
+	@Lob
+	@Column(nullable = false)
 	private String description;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -82,7 +85,10 @@ public class Auction implements Serializable {
 	private User user;
 
 	// bi-directional many-to-many association to Category
-	@ManyToMany(mappedBy = "auctions")
+	@ManyToMany
+	@JoinTable(name = "auction_categories", joinColumns = {
+			@JoinColumn(name = "auction_id", nullable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "category_id", nullable = false) })
 	private List<Category> categories;
 
 	// bi-directional many-to-one association to Location
@@ -92,6 +98,12 @@ public class Auction implements Serializable {
 	
 	@Transient
 	private XmlSeller xmlSeller;
+	
+	@Transient
+	private String xmlStarted;
+	
+	@Transient
+	private String xmlEnds;
 
 	public Auction() {
 	}
@@ -103,7 +115,7 @@ public class Auction implements Serializable {
 		return auctionBidding;
 	}
 
-	@XmlElementWrapper(name = "bids")
+	@XmlElementWrapper(name = "Bids", required = true)
 	@XmlElement(name = "Bid")
 	public List<AuctionBidding> getAuctionBiddings() {
 		return this.auctionBiddings;
@@ -139,7 +151,7 @@ public class Auction implements Serializable {
 		return this.description;
 	}
 
-	@XmlElement(name = "Ends")
+	@XmlTransient
 	public Date getEnds() {
 		return this.ends;
 	}
@@ -164,7 +176,7 @@ public class Auction implements Serializable {
 		return this.numberOfBids;
 	}
 
-	@XmlElement(name = "Started")
+	@XmlTransient
 	public Date getStarted() {
 		return this.started;
 	}
@@ -174,9 +186,19 @@ public class Auction implements Serializable {
 		return this.user;
 	}
 
+	@XmlElement(name = "Ends")
+	public String getXmlEnds() {
+		return xmlEnds;
+	}
+
 	@XmlElement(name = "Seller")
 	public XmlSeller getXmlSeller() {
 		return xmlSeller;
+	}
+
+	@XmlElement(name = "Started")
+	public String getXmlStarted() {
+		return xmlStarted;
 	}
 
 	public AuctionBidding removeAuctionBidding(AuctionBidding auctionBidding) {
@@ -242,8 +264,16 @@ public class Auction implements Serializable {
 		this.user = user;
 	}
 
+	public void setXmlEnds(String xmlEnds) {
+		this.xmlEnds = xmlEnds;
+	}
+
 	public void setXmlSeller(XmlSeller xmlSeller) {
 		this.xmlSeller = xmlSeller;
+	}
+
+	public void setXmlStarted(String xmlStarted) {
+		this.xmlStarted = xmlStarted;
 	}
 
 }

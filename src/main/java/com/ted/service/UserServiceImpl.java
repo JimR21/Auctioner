@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ted.model.Authority;
 import com.ted.model.User;
 import com.ted.repository.UserRepository;
 
@@ -51,6 +52,21 @@ public class UserServiceImpl implements UserService {
 		
 		return userRepository.findByUsername(username);
 		
+	}
+
+	@Transactional
+	public boolean hasAuthority(String username, String role) {
+		
+		User user = userRepository.findByUsername(username);
+		
+		List<Authority> authorities = user.getAuthorities();
+		
+		for(Authority authority : authorities) {
+			if(authority.getId().getRole().equals(role))
+				return true;
+		}
+		
+		return false;
 	}
 	
 }

@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -33,17 +31,14 @@ public class Category implements Serializable {
 	@Column(name = "category_id", unique = true, nullable = false)
 	private int categoryId;
 
-	@Column(nullable = false, length = 45)
+	@Column(nullable = false, length = 45, unique = true)
 	private String name;
 
 	@Column(name = "parent_id")
 	private int parentId;
 
 	// bi-directional many-to-many association to Auction
-	@ManyToMany
-	@JoinTable(name = "auciton_categories", joinColumns = {
-			@JoinColumn(name = "category_id", nullable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "auction_id", nullable = false) })
+	@ManyToMany(mappedBy = "categories")
 	private List<Auction> auctions;
 
 	public Category() {

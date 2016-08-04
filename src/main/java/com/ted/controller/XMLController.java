@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,12 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ted.model.Auction;
 import com.ted.model.AuctionBidding;
 import com.ted.model.Category;
-import com.ted.model.Customer;
 import com.ted.model.Location;
-import com.ted.model.User;
 import com.ted.model.XmlAuctionWrapper;
 import com.ted.model.XmlSeller;
+import com.ted.service.AuctionService;
 import com.ted.service.UserService;
+import com.ted.service.XmlService;
 
 @Controller
 @RequestMapping(value = "/api")
@@ -30,48 +29,13 @@ public class XMLController {
 	
 	@Autowired
 	UserService userService;
-
-	@RequestMapping(value="user/{username}", method = RequestMethod.GET)
-	public @ResponseBody User getUserInXML(@PathVariable String username) {
-
-		User user = userService.getUserByUsername(username);
-		
-		System.out.println("User in controller: " + user.getUsername());
-		
-		return user;
-
-	}
 	
-	@RequestMapping(value = "user/new", method = RequestMethod.PUT) 
-	public String newUser(@RequestBody User user, Model model) {
-		
-		System.out.println("User: " + user.getUsername());
-		
-		return "200 OK";
-
-	} 
+	@Autowired
+	AuctionService auctionService;
 	
-	@RequestMapping(value="customer/get", method = RequestMethod.GET)
-	public @ResponseBody Customer getUserInXML() {
+	@Autowired
+	XmlService xmlService;
 
-		Customer customer = new Customer();
-		customer.setId(100);
-		customer.setName("Sumeet");
-		customer.setAge(22);
-		
-		
-		return customer;
-
-	}
-	
-	@RequestMapping(value = "customer/put", method = RequestMethod.PUT) 
-	public @ResponseBody String newCustomer(@RequestBody Customer customer, Model model) {
-		
-		System.out.println("Customer: " + customer.getName());
-		
-		return "200 OK";
-
-	} 
 	
 	@RequestMapping(value="auction/get", method = RequestMethod.GET)
 	public @ResponseBody XmlAuctionWrapper getAuctionInXML() {
@@ -148,18 +112,15 @@ public class XMLController {
 		
 		System.out.println(auction.getCountry());
 		
-		
-		
-		
-		
 		return wrapper;
 
 	}
 	
 	@RequestMapping(value = "auction/put", method = RequestMethod.PUT) 
-	public @ResponseBody String newAuction(Model model) {
-	
+	public @ResponseBody String newAuction(@RequestBody XmlAuctionWrapper wrapper, Model model) {
 		
+		xmlService.saveXmlAuction(wrapper.getAuctions());
+			
 		return "200 OK";
 
 	} 

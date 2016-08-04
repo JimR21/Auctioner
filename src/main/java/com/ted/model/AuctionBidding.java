@@ -12,9 +12,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * The persistent class for the auction_bidding database table.
@@ -23,6 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "auction_bidding")
 @NamedQuery(name = "AuctionBidding.findAll", query = "SELECT a FROM AuctionBidding a")
+@XmlType(propOrder = {"user", "xmlTime", "amount"})
 @XmlRootElement(name = "bid")
 public class AuctionBidding implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -46,11 +49,14 @@ public class AuctionBidding implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "bidder_userid", nullable = false, insertable = false, updatable = false)
 	private User user;
+	
+	@Transient
+	private String xmlTime;
 
 	public AuctionBidding() {
 	}
 
-	@XmlElement
+	@XmlElement(name = "Amount")
 	public String getAmount() {
 		return this.amount;
 	}
@@ -65,14 +71,19 @@ public class AuctionBidding implements Serializable {
 		return this.id;
 	}
 
-	@XmlElement
+	@XmlTransient
 	public Date getTime() {
 		return time;
 	}
 
-	@XmlElement(name = "bidder")
+	@XmlElement(name = "Bidder")
 	public User getUser() {
 		return this.user;
+	}
+
+	@XmlElement(name = "Time")
+	public String getXmlTime() {
+		return xmlTime;
 	}
 
 	public void setAmount(String amount) {
@@ -93,6 +104,10 @@ public class AuctionBidding implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public void setXmlTime(String xmlTime) {
+		this.xmlTime = xmlTime;
 	}
 
 }

@@ -5,12 +5,12 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "items")
+@XmlRootElement(name = "Items")
 public class XmlAuctionWrapper {
 	
 	private List<Auction> auctions;
 
-	@XmlElement(name = "item")
+	@XmlElement(name = "Item")
 	public List<Auction> getAuctions() {
 		return auctions;
 	}

@@ -1,4 +1,4 @@
-package com.ted.db;
+package com.ted;
 
 import org.junit.Test;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;

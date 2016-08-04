@@ -13,5 +13,7 @@ public interface UserService {
 	void approveUsers(List<String> approved);
 	
 	User getUserByUsername(String username);
+	
+	boolean hasAuthority(String username, String role);
 
 }
