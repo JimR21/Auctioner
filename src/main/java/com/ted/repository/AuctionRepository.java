@@ -7,5 +7,7 @@ import com.ted.model.Auction;
 
 @Repository("auctionRepository")
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
+	
+	Auction findByAuctionid(int id);
 
 }

@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -119,11 +121,30 @@ public class XMLController {
 	@RequestMapping(value = "auction/put", method = RequestMethod.PUT) 
 	public @ResponseBody String newAuction(@RequestBody XmlAuctionWrapper wrapper, Model model) {
 		
-		xmlService.saveXmlAuction(wrapper.getAuctions());
+		xmlService.saveXmlAuction(wrapper.getAuctions(), 0);
 			
 		return "200 OK";
 
 	} 
+	
+	@RequestMapping(value = "xmlAuctions", method = RequestMethod.GET)
+	public @ResponseBody String saveAuctions() {
+		
+		xmlService.xmlUnmarshalling();
+		
+		return "200 OK";
+	}
+	
+	@RequestMapping(value = "auctions/{id}", method = RequestMethod.GET)
+	public @ResponseBody Auction getAuction(@PathVariable Integer id) {
+		
+		Auction auction = auctionService.getAuctionById(id);
+		
+		Hibernate.initialize(auction);
+		
+		return auction;
+		
+	}
 
 }
 

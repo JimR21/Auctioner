@@ -45,7 +45,7 @@ public class User implements Serializable {
 	@Column(name = "bidder_rating", length = 45)
 	private String bidderRating;
 
-	@Column(nullable = false, length = 45)
+	@Column(nullable = false, length = 100)
 	private String city;
 
 	@Column(nullable = false, length = 45)

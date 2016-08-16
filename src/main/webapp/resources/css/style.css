@@ -18,3 +18,6 @@ body {
 	max-width: 400px;
 }
 
+.opaque > *:not(.spinner) {
+    opacity: 0.1
+ }

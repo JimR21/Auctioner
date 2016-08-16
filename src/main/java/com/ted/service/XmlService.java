@@ -11,7 +11,7 @@ import com.ted.model.XmlSeller;
 
 public interface XmlService {
 	
-	void saveXmlAuction(List<Auction> auctions);
+	void saveXmlAuction(List<Auction> auctions, Integer j);
 
 	User saveBidderUser(User user, Integer file_no, Integer auction_no, Integer bid_no);
 	
@@ -22,5 +22,7 @@ public interface XmlService {
 	List<Category> saveCategories(List<Category> categories);
 	
 	Date formatString(String dateString);
+	
+	void xmlUnmarshalling();
 
 }

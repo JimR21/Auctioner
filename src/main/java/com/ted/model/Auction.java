@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 @NamedQuery(name = "Auction.findAll", query = "SELECT a FROM Auction a")
 @XmlType(propOrder = {"name", "categories", "currently", "buyPrice", "firstBid", "numberOfBids", 
 		"auctionBiddings", "location", "country", "xmlStarted", "xmlEnds", "xmlSeller", "description"})
-@XmlRootElement(name = "item")
+@XmlRootElement(name = "Item")
 public class Auction implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -76,7 +77,7 @@ public class Auction implements Serializable {
 	private Date started;
 
 	// bi-directional many-to-one association to AuctionBidding
-	@OneToMany(mappedBy = "auction")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "auction")
 	private List<AuctionBidding> auctionBiddings;
 
 	// bi-directional many-to-one association to User
@@ -85,7 +86,7 @@ public class Auction implements Serializable {
 	private User user;
 
 	// bi-directional many-to-many association to Category
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "auction_categories", joinColumns = {
 			@JoinColumn(name = "auction_id", nullable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "category_id", nullable = false) })

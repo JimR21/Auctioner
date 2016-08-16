@@ -14,6 +14,7 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	
 	@RequestMapping(value = "/myprofile", method = RequestMethod.GET)
 	public String getMyProfile(Model model) {
 		

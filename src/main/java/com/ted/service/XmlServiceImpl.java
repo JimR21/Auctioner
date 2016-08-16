@@ -1,11 +1,16 @@
 package com.ted.service;
 
+import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +25,7 @@ import com.ted.model.AuthorityPK;
 import com.ted.model.Category;
 import com.ted.model.Location;
 import com.ted.model.User;
+import com.ted.model.XmlAuctionWrapper;
 import com.ted.model.XmlSeller;
 import com.ted.repository.AuctionBiddingRepository;
 import com.ted.repository.AuctionRepository;
@@ -56,14 +62,14 @@ public class XmlServiceImpl implements XmlService {
 	AuctionRepository auctionRepository;
 	
 	@Transactional
-	public void saveXmlAuction(List<Auction> auctions) {
+	public void saveXmlAuction(List<Auction> auctions, Integer j) {
 		
 		int i = 0;
 		
 		for(Auction auction : auctions) {
 			
 			/* Seller */
-			auction.setUser(saveSellerUser(auction.getXmlSeller(), 0, i));
+			auction.setUser(saveSellerUser(auction.getXmlSeller(), j, i));
 			
 			/* Location */
 			auction.setLocation(saveLocation(auction.getLocation()));
@@ -84,7 +90,7 @@ public class XmlServiceImpl implements XmlService {
 			
 			for(AuctionBidding bid : xmlbiddings) {
 				
-				bid.setUser(saveBidderUser(bid.getUser(), 0, i, k));	// save and return bidder
+				bid.setUser(saveBidderUser(bid.getUser(), j, i, k));	// save and return bidder
 				
 				bid.setAuction(dbauction);	//setAuction
 				
@@ -288,9 +294,17 @@ public class XmlServiceImpl implements XmlService {
 		for(Category category : categories) {
 			category.setParentId(parentId);
 			cat = categoryRepository.findByName(category.getName());
-			if(cat == null)
+			if(cat == null) {
 				categoryRepository.save(category);
-			parentId = category.getCategoryId();
+				parentId = category.getCategoryId();
+			}
+			else {
+				if(category.getParentId() != 0) {
+					cat.setParentId(category.getParentId());
+					categoryRepository.save(cat);
+				}
+				parentId = cat.getCategoryId();
+			}
 			returnList.add(categoryRepository.findByName(category.getName()));
 		}
 		
@@ -301,7 +315,7 @@ public class XmlServiceImpl implements XmlService {
 	// TODO: formatter
 	public Date formatString(String dateString) {
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yy HH:mm:ss", Locale.ENGLISH);
 
 		try {
 			
@@ -313,8 +327,33 @@ public class XmlServiceImpl implements XmlService {
 			e.printStackTrace();
 		}
 		
-		return new Date();
+		return null;
 			
+	}
+
+	public void xmlUnmarshalling() {
+		
+		try {
+			JAXBContext context = JAXBContext.newInstance(XmlAuctionWrapper.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			
+			for(int j = 15; j < 16; j++) {
+				
+				XmlAuctionWrapper wrapper = (XmlAuctionWrapper)unmarshaller.unmarshal(new FileReader("D:\\ebay-data\\items-" + j + ".xml"));
+				
+				saveXmlAuction(wrapper.getAuctions(), j);
+				
+				int i = 0;
+				for(Auction auction : wrapper.getAuctions()) {
+					System.out.println("File" + j + ": Auction" + i + ": " + auction.getName());
+					i++;
+				}
+			}
+			
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		
 	}
 
 }

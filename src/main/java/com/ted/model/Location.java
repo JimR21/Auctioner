@@ -40,7 +40,7 @@ public class Location implements Serializable {
 	@Column(precision=10, scale=8)
 	private BigDecimal longitude;
 
-	@Column(nullable=false, length=45)
+	@Column(nullable=false, length=100)
 	private String name;
 
 	//bi-directional many-to-one association to Auction
