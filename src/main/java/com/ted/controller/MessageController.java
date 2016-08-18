@@ -1,6 +1,7 @@
 package com.ted.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ted.model.GlobalMessage;
 import com.ted.model.Message;
 import com.ted.model.User;
 import com.ted.service.MessageService;
@@ -31,7 +33,7 @@ public class MessageController {
 		
 		model.addAttribute("inbox", messageService.getByReceiver(user));
 		
-		return "user-inbox";
+		return "inbox";
 		
 	}
 	
@@ -42,7 +44,7 @@ public class MessageController {
 		
 		model.addAttribute("sent", messageService.getBySender(user));
 		
-		return "user-sent";
+		return "sent";
 		
 	}
 	
@@ -83,21 +85,82 @@ public class MessageController {
 	@RequestMapping(value = "new-message", method = RequestMethod.GET)
 	public String userNewMessageGet(Model model) {
 		
+		User user = new User();
 		Message message = new Message();
+		
+		message.setReceiver(user);
 		
 		model.addAttribute("new_message", message);
 		
 		return "new-message";
-		
 	}
 	
 	@RequestMapping(value = "new-message", method = RequestMethod.POST)
-	public String userNewMessagePost(@ModelAttribute("message") Message message, Model model) {
+	public String userNewMessagePost(@ModelAttribute("new_message") Message message, Model model) {
 		
-		System.out.println("Receipient: " + message.getReceiver().getUsername());
-		System.out.println("Message:" + message.getMessage());
+		String err_msg = messageService.saveMessage(message);
+				
+		if(err_msg != null) {
+			model.addAttribute("err_msg", err_msg);
+		}
+		else {
+			model.addAttribute("info_msg", "Message Sent!");
+		}
 		
-		return "user-sent";
+		model.addAttribute("button", "newMessage_tab");	// New Message tab Active
 		
+		if(userService.isUserAdmin())
+			return "admin";
+		
+		return "myprofile";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value = "new-anouncement", method = RequestMethod.GET)
+	public String userNewAnouncementGet(Model model) {
+		
+		System.out.println("new an get");
+		
+		GlobalMessage message = new GlobalMessage();
+		
+		model.addAttribute("new_message", message);
+		
+		return "new-anouncement";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value = "new-anouncement", method = RequestMethod.POST)
+	public String userNewAnouncementPost(@ModelAttribute("new_message") GlobalMessage message, Model model) {
+		
+		System.out.println("new an post");
+		
+		messageService.saveGlobalMessage(message);
+		
+		model.addAttribute("button", "newAnouncement_tab");	// New Message tab Active
+		
+		model.addAttribute("info_an", "Message Sent!");
+		
+		return "admin";
+	}
+	
+	@RequestMapping(value = "anouncements", method = RequestMethod.GET)
+	public String anouncements(Model model) {
+		
+		System.out.println("an");
+		
+		model.addAttribute("anouncements", messageService.getAllGlobalMessages());
+		
+		return "anouncements";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@RequestMapping(value = "checkNewMessages", method = RequestMethod.GET)
+	public @ResponseBody String checkNewMessages(Model model) {
+		
+		Integer number = messageService.checkNewMessages();
+		
+		System.out.println("Returning messages number: " + number);		// Debug
+		
+		return number.toString();
 	}
 }

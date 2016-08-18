@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,48 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return null;
+	}
+	
+	public boolean isUserBidder() {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+		    for(GrantedAuthority auth : authentication.getAuthorities())
+		    {
+		    	if(auth.getAuthority().equals("ROLE_BIDDER"))
+		    		return true;
+		    }
+		}
+		
+		return false;
+	}
+	
+	public boolean isUserSeller() {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+		    for(GrantedAuthority auth : authentication.getAuthorities())
+		    {
+		    	if(auth.getAuthority().equals("ROLE_SELLER"))
+		    		return true;
+		    }
+		}
+		
+		return false;
+	}
+	
+	public boolean isUserAdmin() {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+		    for(GrantedAuthority auth : authentication.getAuthorities())
+		    {
+		    	if(auth.getAuthority().equals("ROLE_ADMIN"))
+		    		return true;
+		    }
+		}
+		
+		return false;
 	}
 
 	public List<User> getAllUsers() {

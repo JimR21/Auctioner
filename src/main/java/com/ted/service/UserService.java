@@ -8,6 +8,12 @@ public interface UserService {
 	
 	User getLoggedInUser();
 	
+	boolean isUserBidder();
+	
+	boolean isUserSeller();
+	
+	boolean isUserAdmin();
+	
 	List<User> getAllUsers();
 	
 	void approveUsers(List<String> approved);

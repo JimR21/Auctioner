@@ -18,24 +18,24 @@ public class GlobalMessage implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="g_message_id", unique=true, nullable=false)
-	private int gMessageId;
+	private int messageId;
 
 	@Column(nullable=false)
 	private Timestamp date;
 
 	@Lob
 	@Column(name="g_message")
-	private String gMessage;
+	private String message;
 
 	public GlobalMessage() {
 	}
 
-	public int getGMessageId() {
-		return this.gMessageId;
+	public int getMessageId() {
+		return this.messageId;
 	}
 
-	public void setGMessageId(int gMessageId) {
-		this.gMessageId = gMessageId;
+	public void setMessageId(int messageId) {
+		this.messageId = messageId;
 	}
 
 	public Timestamp getDate() {
@@ -46,12 +46,12 @@ public class GlobalMessage implements Serializable {
 		this.date = date;
 	}
 
-	public String getGMessage() {
-		return this.gMessage;
+	public String getMessage() {
+		return this.message;
 	}
 
-	public void setGMessage(String gMessage) {
-		this.gMessage = gMessage;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

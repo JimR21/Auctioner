@@ -20,4 +20,24 @@ body {
 
 .opaque > *:not(.spinner) {
     opacity: 0.1
- }
+}
+
+.notification-icon .glyphicon {
+    font-size: 22px;
+}
+
+.notification-icon .badge {
+    background:red;
+    position:relative;
+    top: -18px;
+    left: -8px;
+    padding: 2px 4px;
+}
+
+a:hover, a:active, a:focus {
+  outline: 0;
+}
+
+btn-link:hover, btn-link:active, btn-link:focus {
+  outline: 0;
+}

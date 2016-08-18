@@ -1,5 +1,6 @@
 var inbox_visited = false,
-    sent_visited = false;
+    sent_visited = false,
+    anouncements_visited = false;
 
 $('[data-toggle="pill"]').click(function(e) {
     var $this = $(this),
@@ -7,7 +8,8 @@ $('[data-toggle="pill"]').click(function(e) {
         targ = $this.attr('data-target');
 
     /* Load only once */
-    if((inbox_visited == false && $this.attr('id') == "inbox_tab") || (sent_visited == false && $this.attr('id') == "sent_tab")) {
+    if((inbox_visited == false && $this.attr('id') == "inbox_tab") || (sent_visited == false && $this.attr('id') == "sent_tab")
+    || (anouncements_visited == false && $this.attr('id') == "anouncements_tab")) {
         $('#loading').addClass('opaque');                   // add opaque in background
         $('#loading').spin();                               // add spinner
         $(targ).load(loadurl, null, function() {
@@ -25,6 +27,9 @@ $('[data-toggle="pill"]').click(function(e) {
     }
     if($this.attr('id') == "sent_tab") {
        sent_visited = true;
+    }
+    if($this.attr('id') == "anouncements_tab") {
+       anouncements_visited = true;
     }
 
     $this.tab('show');

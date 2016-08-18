@@ -8,9 +8,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href=<c:url value="/resources/css/bootstrap.min.css" /> rel="stylesheet" type="text/css">
-	<link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet" type="text/css">
-	<link href=<c:url value="/resources/css/style.css" /> rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,9 +21,9 @@
 
 </head>
 <body onload='document.loginForm.username.focus();'>
-	
+
  	<%@ include file="/resources/template/menu-top-visitor.jsp" %>
-	
+
 	<div class="col-md-4 col-md-offset-4">
 		<c:if test="${not empty error}">
 		<div class="alert alert-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</div>
@@ -55,12 +52,10 @@
 		</form>
 		<p>Not a member? Sign up <a href="registration">here</a><p>
 	</div>
-	
+
 	<!-- Footer -->
 	<%@ include file="/resources/template/footer.jsp" %>
-	
-	<script src=<c:url value="/resources/js/jquery.min.js" />></script>
-   	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
+
 
 </body>
 </html>

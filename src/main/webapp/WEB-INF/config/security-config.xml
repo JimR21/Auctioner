@@ -31,6 +31,7 @@
 		<intercept-url pattern="/myprofile/**" access="hasRole('ROLE_BIDDER')"/>
 		<intercept-url pattern="/upgrade" access="hasRole('ROLE_BIDDER')"/>
 		<intercept-url pattern="/myauctions/**" access="hasRole('ROLE_SELLER')"/>
+<!-- 		<intercept-url pattern="/messaging" access="hasRole('ROLE_BIDDER', 'ROLE_ADMIN')"/> -->
 		<intercept-url pattern="/**" access="permitAll"/>
 		
 		<!-- 
@@ -56,14 +57,15 @@
         FROM users u, authorities r
         WHERE u.userid = r.userid
         AND u.username=?;"
- 
         />
 		</authentication-provider>
-		<authentication-provider>
+		
+		<!-- <authentication-provider>
 	        <user-service>
-	            <user name="admin" password="secret" authorities="ROLE_USER, ROLE_ADMIN" />
+	            <user name="admin" password="secret" authorities="ROLE_ADMIN" />
 	        </user-service>
-   		</authentication-provider>		
+   		</authentication-provider>	 -->
+   			
 	</authentication-manager>
 	
 	<mvc:annotation-driven>

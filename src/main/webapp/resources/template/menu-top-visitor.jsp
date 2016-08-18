@@ -1,3 +1,8 @@
+<link href=<c:url value="/resources/css/bootstrap.min.css" /> rel="stylesheet" type="text/css">
+<link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet" type="text/css">
+<link href=<c:url value="/resources/css/iconmoon.css" /> rel="stylesheet" type="text/css">
+<link href=<c:url value="/resources/css/style.css" /> rel="stylesheet" type="text/css">
+
 
 <!-- Navigation -->
 <nav id="menu" class="navbar navbar-default navbar-fixed-top">
@@ -11,7 +16,7 @@
                 <span class="icon-bar"></span>
             </button>
             <div id="logo" >
-                <a class="navbar-brand" href="home">Auctioner</a>
+                <a class="navbar-brand" href="home"><span class="icon-hammer2"></span> Auctioner</a>
             </div>
         </div>
 
@@ -22,18 +27,7 @@
             </ul>
 
             <form id="signin" class="navbar-form navbar-right" role="form">
-            
-               <!--  <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input id="username" type="text" class="form-control" name="username" value="" placeholder="Email Address">
-                </div>
-
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input id="password" type="password" class="form-control" name="password" value="" placeholder="Password">
-                </div> -->
-
-               <a class="btn btn-primary" href="login">Login</a>
+                <a class="btn btn-primary" href="login">Login</a>
                 or
                 <a class="btn btn-warning" href="registration">Sign up</a>
             </form>

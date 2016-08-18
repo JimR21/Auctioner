@@ -15,11 +15,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-	<link href=<c:url value="/resources/css/bootstrap.min.css" /> rel="stylesheet" type="text/css">
-	<link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet" type="text/css">
 	<link href=<c:url value="/resources/css/sidenav.css" /> rel="stylesheet" type="text/css">
 	<link href=<c:url value="/resources/css/dataTables.bootstrap.min.css" /> rel="stylesheet" type="text/css">
-    <link href=<c:url value="/resources/css/style.css" /> rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -61,21 +58,21 @@
 
               <!-- Desktop sidebar -->
               <div class="col-sm-3 collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
-                <h4 class="text-center"><sec:authentication property="name"</h4>
+                <h4 class="text-center"><sec:authentication property="name"/></h4>
                 <hr />
                 <ul class="nav navbar-nav nav-pills">
                   <li class="active"><a href="#section1" data-toggle="pill">Overview<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a>
                     <ul class="dropdown-menu forAnimate" role="menu">
-                      <li><a href="messaging/inbox" data-target="#section2" id="inbox_tab" data-toggle="pill" rel="tooltip">Inbox</a></li>
-                      <li><a href="messaging/new-message" data-target="#section3" id="newMessage_tab" data-toggle="pill" rel="tooltip">New Message</a></li>
-                      <li><a href="messaging/sent" data-target="#section4" id="sent_tab" data-toggle="pill" rel="tooltip">Sent</a></li>
+                      <li><a href="/Auctioner/messaging/inbox" data-target="#section2" id="inbox_tab" data-toggle="pill" rel="tooltip">Inbox</a></li>
+                      <li><a href="/Auctioner/messaging/new-message" data-target="#section3" id="newMessage_tab" data-toggle="pill" rel="tooltip">New Message</a></li>
+                      <li><a href="/Auctioner/messaging/sent" data-target="#section4" id="sent_tab" data-toggle="pill" rel="tooltip">Sent</a></li>
                       <li class="divider" data-toggle="pill"></li>
-                      <li><a href="messaging/anouncements" data-target="#section5" id="inbox_tab" data-toggle="pill" rel="tooltip">Anouncements</a></li>
+                      <li><a href="/Auctioner/messaging/anouncements" data-target="#section5" id="anouncements_tab" data-toggle="pill" rel="tooltip">Anouncements</a></li>
                     </ul>
                   </li>
-                  <li ><a href="admin/settings" data-target="#section6" id="settings_tab" data-toggle="pill" rel="tooltip">Other Settings<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-tasks"></span></a></li>
+                  <li ><a href="user/settings" data-target="#section6" id="settings_tab" data-toggle="pill" rel="tooltip">Other Settings<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-tasks"></span></a></li>
                 </ul>
               </div>
             </div>
@@ -190,13 +187,24 @@
 
     <!-- /.container -->
 
-    <script src=<c:url value="/resources/js/jquery.min.js" />></script>
-   	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
     <script src=<c:url value="/resources/js/jquery.dataTables.min.js" />></script>
-   	<script src=<c:url value="/resources/js/dataTables.bootstrap.min.js" />></script>
+    <script src=<c:url value="/resources/js/dataTables.bootstrap.min.js" />></script>
     <script src=<c:url value="/resources/js/spin.min.js" />></script>
     <script src=<c:url value="/resources/js/spinner.js" />></script>
     <script src=<c:url value="/resources/js/myprofile-page-load.js" />></script>
+
+    <script>
+
+    $('#${button}').click();
+
+    /* Messages for New Message Tab */
+    var error_msg = "${err_msg}";
+    var info_msg = "${info_msg}";
+
+    /* Reply Receiver */
+    var recipient = "${receiver}";
+
+    </script>
 
 </body>
 

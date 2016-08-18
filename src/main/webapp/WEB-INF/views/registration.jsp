@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href=<c:url value="/resources/css/bootstrap.min.css" /> rel="stylesheet" type="text/css">
+	<link href=<c:url value="/resources/css/bootstrap.min.css" /> rel="stylesheet" type="text/css">
 	<link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet" type="text/css">
 	<link href=<c:url value="/resources/css/style.css" /> rel="stylesheet" type="text/css">
 
@@ -24,16 +24,16 @@
     <![endif]-->
 
 	<title>Registration</title>
-	
+
 	<style>
-	
+
 	.error{
 		color:red;
 		font-size: 0.8em;
 	}
-	
+
 	</style>
-	
+
 </head>
 <body>
 
@@ -115,18 +115,16 @@
 			</div>
 		</form:form>
 	</div>
-	
+
 	<!-- Footer -->
 	<%@ include file="/resources/template/footer.jsp" %>
-	
-	<script src=<c:url value="/resources/js/jquery.min.js" />></script>
+
 	<script src=<c:url value="/resources/js/jquery.validate.min.js" />></script>
-   	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
-   	
+
    	<script>
-   	
+
  	$('#form').validate({
-				
+
 		rules: {
 			firstName: {
 				required: true
@@ -166,7 +164,7 @@
 			$(element).closest('.form-group').addClass('has-error');
 		}
 	});
-   	
+
    	</script>
 
 </body>

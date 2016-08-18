@@ -27,7 +27,7 @@
                 <td><c:out value="${message.messageId}"></c:out></td>
                 <td><c:out value="${message.receiver.username}"></c:out></td>
 				<td><c:out value="${message.sender.username}"></c:out></td>
-				<td class="text-right"><c:out value="${message.date}"></c:out></td>
+				<td class="text-right"><fmt:formatDate pattern="hh:mm dd-MMM-yyyy" value="${message.date}" /></td>
                 <td><c:out value="${message.message}"></c:out></td>
 			</tr>
 			</c:forEach>

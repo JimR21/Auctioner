@@ -15,11 +15,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-	<link href=<c:url value="/resources/css/bootstrap.min.css" /> rel="stylesheet" type="text/css">
-	<link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet" type="text/css">
 	<link href=<c:url value="/resources/css/sidenav.css" /> rel="stylesheet" type="text/css">
 	<link href=<c:url value="/resources/css/dataTables.bootstrap.min.css" /> rel="stylesheet" type="text/css">
-    <link href=<c:url value="/resources/css/style.css" /> rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -68,15 +65,16 @@
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a>
                     <ul class="dropdown-menu forAnimate" role="menu">
-                      <li><a href="messaging/inbox" data-target="#section2" id="inbox_tab" data-toggle="pill" rel="tooltip">Inbox</a></li>
-                      <li><a href="messaging/new-message" data-target="#section3" id="newMessage_tab" data-toggle="pill" rel="tooltip">New Message</a></li>
-                      <li><a href="messaging/sent" data-target="#section4" id="sent_tab" data-toggle="pill" rel="tooltip">Sent</a></li>
+                      <li><a href="/Auctioner/messaging/inbox" data-target="#section2" id="inbox_tab" data-toggle="pill" rel="tooltip">Inbox</a></li>
+                      <li><a href="/Auctioner/messaging/new-message" data-target="#section3" id="newMessage_tab" data-toggle="pill" rel="tooltip">New Message</a></li>
+                      <li><a href="/Auctioner/messaging/sent" data-target="#section4" id="sent_tab" data-toggle="pill" rel="tooltip">Sent</a></li>
                       <li class="divider" data-toggle="pill"></li>
-                      <li><a href="messaging/anouncements" data-target="#section5" id="inbox_tab" data-toggle="pill" rel="tooltip">Anouncements</a></li>
+                      <li><a href="/Auctioner/messaging/anouncements" data-target="#section5" id="anouncements_tab" data-toggle="pill" rel="tooltip">Anouncements</a></li>
+                      <li><a href="/Auctioner/messaging/new-anouncement" data-target="#section6" id="newAnouncement_tab" data-toggle="pill" rel="tooltip">New Anouncement</a></li>
                     </ul>
                   </li>
-                  <li ><a href="admin/users" data-target="#section6" id="users_tab" data-toggle="pill" rel="tooltip">Users<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
-                  <li ><a href="admin/auctions" data-target="#section7" id="auctions_tab" data-toggle="pill" rel="tooltip">Libros<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-"></span></a></li>
+                  <li ><a href="admin/users" data-target="#section7" id="users_tab" data-toggle="pill" rel="tooltip">Users<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
+                  <li ><a href="admin/auctions" data-target="#section8" id="auctions_tab" data-toggle="pill" rel="tooltip">Auctions<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-"></span></a></li>
                 </ul>
               </div>
             </div>
@@ -154,12 +152,7 @@
 			</div>
 
 		    <div class="tab-pane fade" id="section2">
-			    <div class="col-sm-9">
-			      <div class="well">
-			        <h4>Messages</h4>
-			        <p>Some text..</p>
-			      </div>
-			    </div>
+
 			</div>
 
             <div class="tab-pane fade" id="section3">
@@ -174,11 +167,15 @@
 
 		    </div>
 
-		    <div class="tab-pane fade" id="section6">
+            <div class="tab-pane fade" id="section6">
 
 		    </div>
 
 		    <div class="tab-pane fade" id="section7">
+
+		    </div>
+
+		    <div class="tab-pane fade" id="section8">
 
 		    </div>
 
@@ -191,14 +188,27 @@
 
     <!-- /.container -->
 
-    <script src=<c:url value="/resources/js/jquery.min.js" />></script>
-    <script src=<c:url value="/resources/js/jquery.form.min.js" />></script>
-   	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
    	<script src=<c:url value="/resources/js/jquery.dataTables.min.js" />></script>
    	<script src=<c:url value="/resources/js/dataTables.bootstrap.min.js" />></script>
     <script src=<c:url value="/resources/js/spin.min.js" />></script>
     <script src=<c:url value="/resources/js/spinner.js" />></script>
     <script src=<c:url value="/resources/js/admin-page-load.js" />></script>
+
+    <script>
+
+     $('#${button}').click();
+
+     /* Messages for New Message Tab */
+     var error_msg = "${err_msg}";
+     var info_msg = "${info_msg}";
+
+     /* Messages for New Anouncement Tab */
+     var info_an = "${info_an}";
+
+     /* Reply Receiver */
+     var recipient = "${receiver}";
+
+    </script>
 
 </body>
 

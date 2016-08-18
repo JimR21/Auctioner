@@ -52,9 +52,6 @@ public class LoginController {
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public String registrationPost(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 		
-		System.out.println("result has errors: " + result.hasErrors());
-		
-		System.out.println("User password: " + user.getPassword());
 		
 		if(result.hasErrors()) {
 			return "registration";

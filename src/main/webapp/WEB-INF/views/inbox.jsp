@@ -1,4 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%-- Inbox and Message View swap through Javascript --%>
 
@@ -27,7 +29,7 @@
                 <td><c:out value="${message.messageId}"></c:out></td>
                 <td><c:out value="${message.receiver.username}"></c:out></td>
 				<td><c:out value="${message.sender.username}"></c:out></td>
-				<td class="text-right"><c:out value="${message.date}"></c:out></td>
+				<td class="text-right"><fmt:formatDate pattern="hh:mm dd-MMM-yyyy" value="${message.date}" /></td>
                 <td><c:out value="${message.message}"></c:out></td>
 			</tr>
 			</c:forEach>
@@ -59,7 +61,13 @@
             </div>
     	</div>
     	<div class="panel-footer">
-    		<input class="btn btn-sm btn-success col-md-offset-11" type="submit" value="Reply" id="appr-btn"></input>
+            <%-- Prepare Response --%>
+            <sec:authorize ifAnyGranted="ROLE_ADMIN">
+                <a id = "reply" href="/Auctioner/admin-new-message" class="btn btn-sm btn-success col-md-offset-11">Reply</a>
+            </sec:authorize>
+            <sec:authorize ifNotGranted="ROLE_ADMIN">
+                <a id = "reply" href="/Auctioner/myprofile-new-message" class="btn btn-sm btn-success col-md-offset-11">Reply</a>
+            </sec:authorize>
     	</div>
     </div>
 </div>
@@ -120,6 +128,12 @@
         $('#receiver').text('To: ' + receiver);
         $('#content').text(message);
 
+        /* Reply */
+        $('#reply').each(function () {
+            var href = $(this).attr('href');
+            $(this).attr('href', href + '/' + sender);
+        });
+
         /* Ajax update message.isRead value */
         $.ajax({
     		url: '/Auctioner/messaging/isRead/' + data[0],
@@ -130,6 +144,7 @@
                 $('#messages').hide();
                 row.removeClass('info');
                 $('#message').show();
+                chekforMessagesOnce();
     	    },
     		error: function(data)
     		{
