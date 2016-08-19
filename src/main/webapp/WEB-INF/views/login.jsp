@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <html>
 <head>
 
@@ -22,7 +24,7 @@
 </head>
 <body onload='document.loginForm.username.focus();'>
 
- 	<%@ include file="/resources/template/menu-top-visitor.jsp" %>
+ 	<%@ include file="/resources/template/menu-top.jsp" %>
 
 	<div class="col-md-4 col-md-offset-4">
 		<c:if test="${not empty error}">

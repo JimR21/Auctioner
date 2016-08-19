@@ -27,12 +27,9 @@
 </head>
 
 <body>
-	 <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-   	 	<%@ include file="/resources/template/menu-top.jsp" %>
-   	 </sec:authorize>
-   	 <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
-   	 	<%@ include file="/resources/template/menu-top-visitor.jsp" %>
-   	 </sec:authorize>
+
+   	 <%@ include file="/resources/template/menu-top.jsp" %>
+
 
     <!-- Page Content -->
     <div class="container">

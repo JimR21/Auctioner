@@ -18,7 +18,7 @@
 			username-parameter="username"
 			password-parameter="password"
 			authentication-failure-url="/loginFailed"
-			default-target-url="/home" />
+			default-target-url="/Auctioner/" />
 		<logout logout-success-url="/logout"/>
 		<access-denied-handler error-page="/403"/>
 		<intercept-url pattern="/login" access="permitAll"/>

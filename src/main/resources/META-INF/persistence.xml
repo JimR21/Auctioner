@@ -10,11 +10,11 @@
 		<class>com.ted.model.Auction</class>
 		<class>com.ted.model.Authority</class>
 		<class>com.ted.model.AuthorityPK</class>
-		<class>com.ted.model.Category</class>
 		<class>com.ted.model.Location</class>
 		<class>com.ted.model.User</class>
 		<class>com.ted.model.GlobalMessage</class>
 		<class>com.ted.model.Message</class>
+		<class>com.ted.model.Category</class>
 	</persistence-unit>
 	
 </persistence>

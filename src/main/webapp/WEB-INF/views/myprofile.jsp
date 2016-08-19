@@ -58,7 +58,7 @@
 
               <!-- Desktop sidebar -->
               <div class="col-sm-3 collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
-                <h4 class="text-center"><sec:authentication property="name"/></h4>
+                <h4 class="text-center">${user.username}</h4>
                 <hr />
                 <ul class="nav navbar-nav nav-pills">
                   <li class="active"><a href="#section1" data-toggle="pill">Overview<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>

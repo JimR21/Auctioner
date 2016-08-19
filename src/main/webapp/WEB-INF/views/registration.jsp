@@ -37,7 +37,7 @@
 </head>
 <body>
 
-	<%@ include file="/resources/template/menu-top-visitor.jsp" %>
+	<%@ include file="/resources/template/menu-top.jsp" %>
 
 	<div class="container">
 		<div class="row">
