@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ted.model.User;
 import com.ted.service.UserService;
 
 @Controller
@@ -77,6 +78,16 @@ public class UserController {
 	public String getUpgrade(Model model) {
 		
 		return "upgrade";
+	}
+	
+	@RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
+	public String getProfile(Model model, @PathVariable Integer id) {
+		
+		User usr = userService.getUserById(id);
+		
+		model.addAttribute("usr", usr);
+		
+		return "profile";
 	}
 
 }

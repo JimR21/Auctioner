@@ -153,14 +153,16 @@ public class MessageController {
 		return "anouncements";
 	}
 	
-	@PreAuthorize("isAuthenticated()")
+//	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_BIDDER')")
 	@RequestMapping(value = "checkNewMessages", method = RequestMethod.GET)
-	public @ResponseBody String checkNewMessages(Model model) {
+	public @ResponseBody Integer checkNewMessages(@ModelAttribute("user") User user, Model model) {
 		
 		Integer number = messageService.checkNewMessages();
 		
 		System.out.println("Returning messages number: " + number);		// Debug
 		
-		return number.toString();
+		System.out.println("Checking for new messages. User: " + user.getUsername());
+		
+		return number;
 	}
 }

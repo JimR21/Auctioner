@@ -18,7 +18,7 @@
 			username-parameter="username"
 			password-parameter="password"
 			authentication-failure-url="/loginFailed"
-			default-target-url="/Auctioner/" />
+			default-target-url="/" />
 		<logout logout-success-url="/logout"/>
 		<access-denied-handler error-page="/403"/>
 		<intercept-url pattern="/login" access="permitAll"/>
@@ -60,11 +60,11 @@
         />
 		</authentication-provider>
 		
-		<!-- <authentication-provider>
+		<authentication-provider>
 	        <user-service>
 	            <user name="admin" password="secret" authorities="ROLE_ADMIN" />
 	        </user-service>
-   		</authentication-provider>	 -->
+   		</authentication-provider>
    			
 	</authentication-manager>
 	

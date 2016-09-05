@@ -31,7 +31,6 @@
    	 <%@ include file="/resources/template/menu-top.jsp" %>
 
 
-    <!-- Page Content -->
     <div class="container">
 
         <div class="row">
@@ -40,10 +39,8 @@
                 <p class="lead">Buy and Sell Anything!</p>
             </div>
         </div>
-        <!-- /.row -->
 
     </div>
-    <!-- /.container -->
 
     <%@ include file="/resources/template/footer.jsp" %>
 

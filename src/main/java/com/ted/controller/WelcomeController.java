@@ -16,7 +16,7 @@ import com.ted.service.UserService;
 
 
 @Controller
-@SessionAttributes({"user", "categories"})
+@SessionAttributes("user")
 public class WelcomeController {
 	
 	@Autowired

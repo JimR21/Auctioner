@@ -2,7 +2,13 @@ package com.ted.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.data.domain.Page;
+
 import com.ted.model.Auction;
+import com.ted.model.AuctionBidding;
+import com.ted.model.BidResponse;
 
 public interface AuctionService {
 
@@ -10,6 +16,16 @@ public interface AuctionService {
 	
 	List<Auction> getAllAuctions();
 	
+	Page<Auction> pageAuctions(HttpServletRequest request);
+	
 	Auction getAuctionById(Integer id);
+
+	void updateFilter(HttpServletRequest request);
+	
+	BidResponse checkBids(Integer numofBids, Integer id);
+	
+	String bidSave(Integer auctionId, String bidAmount);
+	
+	void initializeMapper(Integer auctionId);
 	
 }

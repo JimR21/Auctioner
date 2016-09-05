@@ -18,9 +18,14 @@ function chekforMessages(){
     if(stopFlag == 1)   // Recursive returns
         return;
 
-    $.ajax({
+    if (request) {
+        request.abort();  // abort any pending request
+    }
+
+    var request = $.ajax({
         url: "/Auctioner/messaging/checkNewMessages",
         type: "GET",
+        timeout:45000,
         success: function( notification ) {
             //Check if any notifications are returned - if so then display alert
             msg_notifications = notification;
@@ -29,8 +34,8 @@ function chekforMessages(){
         },
         error: function(data){
             //handle any error
-            console.log('checkforMessages: nothing');
-             stopFlag = 1;
+            console.log("checkforMessages: ERROR: " + data.responseText);
+            stopFlag = 1;
         }
     });
     if(stopFlag == 1)

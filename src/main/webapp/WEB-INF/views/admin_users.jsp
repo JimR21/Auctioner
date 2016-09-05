@@ -28,7 +28,7 @@
 							<div class="dropdown">
 							<button class="btn btn-xs btn-primary" data-toggle="dropdown">More</button>
 							<ul class="dropdown-menu">
-								<li><a href="Profile">Profile</a>
+								<li><a href="/Auctioner/profile/${user.userid}">Profile</a>
 								<li class="divider"></li>
 								<li id="deleteU"><a href="#">Delete</a>
 							</ul>

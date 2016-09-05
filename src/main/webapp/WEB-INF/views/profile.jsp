@@ -2,7 +2,6 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,137 +14,107 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-	<link href=<c:url value="/resources/css/bootstrap.min.css" /> rel="stylesheet" type="text/css">
-	<link href=<c:url value="/resources/css/bootstrap-lumen.css" /> rel="stylesheet" type="text/css">
-	<link href=<c:url value="/resources/css/style.css" /> rel="stylesheet" type="text/css">
-	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
     <title>Auctioner</title>
 
 </head>
 
 <body>
-	 <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-   	 	<%@ include file="/resources/template/menu-top.jsp" %>
-   	 </sec:authorize>
-   	 <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
-   	 	<%@ include file="/resources/template/menu-top-visitor.jsp" %>
-   	 </sec:authorize>
 
-    <nav class="navbar navbar-inverse visible-xs">
-	  <div class="container">
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <a class="navbar-brand" href="#">Logo</a>
-	    </div>
-	    <div class="collapse navbar-collapse" id="myNavbar">
-	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="#">Dashboard</a></li>
-	        <li><a href="#">Users</a></li>
-	        <li><a href="#">Auctions</a></li>
-	      </ul>
-	    </div>
-	  </div>
-	</nav>
+   	 <%@ include file="/resources/template/menu-top.jsp" %>
 
-	<div class="container">
-	  <div class="row content">
-	    <div class="col-sm-3 sidenav hidden-xs">
-	      <h2>Logo</h2>
-	      <ul class="nav nav-pills nav-stacked">
-	        <li class="active"><a href="#section1">Dashboard</a></li>
-	        <li><a href="#section2">Users</a></li>
-	        <li><a href="#section3">Auctions</a></li>
-	      </ul><br>
-	    </div>
-	    <br>
-	    
-	    <div class="col-sm-9">
-	      <div class="well">
-	        <h4>Dashboard</h4>
-	        <p>Some text..</p>
-	      </div>
-	      <div class="row">
-	        <div class="col-sm-3">
-	          <div class="well">
-	            <h4>Users</h4>
-	            <p>1 Million</p>
-	          </div>
-	        </div>
-	        <div class="col-sm-3">
-	          <div class="well">
-	            <h4>Pages</h4>
-	            <p>100 Million</p>
-	          </div>
-	        </div>
-	        <div class="col-sm-3">
-	          <div class="well">
-	            <h4>Sessions</h4>
-	            <p>10 Million</p>
-	          </div>
-	        </div>
-	        <div class="col-sm-3">
-	          <div class="well">
-	            <h4>Bounce</h4>
-	            <p>30%</p>
-	          </div>
-	        </div>
-	      </div>
-	      <div class="row">
-	        <div class="col-sm-4">
-	          <div class="well">
-	            <p>Text</p>
-	            <p>Text</p>
-	            <p>Text</p>
-	          </div>
-	        </div>
-	        <div class="col-sm-4">
-	          <div class="well">
-	            <p>Text</p>
-	            <p>Text</p>
-	            <p>Text</p>
-	          </div>
-	        </div>
-	        <div class="col-sm-4">
-	          <div class="well">
-	            <p>Text</p>
-	            <p>Text</p>
-	            <p>Text</p>
-	          </div>
-	        </div>
-	      </div>
-	      <div class="row">
-	        <div class="col-sm-8">
-	          <div class="well">
-	            <p>Text</p>
-	          </div>
-	        </div>
-	        <div class="col-sm-4">
-	          <div class="well">
-	            <p>Text</p>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-    
-    <%@ include file="/resources/template/footer.jsp" %>
 
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="container">
+                    <h1 class="page-header"><strong>${usr.username}</strong></h1>
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                          <div class="text-center">
+                            <img src="http://lorempixel.com/200/200/people/9/" class="avatar img-circle img-thumbnail" alt="avatar">
+                            <h3>Bidder Rating</h3>
+                            <ul class="list-inline ratings text-center" title="Ratings">
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                </ul>
+                            <h3>Auctioneer Rating</h3>
+                            <ul class="list-inline ratings text-center" title="Ratings">
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                </ul>
+                          </div>
+                        </div>
+                        <!-- edit form column -->
+                        <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
+                          <h3>Personal info</h3>
+                          <div class="col-md-offset-4 col-md-3">
+                            <h4 class="text-left">Name</h4>
+                          </div>
+                          <div class="col-md-4">
+                              <h4 class="text-left"><strong>${usr.firstName}</strong></h4>
+                          </div>
+                          <div class="col-md-offset-4 col-md-3">
+                            <h4 class="text-left">Lastname</h4>
+                          </div>
+                          <div class="col-md-4">
+                              <h4 class="text-left"><strong>${usr.lastName}</strong></h4>
+                          </div>
+                          <div class="col-md-offset-4 col-md-3">
+                            <h4 class="text-left">Country</h4>
+                          </div>
+                          <div class="col-md-4">
+                              <h4 class="text-left"><strong>${usr.country}</strong></h4>
+                          </div>
+                          <div class="col-md-offset-4 col-md-3">
+                            <h4 class="text-left">City</h4>
+                          </div>
+                          <div class="col-md-4">
+                              <h4 class="text-left"><strong>${usr.city}</strong></h4>
+                          </div>
+                          <div class="col-md-offset-4 col-md-3">
+                            <h4 class="text-left">Email</h4>
+                          </div>
+                          <div class="col-md-4">
+                              <h4 class="text-left"><strong>${usr.email}</strong></h4>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <a href="/Auctioner/auctions/bySeller/${usr.userid}" class="btn btn-default pull-right">View User's Auctions</a>
+                            <sec:authorize ifAnyGranted="ROLE_ADMIN">
+                                <a href="/Auctioner/admin-new-message/${usr.username}" class="btn btn-default pull-right">Send Message</a>
+                            </sec:authorize>
+                            <sec:authorize ifNotGranted="ROLE_ADMIN">
+                                <a href="/Auctioner/myprofile-new-message/${usr.username}" class="btn btn-default pull-right">Send Message</a>
+                            </sec:authorize>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
     <!-- /.container -->
-    
-    <script src=<c:url value="/resources/js/jquery.min.js" />></script>
-   	<script src=<c:url value="/resources/js/bootstrap.min.js" />></script>
+
+    <%@ include file="/resources/template/footer.jsp" %>
 
 </body>
 

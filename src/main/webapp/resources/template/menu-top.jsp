@@ -23,16 +23,19 @@
 
 	<div class="collapse navbar-collapse js-navbar-collapse">
 		<ul class="nav navbar-nav">
+            <li><a href="/Auctioner/auctions?categoryId=all">View All</a></li>
 
             <%-- Categories --%>
             <%@ include file="/resources/template/categories.jsp" %>
 
 		</ul>
-        <div class="nav navbar-nav navbar-form navbar-right">
+        <div class="nav navbar-nav navbar-right">
             <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
                 <li>
                     <sec:authorize ifAnyGranted="ROLE_ADMIN">
-                        <a href="/Auctioner/admin-inbox" class="btn btn-default btn-sm btn-link">
+                        <p class="navbar-btn">
+                            <a href="/Auctioner/admin-inbox" class="btn btn-default btn-link">
+                        </p>
                     </sec:authorize>
                     <sec:authorize ifNotGranted="ROLE_ADMIN">
                         <a href="/Auctioner/myprofile-inbox" class="btn btn-default btn-sm btn-link">
@@ -67,9 +70,9 @@
                 </sec:authorize>
             </sec:authorize>
             <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
-                <a class="btn btn-primary" href="login">Login</a>
+                <a class="btn btn-primary" href="/Auctioner/login">Login</a>
                 or
-                <a class="btn btn-warning" href="registration">Sign up</a>
+                <a class="btn btn-warning" href="/Auctioner/registration">Sign up</a>
             </sec:authorize>
         </div>
 	</div><!-- /.nav-collapse -->

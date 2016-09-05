@@ -27,6 +27,9 @@ public class MessageServiceImpl implements MessageService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserService userService;
 
 	public List<Message> getByReceiver(User receiver) {
 		
@@ -75,11 +78,7 @@ public class MessageServiceImpl implements MessageService {
 		
 		// TODO: Extra input check
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-		    String username = authentication.getName();
-		    sender = userRepository.findByUsername(username);
-		}
+		sender = userService.getLoggedInUser();
 		
 		message.setReceiver(receiver);
 		message.setSender(sender);
@@ -104,16 +103,29 @@ public class MessageServiceImpl implements MessageService {
 
 	public Integer checkNewMessages() {
 		
-		User user = null;
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-		    String username = authentication.getName();
-		    user = userRepository.findByUsername(username);
+		User user = userService.getLoggedInUser();
+		
+		if(user == null)
+			return 0;
+		
+		Integer newMessages;
+		
+		for(int i = 0; i < 3; i++) {
+			
+			newMessages = messageRepository.newMessagesCount(user.getUserid());
+			
+			if(newMessages > 0)
+				return newMessages;
+			
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
-		return messageRepository.newMessagesCount(user.getUserid());
-		
+		return 0;
 	}
 	
 	

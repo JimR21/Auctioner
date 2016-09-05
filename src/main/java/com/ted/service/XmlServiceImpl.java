@@ -68,44 +68,44 @@ public class XmlServiceImpl implements XmlService {
 		
 		for(Auction auction : auctions) {
 			
-//			/* Seller */
-//			auction.setUser(saveSellerUser(auction.getXmlSeller(), j, i));
-//			
-//			/* Location */
-//			auction.setLocation(saveLocation(auction.getLocation()));
+			/* Seller */
+			auction.setUser(saveSellerUser(auction.getXmlSeller(), j, i));
+			
+			/* Location */
+			auction.setLocation(saveLocation(auction.getLocation()));
 			
 			/*Categories */
 			auction.setCategories(saveCategories(auction.getCategories()));
 			
-//			/* Date Format */
-//			auction.setEnds(formatString(auction.getXmlEnds()));
-//			auction.setStarted(formatString(auction.getXmlStarted()));
-//			
-//			/*Persist Auction */
-//			Auction dbauction = auctionRepository.saveAndFlush(auction);
-//			
-//			/* Auction Biddings */
-//			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
-//			int k = 0;
-//			
-//			for(AuctionBidding bid : xmlbiddings) {
-//				
-//				bid.setUser(saveBidderUser(bid.getUser(), j, i, k));	// save and return bidder
-//				
-//				bid.setAuction(dbauction);	//setAuction
-//				
-//				bid.setTime(formatString(bid.getXmlTime()));
-//				
-//				AuctionBiddingPK auctionBiddingPK = new AuctionBiddingPK();
-//				auctionBiddingPK.setAuctionid(dbauction.getAuctionid());
-//				auctionBiddingPK.setBidderUserid(bid.getUser().getUserid());
-//				
-//				bid.setId(auctionBiddingPK);
-//				
-//				auctionBiddingRepository.save(bid);
-//				
-//				k++;
-//			}
+			/* Date Format */
+			auction.setEnds(formatString(auction.getXmlEnds()));
+			auction.setStarted(formatString(auction.getXmlStarted()));
+			
+			/*Persist Auction */
+			Auction dbauction = auctionRepository.saveAndFlush(auction);
+			
+			/* Auction Biddings */
+			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
+			int k = 0;
+			
+			for(AuctionBidding bid : xmlbiddings) {
+				
+				bid.setUser(saveBidderUser(bid.getUser(), j, i, k));	// save and return bidder
+				
+				bid.setAuction(dbauction);	//setAuction
+				
+				bid.setTime(formatString(bid.getXmlTime()));
+				
+				AuctionBiddingPK auctionBiddingPK = new AuctionBiddingPK();
+				auctionBiddingPK.setAuctionid(dbauction.getAuctionid());
+				auctionBiddingPK.setBidderUserid(bid.getUser().getUserid());
+				
+				bid.setId(auctionBiddingPK);
+				
+				auctionBiddingRepository.save(bid);
+				
+				k++;
+			}
 			
 			i++;
 		}
@@ -337,7 +337,7 @@ public class XmlServiceImpl implements XmlService {
 			JAXBContext context = JAXBContext.newInstance(XmlAuctionWrapper.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			
-			for(int j = 1; j < 5; j++) {
+			for(int j = 0; j < 2; j++) {
 				
 				XmlAuctionWrapper wrapper = (XmlAuctionWrapper)unmarshaller.unmarshal(new FileReader("D:\\ebay-data\\items-" + j + ".xml"));
 				

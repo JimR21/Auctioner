@@ -111,5 +111,11 @@ public class UserServiceImpl implements UserService {
 		
 		return false;
 	}
+
+	public User getUserById(int id) {
+
+		return userRepository.findByUserid(id);
+		
+	}
 	
 }

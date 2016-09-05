@@ -27,59 +27,33 @@
   <dependencies>
   
     <!-- Spring -->
-<!--   	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-context</artifactId>
-		<version>${spring.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-aop</artifactId>
-		<version>${spring.version}</version>
-	</dependency> -->
 	<dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${spring.version}</version>
     </dependency>
-    <!-- <dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-context-support</artifactId>
-		<version>${spring.version}</version>
-	</dependency> -->
     
 	<!-- Database Integration -->
-	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 	<dependency>
 	    <groupId>mysql</groupId>
 	    <artifactId>mysql-connector-java</artifactId>
 	    <version>${mysql-connector.version}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-	<!-- <dependency>
-	    <groupId>org.hibernate</groupId>
-	    <artifactId>hibernate-core</artifactId>
-	    <version>${hibernate.version}</version>
-	</dependency> -->
-	<!-- https://mvnrepository.com/artifact/javax.transaction/jta -->
 	<dependency>
 	    <groupId>javax.transaction</groupId>
 	    <artifactId>jta</artifactId>
 	    <version>${jta.version}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-jdbc</artifactId>
 		<version>${spring.version}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-orm</artifactId>
 	    <version>${spring.version}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
 	<dependency>
 	    <groupId>org.springframework.data</groupId>
 	    <artifactId>spring-data-jpa</artifactId>
@@ -140,18 +114,6 @@
 		<version>${spring.version}</version>
 		<scope>test</scope>
 	</dependency>
-<!-- 	<dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.6.6</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>1.6.6</version>
-        <scope>test</scope>
-    </dependency> -->
    <dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-test</artifactId>
@@ -170,7 +132,6 @@
 	    <scope>provided</scope>
 	</dependency>
 	
-	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 	<dependency>
 	    <groupId>javax.servlet</groupId>
 	    <artifactId>jstl</artifactId>
@@ -194,6 +155,26 @@
         <artifactId>jquery</artifactId>
         <version>${jquery.version}</version>
     </dependency>
+    
+    <!-- Websocket -->
+    <dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-websocket</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
+	 
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-messaging</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
+	
+	<!-- JSON -->
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.5.0</version>
+	</dependency>
 	
   </dependencies>
   
