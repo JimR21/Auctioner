@@ -31,7 +31,10 @@
 		<div class="alert alert-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</div>
 		</c:if>
 		<c:if test="${not empty msg}">
-			<div class="alert alert-info">${msg}</div>
+			<div class="alert alert-info">
+				 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				${msg}
+			</div>
 		</c:if>
 	</div>
 	<br/>

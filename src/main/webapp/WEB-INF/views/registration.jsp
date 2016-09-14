@@ -59,54 +59,54 @@
 					 <div class="form-group">
 						 <label for="lastName">Last Name:</label>
 						 <form:input type="text" name='lastName' path="lastName" class="form-control" id="lastName" />
-						 <form:errors path="lastName" style="color:red" />
+						 <form:errors path="lastName" cssClass="error" />
 					 </div>
 					 <div class="form-group">
 						 <label for="username">Username:</label>
 						 <form:input type="text" name='username' path="username" class="form-control" id="username" />
-						 <form:errors path="username" style="color:red" />
+						 <form:errors path="username" cssClass="error" />
 					 </div>
 					 <div class="form-group">
 						  <label for="pwd">Password:</label>
 						  <form:input type="password" name='password' path="password" class="form-control" id="pwd" />
-						  <form:errors path="password" style="color:red" />
+						  <form:errors path="password" cssClass="error" />
 					 </div>
 					  <div class="form-group">
 						 <label for="email">Email address:</label>
 						 <form:input type="text" name='email' path="email" class="form-control" id="email" />
-						 <form:errors path="email" style="color:red" />
+						 <form:errors path="email" cssClass="error" />
 					 </div>
 					 <div class="form-group">
 						 <label for="phone">Phone:</label>
 						 <form:input type="text" name='phone' path="phone" class="form-control" id="phone" />
-						 <form:errors path="phone" style="color:red" />
+						 <form:errors path="phone" cssClass="error" />
 					 </div>
 				 </div>
 				 <div class="col-md-6">
 					 <div class="form-group">
 						 <label for="country">Country:</label>
 						 <form:input type="text" name='country' path="country" class="form-control" id="country" />
-						 <form:errors path="country" style="color:red" />
+						 <form:errors path="country" cssClass="error" />
 					 </div>
 					  <div class="form-group">
 						 <label for="city">City:</label>
 						 <form:input type="text" name='city' path="city" class="form-control" id="city" />
-						 <form:errors path="city" style="color:red" />
+						 <form:errors path="city" cssClass="error" />
 					 </div>
 					 <div class="form-group">
 						 <label for="address">Address:</label>
 						 <form:input type="text" name='address' path="address" class="form-control" id="address" />
-						 <form:errors path="address" style="color:red" />
+						 <form:errors path="address" cssClass="error" />
 					 </div>
 					 <div class="form-group">
 						 <label for="postalCode">Postal Code:</label>
 						 <form:input type="text" name='postalCode' path="postalCode" class="form-control" id="postalCode" />
-						 <form:errors path="postalCode" style="color:red" />
+						 <form:errors path="postalCode" cssClass="error" />
 					 </div>
 					  <div class="form-group">
 						 <label for="afm">AFM:</label>
 						 <form:input type="text" name='afm' path="afm" class="form-control" id="afm" />
-						 <form:errors path="afm" style="color:red" />
+						 <form:errors path="afm" cssClass="error" />
 					 </div>
 					 <br>
 			 		 <button name="submit" type="submit"

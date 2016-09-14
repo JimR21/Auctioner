@@ -9,5 +9,7 @@ public interface CategoryService {
 	List<Category> getAllCategories();
 
 	String getMenuHtml();
+	
+	List<Category> getParentCategories(Category category);
 
 }

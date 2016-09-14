@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 
 import com.ted.model.Auction;
-import com.ted.model.AuctionBidding;
 import com.ted.model.BidResponse;
+import com.ted.model.FormAuction;
 
 public interface AuctionService {
 
@@ -28,4 +28,6 @@ public interface AuctionService {
 	
 	void initializeMapper(Integer auctionId);
 	
+	String saveFormAuction(FormAuction formAuction);
+
 }

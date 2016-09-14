@@ -12,10 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * The persistent class for the users database table.
@@ -45,27 +48,34 @@ public class User implements Serializable {
 	@Column(name = "bidder_rating", length = 45)
 	private String bidderRating;
 
+	@NotEmpty
 	@Column(nullable = false, length = 100)
 	private String city;
 
+	@NotEmpty
 	@Column(nullable = false, length = 45)
 	private String country;
 
+	@NotEmpty
 	@Column(nullable = false, length = 55)
 	private String email;
 
 	@Column(nullable = false)
 	private byte enabled;
 
+	@NotEmpty
 	@Column(name = "first_name", nullable = false, length = 45)
 	private String firstName;
 
+	@NotEmpty
 	@Column(name = "last_name", nullable = false, length = 45)
 	private String lastName;
 
+	@NotEmpty
 	@Column(nullable = false, length = 60)
 	private String password;
 
+	@NotEmpty
 	@Column(nullable = false, length = 45)
 	private String phone;
 
@@ -75,6 +85,7 @@ public class User implements Serializable {
 	@Column(name = "seller_rating", length = 45)
 	private String sellerRating;
 
+	@NotEmpty
 	@Column(nullable = false, length = 45)
 	private String username;
 
@@ -89,6 +100,11 @@ public class User implements Serializable {
 	// bi-directional many-to-one association to Authority
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Authority> authorities;
+	
+	//bi-directional many-to-one association to AuctionPictures
+	@Transient
+	@OneToMany(mappedBy="user")
+	private List<UserPicture> userPictures;
 
 	public User() {
 	}
@@ -209,6 +225,11 @@ public class User implements Serializable {
 		return this.username;
 	}
 
+	@XmlTransient
+	public List<UserPicture> getUserPictures() {
+		return userPictures;
+	}
+
 	public Auction removeAuction(Auction auction) {
 		getAuctions().remove(auction);
 		auction.setUser(null);
@@ -304,6 +325,10 @@ public class User implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public void setUserPictures(List<UserPicture> userPictures) {
+		this.userPictures = userPictures;
 	}
 
 }

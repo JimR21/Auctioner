@@ -35,11 +35,11 @@
      <div class="container">
         <div class="row">
             <div class="row">
-                <c:if test="${not empty msg}">
-    				<div class="alert alert-info">${msg}</div>
-    			</c:if>
     			<c:if test="${not empty error}">
     				<div class="alert alert-danger">${error}</div>
+    			</c:if>
+    			<c:if test="${not empty msg}">
+    				<div class="alert alert-info">${msg}</div>
     			</c:if>
     		</div>
         	<section>
@@ -49,7 +49,7 @@
                      <ul class="nav nav-tabs" role="tablist">
 
                          <li role="presentation" class="active">
-                             <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Auction Info">
+                             <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="User Info">
                                  <span class="round-tab">
                                      <i class="glyphicon glyphicon-pencil"></i>
                                  </span>
@@ -81,19 +81,19 @@
                      </ul>
                  </div>
 
-                 <form:form id="form" name="auctionForm" role="form" modelAttribute="formAuction" method="POST" enctype="multipart/form-data">
+                 <form:form id="form" name="regForm" role="form" modelAttribute="user" method="POST" enctype="multipart/form-data">
                      <div class="tab-content">
                          <div class="tab-pane active" role="tabpanel" id="step1">
-                            <h2 class="text-center">Auction Info</h2>
+                            <h2 class="text-center">User Info</h2>
                             <div class="row content-row">
                                 <div class="col-md-6" style="padding-right:20px; border-right: 1px solid #ccc;">
                                     <div class="row">
                                         <div class="form-group">
-                                            <label for="name" class="input-label col-md-3">Auction Name:</label>
+                                            <label for="username" class="input-label col-md-3">Username:</label>
                                             <div class="col-lg-8">
                                                 <div class="in-group">
-                                                    <form:input type="text" name="auction.name" path="auction.name" id="name" class="form-control" placeholder="Auction" />
-                                            		<form:errors path="auction.name" cssClass="error" />
+                                                    <form:input type="text" name='username' path="username" class="form-control" id="username" />
+                                                    <form:errors path="username" cssClass="error" />
                                                 </div>
                                                 <div class="err">
                                                 </div>
@@ -102,11 +102,24 @@
                                     </div>
                                     <div class="row top-buffer">
                                         <div class="form-group">
-                                            <label for="description" class="input-label col-md-3">Description:</label>
+                                            <label for="email" class="input-label col-md-3">Email:</label>
                                             <div class="col-lg-8">
                                                 <div class="in-group">
-                                                    <form:textarea rows="5" name="description" path="auction.description" id="description" class="form-control" placeholder="Auction Info..." />
-                                                	<%-- <form:errors path="formAuction.auction.description" cssClass="error" /> --%>
+                                                    <form:input type="text" name='email' path="email" class="form-control" id="email" />
+                                                    <form:errors path="email" cssClass="error" />
+                                                </div>
+                                                <div class="err">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="form-group">
+                                            <label for="pwd" class="input-label col-md-3">Password:</label>
+                                            <div class="col-lg-8">
+                                                <div class="in-group">
+                                                    <form:input type="password" name='password' path="password" class="form-control" id="pwd" />
+                          						    <form:errors path="password" cssClass="error" />
                                                 </div>
                                                 <div class="err">
                                                 </div>
@@ -115,12 +128,43 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="name" class="input-label col-md-3">Category:</label>
-                                        <div class="col-lg-8">
-                                            <form:select path="categoryName" name="categoryName" class="selectpicker" data-live-search="true" data-container="body" data-max-options="1" title="Choose one of the following...">
-                                                <form:options items="${categories}" itemValue="name" itemLabel="name"></form:options>
-                                            </form:select>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label for="firstName" class="input-label col-md-3">First Name:</label>
+                                            <div class="col-lg-8">
+                                                <div class="in-group">
+                                                    <form:input type="text" id="firstName" name='firstName' path="firstName" class="form-control" />
+    					                            <form:errors path="firstName" cssClass="error" />
+                                                </div>
+                                                <div class="err">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="form-group">
+                                            <label for="lastName" class="input-label col-md-3">Last Name:</label>
+                                            <div class="col-lg-8">
+                                                <div class="in-group">
+                                                    <form:input type="text" name='lastName' path="lastName" class="form-control" id="lastName" />
+       						                        <form:errors path="lastName" cssClass="error" />
+                                                </div>
+                                                <div class="err">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="form-group">
+                                            <label for="phone" class="input-label col-md-3">Phone:</label>
+                                            <div class="col-lg-8">
+                                                <div class="in-group">
+                                                    <form:input type="text" name='phone' path="phone" class="form-control" id="phone" />
+                       						        <form:errors path="phone" cssClass="error" />
+                                                </div>
+                                                <div class="err">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                  </div>
@@ -137,14 +181,12 @@
                                  <div class="col-md-6" style="padding-right:20px; border-right: 1px solid #ccc;">
                                      <div class="row">
                                          <div class="form-group">
-                                             <label for="firstBid" class="input-label col-md-3">Starting Price:</label>
+                                             <label for="country" class="input-label col-md-3">Country:</label>
                                              <div class="col-lg-8">
-                                                 <div class="input-group">
-                                                     <span class="input-group-addon">&euro;</span>
-                                                     <form:input type="text" name="firstBid" path="auction.firstBid" id="firstBid" class="form-control" placeholder="Required" />
-                                                     <span class="input-group-addon">.00</span>
-                                             		<%-- <form:errors path="auction.name" cssClass="error" /> --%>
-                                                </div>
+                                                 <div class="in-group">
+                                                     <form:select path="country" id="country" name="country" class="form-control"></form:select>
+                                                     <form:errors path="country" cssClass="error" />
+                                                 </div>
                                                 <div class="err">
                                                 </div>
                                              </div>
@@ -152,26 +194,11 @@
                                      </div>
                                      <div class="row top-buffer">
                                          <div class="form-group">
-                                             <label for="buyPrice" class="input-label col-md-3">Buy Price:</label>
+                                             <label for="city" class="input-label col-md-3">City:</label>
                                              <div class="col-lg-8">
-                                                 <div class="input-group">
-                                                     <span class="input-group-addon">&euro;</span>
-                                                     <form:input type="text" name="buyPrice" path="auction.buyPrice" id="buyPrice" class="form-control" placeholder="Optional" />
-                                                     <span class="input-group-addon"> <span class="glyphicon glyphicon-euro"></span></span>
-                                                     <%-- <form:errors path="auction.name" cssClass="error" /> --%>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="row top-buffer">
-                                         <div class="form-group">
-                                             <label for="ends" class="input-label col-md-3">Ending Date & Time:</label>
-                                             <div class="col-lg-8">
-                                                 <div class='input-group date' id='datetimepicker1'>
-                                                     <form:input type='text' path="auction.ends" id="ends" name="ends" class="form-control" />
-                                                     <span class="input-group-addon">
-                                                         <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
+                                                 <div class="in_group">
+                                                     <form:input type="text" name='city' path="city" class="form-control" id="city" />
+                            						 <form:errors path="city" cssClass="error" />
                                                  </div>
                                                  <div class="err">
                                                  </div>
@@ -180,31 +207,7 @@
                                      </div>
                                  </div>
                                  <div class="col-md-6">
-                                     <div class="row">
-                                         <div class="form-group">
-                                             <label for="country" class="input-label col-md-3">Country:</label>
-                                             <div class="col-lg-8">
-                                                 <div class="in-group">
-                                                     <form:select path="auction.country" id="country" name="country" class="form-control"></form:select>
-                                                 </div>
-                                                 <div class="err">
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="row top-buffer">
-                                         <div class="form-group">
-                                             <label for="location" class="input-label col-md-3">City:</label>
-                                             <div class="col-lg-8">
-                                                 <div class="in_group">
-                                                     <form:input path="auction.location.name" id="location" name="location" class="form-control"></form:input>
-                                                 </div>
-                                                 <div class="err">
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                  </div>
+                                 </div>
                               </div>
                               <div class="row top-buffer">
                                   <ul class="list-inline pull-right">
@@ -216,8 +219,8 @@
                          <div class="tab-pane" role="tabpanel" id="step3">
                              <h2 class="text-center">Upload Pictures</h2>
                              <div class="row content-row">
-                                 <input id="input-1" name="input1" type="file" class="file-loading" multiple accept="image/x-png, image/jpeg"/>
-                                 <p>At least one picture is required.</p>
+                                 <input id="input-1" name="input1" type="file" class="file-loading" accept="image/x-png, image/jpeg"/>
+                                 <p>You can skip this step and add a photo later.</p>
                               </div>
                               <div class="row top-buffer">
                                   <ul class="list-inline pull-right">
@@ -262,31 +265,43 @@
 
     /* Validator */
     $().ready(function() {
-        $('#form').validate({
+        var validator = $('#form').validate({
             onfocusout: function(element) {
                 $(element).valid();
             },
-    		rules: {
-    			'auction.name': {
+            rules: {
+    			firstName: {
     				required: true
     			},
-                'auction.description': {
-    				required: true
+    			lastName: {
+    				required:true
     			},
-                'auction.category': {
-    				required: true
+    			username: {
+    				required:true
     			},
-                'auction.firstBid': {
-    				required: true
+    			email: {
+    				required:true
     			},
-                'auction.ends': {
-    				required: true
+    			password: {
+    				required:true
     			},
-                'auction.country': {
-    				required: true
+    			phone: {
+    				required:true
     			},
-                'auction.location.name': {
-    				required: true
+    			country: {
+    				required:true
+    			},
+    			city: {
+    				required:true
+    			},
+    			address: {
+    				required:true
+    			},
+    			postalCode: {
+    				required:true
+    			},
+    			afm: {
+    				required:true
     			}
     		},
     		highlight: function(element, errorClass) {
@@ -310,7 +325,7 @@
     $(document).on('ready', function() {
         $("#input-1").fileinput({
             showUpload: false,
-            maxFileCount: 10,
+            maxFileCount: 1,
             mainClass: "input-group-lg",
             browseClass: "btn btn-success",
             browseLabel: "Pick Images",

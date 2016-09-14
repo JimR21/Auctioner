@@ -1,5 +1,6 @@
 package com.ted.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,19 @@ public class CategoryServiceImpl implements CategoryService {
 		
 		return html;
 		
+	}
+
+	public List<Category> getParentCategories(Category category) {
+		
+		ArrayList<Category> categories = new ArrayList<Category>();
+		categories.add(category);
+
+		while(category.getCategory() != null) {
+			category = category.getCategory();
+			categories.add(category);
+		}
+		
+		return categories;
 	}
 	
 

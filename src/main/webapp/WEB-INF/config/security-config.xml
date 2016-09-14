@@ -31,6 +31,7 @@
 		<intercept-url pattern="/myprofile/**" access="hasRole('ROLE_BIDDER')"/>
 		<intercept-url pattern="/upgrade" access="hasRole('ROLE_BIDDER')"/>
 		<intercept-url pattern="/myauctions/**" access="hasRole('ROLE_SELLER')"/>
+		<intercept-url pattern="/new-auction" access="hasRole('ROLE_SELLER')"/>
 <!-- 		<intercept-url pattern="/messaging" access="hasRole('ROLE_BIDDER', 'ROLE_ADMIN')"/> -->
 		<intercept-url pattern="/**" access="permitAll"/>
 		

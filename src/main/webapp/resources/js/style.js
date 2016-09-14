@@ -14,6 +14,11 @@
 //     );
 // });
 
+/* Navbar affix */
+$('.navbar-lower').affix({
+  offset: {top: 50}
+});
+
 // ADD SLIDEDOWN ANIMATION TO DROPDOWN //
 (function($){
 $('.mega-dropdown').on('show.bs.dropdown', function(e){

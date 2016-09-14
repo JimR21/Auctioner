@@ -199,6 +199,9 @@ public class XmlServiceImpl implements XmlService {
 				Authority authority = new Authority();
 				authority.setId(authorityPK);
 				authority.setUser(dbuser);
+				
+				/* Persist authority */
+				authorityRepository.save(authority);
 			}
 			
 			return dbuser;

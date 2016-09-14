@@ -1,5 +1,9 @@
 package com.ted.controller;
 
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +13,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ted.model.User;
+import com.ted.service.CategoryService;
 import com.ted.service.LoginService;
 
 @Controller
@@ -18,6 +25,9 @@ public class LoginController {
 	
 	@Autowired
 	LoginService loginService;
+	
+	@Autowired
+	CategoryService categoryService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login (Model model) {
@@ -46,25 +56,59 @@ public class LoginController {
 		
 		model.addAttribute("user", user);
 		
-		return "registration";
+		return "reg";
 	}
 	
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
-	public String registrationPost(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
+	public String registrationPost(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
+			@RequestParam("input1") MultipartFile image) {
 		
 		
 		if(result.hasErrors()) {
-			return "registration";
+			return "reg";
 		}
 		
-		String msg = loginService.checkEmailUsernameAfm(user);
+		String msg = loginService.checkEmailUsername(user);
 		if(msg != null)	// Check if email already exists
 		{
 			model.addAttribute("msg", msg);
-			return "registration";
+			return "reg";
 		}
 		
-		loginService.saveUser(user);
+		loginService.saveUser(user, image);
+		
+		return "redirect:login";
+	}
+	
+	@RequestMapping(value = "/upgrade", method = RequestMethod.GET)
+	public String getUpgrade(Model model) {
+		
+		return "upgrade";
+	}
+	
+	@RequestMapping(value = "/upgrade", method = RequestMethod.POST)
+	public String postUpgrade(@RequestParam Map<String,String> allRequestParams, Model model, 
+			HttpServletRequest request) {
+		
+		String error = loginService.upgradeUser(allRequestParams);
+		
+		if(error != null) {
+			model.addAttribute("error", error);
+			return "upgrade";
+		}
+		
+		/* Logout */
+		try {
+			request.logout();
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
+		
+		/* Prepare login page */
+		String msg = "Your account has just been upgraded. You can now create new Auctions and see them in your account."
+				+ " Please Login again to complete ther process.";
+		model.addAttribute("msg", msg);
+
 		
 		return "redirect:login";
 	}

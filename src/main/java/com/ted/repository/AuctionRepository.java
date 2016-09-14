@@ -23,5 +23,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
 	
 	@Query(value = "SELECT a FROM Auction a WHERE :cat MEMBER OF a.categories")
 	Page<Auction> findByCategory(@Param("cat") Category cat, Pageable page);
+	
+	Page<Auction> findByNameContaining(String searchString, Pageable page);
 
 }

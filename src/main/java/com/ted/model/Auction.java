@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * The persistent class for the auctions database table.
  * 
@@ -49,23 +51,28 @@ public class Auction implements Serializable {
 	@Column(name = "buy_price", length = 45)
 	private String buyPrice;
 
+	@NotEmpty
 	@Column(nullable = false, length = 45)
 	private String country;
 
 	@Column(nullable = false, length = 45)
 	private String currently;
 
+	@NotEmpty
 	@Lob
 	@Column(nullable = false)
 	private String description;
 
+	@NotEmpty
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date ends;
 
+	@NotEmpty
 	@Column(name = "first_bid", nullable = false, length = 45)
 	private String firstBid;
 
+	@NotEmpty
 	@Column(nullable = false, length = 45)
 	private String name;
 
@@ -93,9 +100,15 @@ public class Auction implements Serializable {
 	private List<Category> categories;
 
 	// bi-directional many-to-one association to Location
+	@NotEmpty
 	@ManyToOne
 	@JoinColumn(name = "location_id", nullable = false)
 	private Location location;
+	
+	//bi-directional many-to-one association to AuctionPictures
+	@Transient
+	@OneToMany(mappedBy="auction")
+	private List<AuctionPicture> auctionPicture;
 	
 	@Transient
 	private XmlSeller xmlSeller;
@@ -125,6 +138,10 @@ public class Auction implements Serializable {
 	@XmlAttribute(name = "ItemID")
 	public int getAuctionid() {
 		return this.auctionid;
+	}
+
+	public List<AuctionPicture> getAuctionPicture() {
+		return auctionPicture;
 	}
 
 	@XmlElement(name = "Buy_Price")
@@ -217,6 +234,10 @@ public class Auction implements Serializable {
 		this.auctionid = auctionid;
 	}
 
+	public void setAuctionPicture(List<AuctionPicture> auctionPicture) {
+		this.auctionPicture = auctionPicture;
+	}
+
 	public void setBuyPrice(String buyPrice) {
 		this.buyPrice = buyPrice;
 	}
@@ -276,5 +297,7 @@ public class Auction implements Serializable {
 	public void setXmlStarted(String xmlStarted) {
 		this.xmlStarted = xmlStarted;
 	}
+	
+	
 
 }

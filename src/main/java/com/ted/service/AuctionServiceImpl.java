@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ted.model.Auction;
 import com.ted.model.AuctionBidding;
@@ -23,10 +24,15 @@ import com.ted.model.AuctionInfo;
 import com.ted.model.AuctionMapper;
 import com.ted.model.Bid;
 import com.ted.model.BidResponse;
+import com.ted.model.Category;
 import com.ted.model.Filter;
+import com.ted.model.FormAuction;
+import com.ted.model.Location;
+import com.ted.model.User;
 import com.ted.repository.AuctionBiddingRepository;
 import com.ted.repository.AuctionRepository;
 import com.ted.repository.CategoryRepository;
+import com.ted.repository.LocationRepository;
 
 @Service("auctionService")
 public class AuctionServiceImpl implements AuctionService {
@@ -41,7 +47,16 @@ public class AuctionServiceImpl implements AuctionService {
 	AuctionBiddingRepository auctionBiddingRepository;
 	
 	@Autowired
+	LocationRepository locationRepository;
+	
+	@Autowired
+	AuctionPictureService auctionPictureService;
+	
+	@Autowired
 	UserService userService;
+	
+	@Autowired
+	CategoryService categoryService;
 	
 	@Autowired
 	Filter filter;
@@ -87,6 +102,7 @@ public class AuctionServiceImpl implements AuctionService {
 		}
 		else {
 			page = new PageRequest(0, 15, sort);
+			filter.setSearchString(null);
 		}
 		
 		if(filter.getCategory() != null) {
@@ -94,7 +110,10 @@ public class AuctionServiceImpl implements AuctionService {
 			//auctions = auctionRepository.findAll(page);
 		}
 		else {
-			auctions = auctionRepository.findAll(page);
+			if(filter.getSearchString() == null)
+				auctions = auctionRepository.findAll(page);
+			else
+				auctions = auctionRepository.findByNameContaining(filter.getSearchString(), page);
 		}
 		
 		filter.setNumberofPages(auctions.getTotalPages());
@@ -126,6 +145,7 @@ public class AuctionServiceImpl implements AuctionService {
 		String categoryId = request.getParameter("categoryId");
 		String price = request.getParameter("price");
 		String sortBy = request.getParameter("sortBy");
+		String searchString = request.getParameter("searchString");
 		
 		if(categoryId != null) {
 			if(categoryId.equals("all"))
@@ -147,6 +167,9 @@ public class AuctionServiceImpl implements AuctionService {
 				filter.setSortByOutput("Starting Price");
 			}
 		}
+		
+		if(searchString != null)
+			filter.setSearchString(" " + searchString + " ");
 	}
 	
 	/* Response preparation for ajax request checkBids */
@@ -284,10 +307,67 @@ public class AuctionServiceImpl implements AuctionService {
 				info.setLatestBid(biddings.get(numofBids-1).getAmount());
 			
 			auctionMapper.setAuctionInfo(auctionId, info);
-			
 		}
-
 	}
+
+	public String saveFormAuction(FormAuction formAuction) {
+		
+		Auction auction = formAuction.getAuction();
+		MultipartFile[] files = formAuction.getFiles();
+		
+		/* Check */
+		if(files.length == 0 || files[0].isEmpty())
+			return "You must provide at least one picture.";
+		if(auction.getCountry() == null || auction.getCountry().isEmpty())
+			return "Please provide a Country and a location.";
+		if(formAuction.getCategoryName() == null || formAuction.getCategoryName().isEmpty())
+			return "You must select a category for the Auction.";
+		
+		/* Seller */
+		User user = userService.getLoggedInUser();
+		if(user == null) 
+			return "You must be logged in to create an auction.";
+		
+		auction.setUser(user);
+		
+		/* Location */
+		auction.setLocation(saveLocation(auction.getLocation()));
+		
+		/* Categories */
+		Category category = categoryRepository.findByName(formAuction.getCategoryName());
+		auction.setCategories(categoryService.getParentCategories(category));
+		
+		/* Currently Price */
+		auction.setCurrently(auction.getFirstBid());
+		
+		/* Starting Date */
+		auction.setStarted(new Date());
+		
+		/* Persist Auction */
+		auction = auctionRepository.saveAndFlush(auction);
+		
+		/* Pictures */
+		auction.setAuctionPicture(auctionPictureService.saveMultipartList(files, auction));
+		
+		return null;
+	}
+	
+	@Transactional
+	public Location saveLocation(Location location) {
+		
+		Location loc = locationRepository.findByName(location.getName());
+		
+		if(loc == null)
+			locationRepository.save(location);
+		else if(location.getLatitude() != null || location.getLongitude() != null) {
+			loc.setLatitude(location.getLatitude());
+			loc.setLongitude(location.getLongitude());
+			locationRepository.save(loc);
+		}
+		return locationRepository.findByName(location.getName());
+	}
+
+	
 }
 
 class BidTimeComparator implements Comparator<AuctionBidding> {

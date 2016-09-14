@@ -24,6 +24,8 @@ public class Filter {
 	Integer pageNum;
 	
 	Long numberofItems;
+	
+	String searchString;
 
 	public Filter() {
 		
@@ -34,6 +36,8 @@ public class Filter {
 		price = null;
 
 		sortByOutput = "Ending Date";
+		
+		searchString = null;
 	}
 
 	public Category getCategory() {
@@ -64,6 +68,10 @@ public class Filter {
 		return price;
 	}
 	
+	public String getSearchString() {
+		return searchString;
+	}
+
 	public String getSortBy() {
 		return sortBy;
 	}
@@ -96,6 +104,10 @@ public class Filter {
 		this.price = price;
 	}
 
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+
 	public void setSortBy(String sortBy) {
 		this.sortBy = sortBy;
 	}
@@ -103,6 +115,8 @@ public class Filter {
 	public void setSortByOutput(String sortByOutput) {
 		this.sortByOutput = sortByOutput;
 	}
+	
+	
 
 	
 }

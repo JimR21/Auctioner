@@ -9,8 +9,8 @@
 
 
 <%--Top Navbar --%>
-<div class="container-fluid container-full">
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
     <div class="navbar-header">
     	<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
 			<span class="sr-only">Toggle navigation</span>
@@ -22,13 +22,22 @@
 	</div>
 
 	<div class="collapse navbar-collapse js-navbar-collapse">
-		<ul class="nav navbar-nav">
-            <li><a href="/Auctioner/auctions?categoryId=all">View All</a></li>
 
-            <%-- Categories --%>
-            <%@ include file="/resources/template/categories.jsp" %>
+        <div class="col-md-offset-3 col-md-4">
+            <form class="navbar-center" role="search" action="/Auctioner/auctions">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" name="searchString" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                        <input type="hidden" name="categoryId" value="all">
+                        <input type="hidden" name="page" value="1">
+                    </div>
+                </div>
+            </form>
+        </div>
 
-		</ul>
         <div class="nav navbar-nav navbar-right">
             <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
                 <li>
@@ -50,9 +59,14 @@
                     <li><a href="/Auctioner/admin" style="color:orange">Admin Console</a></li>
                     <li><a href="/Auctioner/j_spring_security_logout">Logout</a></li>
                 </sec:authorize>
-                 <sec:authorize ifAnyGranted="ROLE_BIDDER">
+                <sec:authorize ifAnyGranted="ROLE_BIDDER">
+                <sec:authorize ifNotGranted="ROLE_SELLER">
                     <li><a href="upgrade" style="color:orange">Become An Auctioner</a></li>
                 </sec:authorize>
+                </sec:authorize>
+                <sec:authorize ifAnyGranted="ROLE_SELLER">
+                   <li><a href="new-auction" style="color:orange">New Auction</a></li>
+               </sec:authorize>
                 <sec:authorize ifNotGranted="ROLE_ADMIN">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href=
@@ -76,8 +90,22 @@
             </sec:authorize>
         </div>
 	</div><!-- /.nav-collapse -->
-  </nav>
-</div>
+  </div>
+</nav>
+
+<nav id="nav" class="navbar navbar-inverse navbar-lower" role="navigation">
+  <div class="container">
+    <div class="collapse navbar-collapse collapse-buttons">
+        <ul class="nav navbar-nav">
+            <li><a href="/Auctioner/auctions?categoryId=all">View All</a></li>
+
+            <%-- Categories --%>
+            <%@ include file="/resources/template/categories.jsp" %>
+
+		</ul>
+    </div>
+  </div>
+</nav>
 
 <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
 <script src=<c:url value="/resources/js/msg-notify.js" />></script>
