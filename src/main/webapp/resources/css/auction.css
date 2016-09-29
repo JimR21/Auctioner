@@ -146,3 +146,8 @@ max-height: 480px;
 {
     margin-right: 10px;
 }
+
+div#map_container{
+	width:690;
+	height:400px;
+}

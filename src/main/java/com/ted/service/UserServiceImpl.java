@@ -1,5 +1,6 @@
 package com.ted.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ted.model.AuctionBidding;
 import com.ted.model.Authority;
+import com.ted.model.BidderRating;
+import com.ted.model.BidderRatingPK;
+import com.ted.model.SellerRating;
+import com.ted.model.SellerRatingPK;
 import com.ted.model.User;
+import com.ted.repository.BidderRatingRepository;
+import com.ted.repository.SellerRatingRepository;
 import com.ted.repository.UserRepository;
 
 @Service("userService")
@@ -19,6 +27,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	SellerRatingRepository sellerRatingRepository;
+	
+	@Autowired
+	BidderRatingRepository bidderRatingRepository;
 
 	public User getLoggedInUser() {
 		
@@ -115,6 +129,80 @@ public class UserServiceImpl implements UserService {
 	public User getUserById(int id) {
 
 		return userRepository.findByUserid(id);
+		
+	}
+
+	@Transactional
+	public void rateSeller(Integer id, float rating) {
+		
+		User rated = userRepository.findByUserid(id);
+		User rater = getLoggedInUser();
+		
+		SellerRatingPK sellerRatingPK = new SellerRatingPK();
+		sellerRatingPK.setRatedSellerId(id);
+		sellerRatingPK.setRaterSellerId(rater.getUserid());
+		
+		SellerRating sellerRating;
+		
+		sellerRating = sellerRatingRepository.findOne(sellerRatingPK);
+		
+		/* If rating exists */
+		if(sellerRating != null) {
+			sellerRating.setRating(rating);
+		}
+		else {
+			sellerRating = new SellerRating();
+			sellerRating.setId(sellerRatingPK);
+			sellerRating.setRating(rating);
+		}
+		
+		/* Persist Rating */
+		sellerRatingRepository.saveAndFlush(sellerRating);
+		
+		/* Update Overall Rating */
+		float newAvgRating = sellerRatingRepository.userAvgRating(rated);
+		rated.setSellerRating(newAvgRating);
+		rated.setNumberOfSellerRatings(rated.getNumberOfSellerRatings()+1);
+		
+		/* Update rated User */
+		userRepository.saveAndFlush(rated);
+		
+	}
+
+	@Transactional
+	public void rateBidder(Integer id, float rating) {
+		
+		User rated = userRepository.findByUserid(id);
+		User rater = getLoggedInUser();
+		
+		BidderRatingPK bidderRatingPK = new BidderRatingPK();
+		bidderRatingPK.setRatedBidderId(id);
+		bidderRatingPK.setRaterBidderId(rater.getUserid());
+		
+		BidderRating bidderRating;
+		
+		bidderRating = bidderRatingRepository.findOne(bidderRatingPK);
+		
+		/* If rating exists */
+		if(bidderRating != null) {
+			bidderRating.setRating(rating);
+		}
+		else {
+			bidderRating = new BidderRating();
+			bidderRating.setId(bidderRatingPK);
+			bidderRating.setRating(rating);
+		}
+		
+		/* Persist Rating */
+		bidderRatingRepository.saveAndFlush(bidderRating);
+		
+		/* Update Overall Rating */
+		float newAvgRating = sellerRatingRepository.userAvgRating(rated);
+		rated.setSellerRating(newAvgRating);
+		rated.setNumberOfBidderRatings(rated.getNumberOfBidderRatings()+1);
+		
+		/* Update rated User */
+		userRepository.saveAndFlush(rated);
 		
 	}
 	

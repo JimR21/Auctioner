@@ -66,6 +66,10 @@
             				 <label for="afm">AFM: </label>
             				 <input type="text" name='afm' class="form-control" id="afm" />
             			 </div>
+                         <div class="form-group">
+    						 <label for="phone">Phone:</label>
+    						 <input type="text" name='phone' path="phone" class="form-control" id="phone" />
+    					 </div>
                          <div class="row top-buffer">
                              <ul class="list-inline pull-right">
                                  <li><button name="submit" type="submit" value="submit" class="btn btn-lg btn-success">Upgrade</button></li>

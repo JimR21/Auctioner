@@ -28,6 +28,7 @@
 <body>
 
    	 <%@ include file="/resources/template/menu-top.jsp" %>
+     <link href=<c:url value="/resources/css/star-rating.min.css" /> rel="stylesheet" type="text/css">
 
 
     <!-- Page Content -->
@@ -42,22 +43,10 @@
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <div class="text-center">
                             <img src="http://lorempixel.com/200/200/people/9/" class="avatar img-circle img-thumbnail" alt="avatar">
-                            <h3>Bidder Rating</h3>
-                            <ul class="list-inline ratings text-center" title="Ratings">
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                </ul>
-                            <h3>Auctioneer Rating</h3>
-                            <ul class="list-inline ratings text-center" title="Ratings">
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                  <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                </ul>
+                            <label for="seller-rating" class="control-label"><h3>Auctioneer Rating</h3></label>
+                            <input id="seller-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${usr.sellerRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">(${usr.numberOfSellerRatings})
+                            <label for="bidder-rating" class="control-label"><h3>Bidder Rating</h3></label>
+                            <input id="bidder-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${usr.bidderRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">(${usr.numberOfBidderRatings})
                           </div>
                         </div>
                         <!-- edit form column -->
@@ -115,6 +104,58 @@
     <!-- /.container -->
 
     <%@ include file="/resources/template/footer.jsp" %>
+    <script src=<c:url value="/resources/js/star-rating.min.js" />></script>
+
+    <script>
+
+    $('#seller-rating').on('rating.change', function(event, value, caption) {
+        console.log(value);
+        sellerRatingPost(value);
+    });
+
+    $('#bidder-rating').on('rating.change', function(event, value, caption) {
+        console.log(value);
+        bidderRatingPost(value);
+    });
+
+    userId = "${usr.userid}";
+
+    /* Function to ajax post the Seller Rating */
+    function sellerRatingPost(value) {
+
+        var url = "/Auctioner/rate/seller/" + userId;
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {rating : value},
+            success: function( data ) {
+                console.log("ratingPost: " + data);
+            },
+            error: function(data){
+                console.log("ERROR: " + data.responseText);
+            }
+        });
+    }
+
+    /* Function to ajax post the Bidder Rating */
+    function bidderRatingPost(value) {
+
+        var url = "/Auctioner/rate/bidder/" + userId;
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {rating : value},
+            success: function( data ) {
+                console.log("ratingPost: " + data);
+            },
+            error: function(data){
+                console.log("ERROR: " + data.responseText);
+            }
+        });
+    }
+    </script>
 
 </body>
 

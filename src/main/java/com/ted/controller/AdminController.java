@@ -1,6 +1,13 @@
 package com.ted.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ted.model.Dashboard;
+import com.ted.service.AdminService;
 import com.ted.service.AuctionService;
 import com.ted.service.UserService;
+import com.ted.service.XmlService;
 
 @Controller
 public class AdminController {
@@ -22,10 +32,20 @@ public class AdminController {
 
 	@Autowired
 	AuctionService auctionService;
+	
+	@Autowired
+	XmlService xmlService;
+	
+	@Autowired
+	AdminService adminService;
 
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String getAdmin(Model model) {
+		
+		Dashboard dashboard = adminService.generateDashboard();
+		
+		model.addAttribute("dashboard", dashboard);
 
 		return "admin";
 	}
@@ -110,7 +130,6 @@ public class AdminController {
 		model.addAttribute("userIdToDelete");
 
 		return "admin_users";
-
 	}
 
 	@RequestMapping(value = "/admin/auctions", method = RequestMethod.GET)
@@ -120,7 +139,26 @@ public class AdminController {
 		model.addAttribute("auctions", auctionService.getAllAuctions());
 
 		return "admin_auctions";
-
 	}
+	
+	@RequestMapping(value = "/admin/xmlDownload", method = RequestMethod.GET)
+	public void xmlDownload( HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value="ids[]") List<Integer> ids) {
+		
+		String path = request.getContextPath();
+		System.out.println(path);
 
+        try
+        {
+        	File file = xmlService.xmlFileProduce(ids);
+        	InputStream is = new FileInputStream(file);
+			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+			response.setContentType("application/xml");
+			response.addHeader("Content-Disposition", "attachment; filename=" + file.getName());
+			response.flushBuffer();
+        } 
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+	}
 }

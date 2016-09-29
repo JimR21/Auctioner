@@ -45,8 +45,8 @@ public class LoginServiceImpl implements LoginService {
 		user.setApproved((byte)0);
 		
 		// User Rating
-		user.setBidderRating(null);
-		user.setSellerRating(null);
+//		user.setBidderRating(0);
+//		user.setSellerRating(0);
 		
 		// Persist user
 		user = userRepository.saveAndFlush(user);
@@ -74,6 +74,49 @@ public class LoginServiceImpl implements LoginService {
 		
 		// Persist authority
 		authorityRepository.saveAndFlush(authority);
+		
+		return user;
+	}
+	
+	@Transactional
+	public User updateUser(User user, MultipartFile file) {
+		
+		/* Copy new user info */
+		User perUser = userRepository.findByUserid(user.getUserid());
+		perUser.setFirstName(user.getFirstName());
+		perUser.setLastName(user.getLastName());
+		perUser.setEmail(user.getEmail());
+		perUser.setUsername(user.getUsername());
+		perUser.setCountry(user.getCountry());
+		perUser.setCity(user.getCity());
+		perUser.setAddress(user.getAddress());
+		perUser.setPostalCode(user.getPostalCode());
+		perUser.setAfm(user.getAfm());
+		
+		if(!user.getPassword().equals("p4DS*4a$hLA*4#ataPv")) {
+			// BCrypt password encryption
+			BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+			String hashedPass = passEncoder.encode(user.getPassword());
+			perUser.setPassword(hashedPass);
+		}
+		
+		System.out.println("Password: " + user.getPassword());
+		
+		
+		// Persist user
+		user = userRepository.saveAndFlush(perUser);
+		
+//		// Picture
+//		if(!file.isEmpty()) {
+//			UserPicture picture = new UserPicture();
+//			try {
+//				picture.setContent(file.getBytes());
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			picture.setUser(user);
+//			userPictureRepository.saveAndFlush(picture);
+//		}
 		
 		return user;
 	}
@@ -111,6 +154,12 @@ public class LoginServiceImpl implements LoginService {
 		if(afm.isEmpty())
 			return "Please provide an AFM.";
 		user.setAfm(afm);
+		
+		/* Phone */
+		String phone = params.get("phone");
+		if(afm.isEmpty())
+			return "Please provide a phone number.";
+		user.setPhone(phone);
 		
 		/* Update User */
 		user = userRepository.saveAndFlush(user);

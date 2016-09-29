@@ -72,14 +72,9 @@
 						  <form:errors path="password" cssClass="error" />
 					 </div>
 					  <div class="form-group">
-						 <label for="email">Email address:</label>
+						 <label for="email">Email:</label>
 						 <form:input type="text" name='email' path="email" class="form-control" id="email" />
 						 <form:errors path="email" cssClass="error" />
-					 </div>
-					 <div class="form-group">
-						 <label for="phone">Phone:</label>
-						 <form:input type="text" name='phone' path="phone" class="form-control" id="phone" />
-						 <form:errors path="phone" cssClass="error" />
 					 </div>
 				 </div>
 				 <div class="col-md-6">
@@ -92,21 +87,6 @@
 						 <label for="city">City:</label>
 						 <form:input type="text" name='city' path="city" class="form-control" id="city" />
 						 <form:errors path="city" cssClass="error" />
-					 </div>
-					 <div class="form-group">
-						 <label for="address">Address:</label>
-						 <form:input type="text" name='address' path="address" class="form-control" id="address" />
-						 <form:errors path="address" cssClass="error" />
-					 </div>
-					 <div class="form-group">
-						 <label for="postalCode">Postal Code:</label>
-						 <form:input type="text" name='postalCode' path="postalCode" class="form-control" id="postalCode" />
-						 <form:errors path="postalCode" cssClass="error" />
-					 </div>
-					  <div class="form-group">
-						 <label for="afm">AFM:</label>
-						 <form:input type="text" name='afm' path="afm" class="form-control" id="afm" />
-						 <form:errors path="afm" cssClass="error" />
 					 </div>
 					 <br>
 			 		 <button name="submit" type="submit"
@@ -141,22 +121,10 @@
 			password: {
 				required:true
 			},
-			phone: {
-				required:true
-			},
 			country: {
 				required:true
 			},
 			city: {
-				required:true
-			},
-			address: {
-				required:true
-			},
-			postalCode: {
-				required:true
-			},
-			afm: {
 				required:true
 			}
 		},

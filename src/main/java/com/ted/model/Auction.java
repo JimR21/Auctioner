@@ -1,6 +1,7 @@
 package com.ted.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -37,7 +39,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name = "auctions")
 @NamedQuery(name = "Auction.findAll", query = "SELECT a FROM Auction a")
-@XmlType(propOrder = {"name", "categories", "currently", "buyPrice", "firstBid", "numberOfBids", 
+@XmlType(propOrder = {"name", "categories", "currentlyString", "buyPriceString", "firstBidString", "numberOfBids", 
 		"auctionBiddings", "location", "country", "xmlStarted", "xmlEnds", "xmlSeller", "description"})
 @XmlRootElement(name = "Item")
 public class Auction implements Serializable {
@@ -48,29 +50,30 @@ public class Auction implements Serializable {
 	@Column(unique = true, nullable = false)
 	private int auctionid;
 
-	@Column(name = "buy_price", length = 45)
-	private String buyPrice;
+	@Column(name="buy_price", columnDefinition="Decimal(15,2)")
+	private BigDecimal buyPrice;
 
 	@NotEmpty
 	@Column(nullable = false, length = 45)
 	private String country;
 
-	@Column(nullable = false, length = 45)
-	private String currently;
+	@NotNull
+	@Column(name="currently", columnDefinition="Decimal(15,2)")
+	private BigDecimal currently;
 
-	@NotEmpty
+	@NotNull
 	@Lob
 	@Column(nullable = false)
 	private String description;
 
-	@NotEmpty
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date ends;
 
-	@NotEmpty
-	@Column(name = "first_bid", nullable = false, length = 45)
-	private String firstBid;
+	@NotNull
+	@Column(name="first_bid", columnDefinition="Decimal(15,2)")
+	private BigDecimal firstBid;
 
 	@NotEmpty
 	@Column(nullable = false, length = 45)
@@ -79,6 +82,7 @@ public class Auction implements Serializable {
 	@Column(name = "number_of_bids", nullable = false)
 	private int numberOfBids;
 
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date started;
@@ -86,6 +90,10 @@ public class Auction implements Serializable {
 	// bi-directional many-to-one association to AuctionBidding
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "auction")
 	private List<AuctionBidding> auctionBiddings;
+	
+	// bi-directional many-to-one association to Recommendation
+	@OneToMany(mappedBy = "auction")
+	private List<Recommendation> recommendations;
 
 	// bi-directional many-to-one association to User
 	@ManyToOne
@@ -100,10 +108,13 @@ public class Auction implements Serializable {
 	private List<Category> categories;
 
 	// bi-directional many-to-one association to Location
-	@NotEmpty
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "location_id", nullable = false)
 	private Location location;
+	
+	@Column(name="isBought")
+	boolean isBought;
 	
 	//bi-directional many-to-one association to AuctionPictures
 	@Transient
@@ -118,6 +129,15 @@ public class Auction implements Serializable {
 	
 	@Transient
 	private String xmlEnds;
+	
+	@Transient
+	private String buyPriceString;
+	
+	@Transient
+	private String currentlyString;
+	
+	@Transient
+	private String firstBidString;
 
 	public Auction() {
 	}
@@ -140,13 +160,19 @@ public class Auction implements Serializable {
 		return this.auctionid;
 	}
 
+	@XmlTransient
 	public List<AuctionPicture> getAuctionPicture() {
 		return auctionPicture;
 	}
 
-	@XmlElement(name = "Buy_Price")
-	public String getBuyPrice() {
+	@XmlTransient
+	public BigDecimal getBuyPrice() {
 		return this.buyPrice;
+	}
+
+	@XmlElement(name = "Buy_Price")
+	public String getBuyPriceString() {
+		return buyPriceString;
 	}
 
 	@XmlElement(name = "Category")
@@ -159,9 +185,14 @@ public class Auction implements Serializable {
 		return this.country;
 	}
 
-	@XmlElement(name = "Currently")
-	public String getCurrently() {
+	@XmlTransient
+	public BigDecimal getCurrently() {
 		return this.currently;
+	}
+
+	@XmlElement(name = "Currently")
+	public String getCurrentlyString() {
+		return currentlyString;
 	}
 
 	@XmlElement(name = "Description")
@@ -174,9 +205,14 @@ public class Auction implements Serializable {
 		return this.ends;
 	}
 
-	@XmlElement(name = "First_Bid")
-	public String getFirstBid() {
+	@XmlTransient
+	public BigDecimal getFirstBid() {
 		return this.firstBid;
+	}
+
+	@XmlElement(name = "First_Bid")
+	public String getFirstBidString() {
+		return firstBidString;
 	}
 
 	@XmlElement(name = "Location")
@@ -195,10 +231,15 @@ public class Auction implements Serializable {
 	}
 
 	@XmlTransient
+	public List<Recommendation> getRecommendations() {
+		return recommendations;
+	}
+
+	@XmlTransient
 	public Date getStarted() {
 		return this.started;
 	}
-
+	
 	@XmlTransient
 	public User getUser() {
 		return this.user;
@@ -217,6 +258,11 @@ public class Auction implements Serializable {
 	@XmlElement(name = "Started")
 	public String getXmlStarted() {
 		return xmlStarted;
+	}
+
+	@XmlTransient
+	public boolean isBought() {
+		return isBought;
 	}
 
 	public AuctionBidding removeAuctionBidding(AuctionBidding auctionBidding) {
@@ -238,8 +284,16 @@ public class Auction implements Serializable {
 		this.auctionPicture = auctionPicture;
 	}
 
-	public void setBuyPrice(String buyPrice) {
+	public void setBought(boolean isBought) {
+		this.isBought = isBought;
+	}
+
+	public void setBuyPrice(BigDecimal buyPrice) {
 		this.buyPrice = buyPrice;
+	}
+
+	public void setBuyPriceString(String buyPriceString) {
+		this.buyPriceString = buyPriceString;
 	}
 
 	public void setCategories(List<Category> categories) {
@@ -250,8 +304,12 @@ public class Auction implements Serializable {
 		this.country = country;
 	}
 
-	public void setCurrently(String currently) {
+	public void setCurrently(BigDecimal currently) {
 		this.currently = currently;
+	}
+
+	public void setCurrentlyString(String currentlyString) {
+		this.currentlyString = currentlyString;
 	}
 
 	public void setDescription(String description) {
@@ -262,8 +320,12 @@ public class Auction implements Serializable {
 		this.ends = ends;
 	}
 
-	public void setFirstBid(String firstBid) {
+	public void setFirstBid(BigDecimal firstBid) {
 		this.firstBid = firstBid;
+	}
+
+	public void setFirstBidString(String firstBidString) {
+		this.firstBidString = firstBidString;
 	}
 
 	public void setLocation(Location location) {
@@ -276,6 +338,10 @@ public class Auction implements Serializable {
 
 	public void setNumberOfBids(int numberOfBids) {
 		this.numberOfBids = numberOfBids;
+	}
+
+	public void setRecommendations(List<Recommendation> recommendations) {
+		this.recommendations = recommendations;
 	}
 
 	public void setStarted(Date started) {
@@ -297,7 +363,5 @@ public class Auction implements Serializable {
 	public void setXmlStarted(String xmlStarted) {
 		this.xmlStarted = xmlStarted;
 	}
-	
-	
 
 }

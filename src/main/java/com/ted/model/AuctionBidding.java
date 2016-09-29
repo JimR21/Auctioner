@@ -1,18 +1,24 @@
 package com.ted.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -22,10 +28,27 @@ import javax.xml.bind.annotation.XmlType;
  * The persistent class for the auction_bidding database table.
  * 
  */
+
+@SqlResultSetMapping(
+    name = "CommonBidMapping",
+	classes={
+        @ConstructorResult(targetClass=CommonBid.class,
+        columns={
+            @ColumnResult(name="userid", type=Integer.class),
+            @ColumnResult(name="count", type=Long.class)
+        })
+    }
+)
+
 @Entity
 @Table(name = "auction_bidding")
 @NamedQuery(name = "AuctionBidding.findAll", query = "SELECT a FROM AuctionBidding a")
-@XmlType(propOrder = {"user", "xmlTime", "amount"})
+@NamedNativeQuery(name = "AuctionBidding.getCommonBidsCount", 
+		query = "select similar.bidder_userid as userid, count(*) as count from auction_bidding target "
+		+ "join auction_bidding similar on target.auctionid = similar.auctionid and target.bidder_userid != similar.bidder_userid "
+		+ "where (target.bidder_userid = :userid)"
+		+ "group by similar.bidder_userid", resultSetMapping = "CommonBidMapping")
+@XmlType(propOrder = {"user", "xmlTime", "amountString"})
 @XmlRootElement(name = "bid")
 public class AuctionBidding implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -33,8 +56,9 @@ public class AuctionBidding implements Serializable {
 	@EmbeddedId
 	private AuctionBiddingPK id;
 
-	@Column(nullable = false)
-	private String amount;
+	@NotNull
+	@Column(name="amount", columnDefinition="Decimal(15,2)")
+	private BigDecimal amount;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
@@ -52,13 +76,21 @@ public class AuctionBidding implements Serializable {
 	
 	@Transient
 	private String xmlTime;
+	
+	@Transient
+	private String amountString;
 
 	public AuctionBidding() {
 	}
 
-	@XmlElement(name = "Amount")
-	public String getAmount() {
+	@XmlTransient
+	public BigDecimal getAmount() {
 		return this.amount;
+	}
+
+	@XmlElement(name = "Amount")
+	public String getAmountString() {
+		return amountString;
 	}
 
 	@XmlTransient
@@ -86,8 +118,12 @@ public class AuctionBidding implements Serializable {
 		return xmlTime;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public void setAmountString(String amountString) {
+		this.amountString = amountString;
 	}
 
 	public void setAuction(Auction auction) {

@@ -10,7 +10,7 @@
                 <table id="allAuctions" class="table table-striped table-hover table-condensed">
                     <thead>
                         <tr>
-                            <th>Name</th><th>Seller</th><th>Started</th><th>Ends</th><th>First Bid</th><th></th>
+                            <th>Name</th><th>Seller</th><th>Ends</th><th>First Bid</th><th>Export</th><th></th>
                         </tr>
                     <thead>
                     <tbody>
@@ -18,9 +18,11 @@
                     <tr>
                         <td><c:out value="${auction.name}"></c:out></td>
                         <td><c:out value="${auction.user.username}"></c:out></td>
-                        <td><c:out value="${auction.started}"></c:out></td>
                         <td><c:out value="${auction.ends}"></c:out></td>
                         <td><c:out value="${auction.firstBid}"></c:out></td>
+                        <td>
+							<input type="checkbox" id="toXml" name="toXml" value="${auction.auctionid}"/>
+						</td>
                         <td style="text-align: right">
                             <div class="dropdown">
                             <button class="btn btn-xs btn-primary" data-toggle="dropdown">More</button>
@@ -39,8 +41,8 @@
                 </table>
         </div>
         <div class="panel-footer">
-            <input class="btn btn-success col-md-offset-10" type="submit" value="Approve" id="appr-btn" disabled="disabled"></input>
-        </div>
+			<a class="btn btn-success col-md-offset-10" href="/Auctioner/admin/xmlDownload" id="xml-link" name="xml-link" disabled="disabled">Export XML</a>
+		</div>
       </div>
     </form>
     <div class="row">
@@ -59,6 +61,8 @@
     </div>
 </div>
 
+<script src=<c:url value="/resources/js/xmlExport.js" />></script>
+
 <script>
 
 	/* All Auctions Table */
@@ -67,7 +71,7 @@
 		lengthChange: false,
 
 		"columnDefs": [
-		{ "orderable": false, "targets": 5 }
+		{ "orderable": false, "targets": [4, 5] }
 		 ]
 		});
 

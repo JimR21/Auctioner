@@ -11,12 +11,20 @@
 		<class>com.ted.model.Authority</class>
 		<class>com.ted.model.AuthorityPK</class>
 		<class>com.ted.model.Location</class>
-		<class>com.ted.model.User</class>
 		<class>com.ted.model.GlobalMessage</class>
 		<class>com.ted.model.Message</class>
 		<class>com.ted.model.Category</class>
 		<class>com.ted.model.AuctionPicture</class>
 		<class>com.ted.model.UserPicture</class>
+		<class>com.ted.model.BidderRating</class>
+		<class>com.ted.model.BidderRatingPK</class>
+		<class>com.ted.model.SellerRating</class>
+		<class>com.ted.model.SellerRatingPK</class>
+		<class>com.ted.model.User</class>
+		<class>com.ted.model.Similar</class>
+		<class>com.ted.model.SimilarPK</class>
+		<class>com.ted.model.Recommendation</class>
+		<class>com.ted.model.RecommendationPK</class>
 	</persistence-unit>
 	
 </persistence>

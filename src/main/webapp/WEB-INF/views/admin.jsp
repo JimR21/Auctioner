@@ -17,6 +17,7 @@
 
 	<link href=<c:url value="/resources/css/sidenav.css" /> rel="stylesheet" type="text/css">
 	<link href=<c:url value="/resources/css/dataTables.bootstrap.min.css" /> rel="stylesheet" type="text/css">
+    <link href=<c:url value="/resources/css/fileinput.min.css" /> rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,13 +28,17 @@
 
     <title>Auctioner</title>
 
-<!--     <style>
+    <style>
 
-    .opaque > *:not(.spinner) {
+    /*.opaque > *:not(.spinner) {
         opacity: 0.1
+     }*/
+
+     li > a {
+         margin-right: 15px;
      }
 
-    </style> -->
+    </style>
 
 </head>
 
@@ -59,7 +64,6 @@
               <!-- Desktop sidebar -->
               <div class="col-sm-3 collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
                 <h4 class="text-center">Admin Panel</h4>
-                <hr />
                 <ul class="nav navbar-nav nav-pills">
                   <li class="active"><a href="#section1" data-toggle="pill">Overview<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-dashboard"></span></a></li>
                   <li class="dropdown">
@@ -74,7 +78,13 @@
                     </ul>
                   </li>
                   <li ><a href="admin/users" data-target="#section7" id="users_tab" data-toggle="pill" rel="tooltip">Users<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
-                  <li ><a href="admin/auctions" data-target="#section8" id="auctions_tab" data-toggle="pill" rel="tooltip">Auctions<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-"></span></a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Auctions <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity icon-hammer2"></span></a>
+                    <ul class="dropdown-menu forAnimate" role="menu">
+                      <li><a href="/Auctioner/admin/auctions" data-target="#section8" id="auctions_tab" data-toggle="pill" rel="tooltip">View Auctions</a></li>
+                      <li><a href="/Auctioner/admin/xmlUpload" data-target="#section9" id="xml_tab" data-toggle="pill" rel="tooltip">XML Upload</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -85,68 +95,68 @@
 			    <div class="col-sm-9">
 			      <div class="well">
 			        <h4>Dashboard</h4>
-			        <p>Some text..</p>
+                    <p><span class="glyphicon glyphicon-alert text-danger" style="margin-right:10px;"></span><strong >${dashboard.nonApprovedUsers}</strong> non approved <strong >Users</strong>.</p>
+                    <p><span class="glyphicon glyphicon-info-sign text-info" style="margin-right:10px;"></span><strong>${dashboard.newAuctions}</strong> new <strong>Auctions</strong> in the last 3 days.</p>
 			      </div>
 			      <div class="row">
 			        <div class="col-sm-3">
 			          <div class="well">
 			            <h4>Users</h4>
-			            <p>1 Million</p>
+			            <p>${dashboard.userNum}</p>
 			          </div>
 			        </div>
 			        <div class="col-sm-3">
 			          <div class="well">
-			            <h4>Pages</h4>
-			            <p>100 Million</p>
+			            <h4>Bidders</h4>
+			            <p>${dashboard.bidders}</p>
 			          </div>
 			        </div>
 			        <div class="col-sm-3">
 			          <div class="well">
-			            <h4>Sessions</h4>
-			            <p>10 Million</p>
+			            <h4>Auctioneers</h4>
+			            <p>${dashboard.sellers}</p>
 			          </div>
 			        </div>
 			        <div class="col-sm-3">
 			          <div class="well">
-			            <h4>Bounce</h4>
-			            <p>30%</p>
+			            <h4>Auctions</h4>
+			            <p>${dashboard.auctionNum}</p>
 			          </div>
 			        </div>
 			      </div>
 			      <div class="row">
 			        <div class="col-sm-4">
 			          <div class="well">
-			            <p>Text</p>
-			            <p>Text</p>
-			            <p>Text</p>
+                          <h4>Latest Users</h4>
+                          <ul class="list-group">
+                            <c:forEach items="${dashboard.newUsers}" var="newuser">
+                            <li class="list-group-item"><a href="/Auctioner/profile/${newuser.userid}">${newuser.username}</a></li>
+                            </c:forEach>
+                          </ul>
 			          </div>
 			        </div>
-			        <div class="col-sm-4">
-			          <div class="well">
-			            <p>Text</p>
-			            <p>Text</p>
-			            <p>Text</p>
-			          </div>
-			        </div>
-			        <div class="col-sm-4">
-			          <div class="well">
-			            <p>Text</p>
-			            <p>Text</p>
-			            <p>Text</p>
-			          </div>
-			        </div>
-			      </div>
-			      <div class="row">
 			        <div class="col-sm-8">
 			          <div class="well">
-			            <p>Text</p>
+                          <h4>Latest Auctions</h4>
+                          <ul class="list-group">
+                            <c:forEach items="${dashboard.latestAuctions}" var="latestAuction">
+                            <li class="list-group-item"><a href="/Auctioner/profile/${latestAuction.auctionid}">${latestAuction.name}</a></li>
+                            </c:forEach>
+                          </ul>
 			          </div>
 			        </div>
-			        <div class="col-sm-4">
-			          <div class="well">
-			            <p>Text</p>
-			          </div>
-			        </div>
+			      </div>
+			      <div class="row">
+                      <div class="col-sm-12">
+                          <div class="well">
+                              <h4>Latest Bids</h4>
+                              <ul class="list-group">
+                                <c:forEach items="${dashboard.latestBids}" var="latestBid">
+                                <li class="list-group-item"><a href="/Auctioner/auction/${latestAuction.auctionid}">${latestBid.auction.name}</a> <a href="/Auctioner/auction/${latestAuction.auctionid}">${latestBid.user.username}</a> ${latestBid.amount}</li>
+                                </c:forEach>
+                              </ul>
+                          </div>
+                      </div>
 			      </div>
 			    </div>
 			</div>
@@ -154,29 +164,31 @@
 		    <div class="tab-pane fade" id="section2">
 
 			</div>
-
             <div class="tab-pane fade" id="section3">
 
 		    </div>
-
             <div class="tab-pane fade" id="section4">
 
 		    </div>
-
             <div class="tab-pane fade" id="section5">
 
 		    </div>
-
             <div class="tab-pane fade" id="section6">
 
 		    </div>
-
 		    <div class="tab-pane fade" id="section7">
 
 		    </div>
-
 		    <div class="tab-pane fade" id="section8">
 
+		    </div>
+            <div class="tab-pane fade" id="section9">
+                <div class="col-sm-9">
+                    <h2 class="text-center">Upload XML File</h2>
+                    <input id="input-1" name="input1" type="file" class="file-loading" accept="text/xml"/>
+                    <div id="error-1" style="margin-top:10px;display:none"></div>
+                    <div id="success-1" class="alert alert-success fade in" style="margin-top:10px;display:none"></div>
+                </div>
 		    </div>
 
 	  	</div>
@@ -193,6 +205,7 @@
     <script src=<c:url value="/resources/js/spin.min.js" />></script>
     <script src=<c:url value="/resources/js/spinner.js" />></script>
     <script src=<c:url value="/resources/js/admin-page-load.js" />></script>
+    <script src=<c:url value="/resources/js/fileinput.min.js" />></script>
 
     <script>
 
@@ -207,6 +220,26 @@
 
      /* Reply Receiver */
      var recipient = "${receiver}";
+
+     /* XML File Upload */
+     $(document).on('ready', function() {
+         $("#input-1").fileinput({
+            uploadUrl: "/Auctioner/api/auction/upload", // server upload action
+            uploadAsync: true,
+            showPreview: false,
+            allowedFileExtensions: ['xml'],
+            maxFileCount: 1,
+            elErrorContainer: '#error-1'
+        }).on('filebatchpreupload', function(event, data, id, index) {
+            $('#success-1').html('<h4>Upload Status</h4><ul></ul>').hide();
+        }).on('fileuploaded', function(event, data, id, index) {
+            var fname = data.files[index].name,
+                out = '<li>' + 'Uploaded file # ' + (index + 1) + ' - '  +
+                    fname + ' successfully.' + '</li>';
+            $('#success-1 ul').append(out);
+            $('#success-1').fadeIn('slow');
+        });
+     });
 
     </script>
 

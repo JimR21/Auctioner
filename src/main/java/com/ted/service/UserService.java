@@ -23,5 +23,9 @@ public interface UserService {
 	User getUserById(int id);
 	
 	boolean hasAuthority(String username, String role);
+	
+	void rateSeller(Integer id, float rating);
+	
+	void rateBidder(Integer id, float rating);
 
 }

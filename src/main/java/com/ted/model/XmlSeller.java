@@ -9,10 +9,10 @@ public class XmlSeller {
 	
 	private String username;
 	
-	private String rating;
+	private float rating;
 
 	@XmlAttribute(name = "Rating")
-	public String getRating() {
+	public float getRating() {
 		return rating;
 	}
 
@@ -21,7 +21,7 @@ public class XmlSeller {
 		return username;
 	}
 
-	public void setRating(String rating) {
+	public void setRating(float rating) {
 		this.rating = rating;
 	}
 

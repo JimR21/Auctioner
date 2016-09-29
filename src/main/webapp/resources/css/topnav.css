@@ -33,12 +33,16 @@ body{
 }
 
 #nav{
-  z-index:9999;
+  z-index:9998;
 }
 
-.round {
-    border-radius: 15px;
+.affix + .container {
+    padding-top:50px
 }
+
+/*.round {
+    border-radius: 15px;
+}*/
 
 /*.navbar-lower {
     padding-bottom: 50px;

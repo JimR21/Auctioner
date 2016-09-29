@@ -1,9 +1,11 @@
 package com.ted.controller;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.File;
+import java.io.FileReader;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ted.model.Auction;
-import com.ted.model.AuctionBidding;
-import com.ted.model.Category;
-import com.ted.model.Location;
 import com.ted.model.XmlAuctionWrapper;
-import com.ted.model.XmlSeller;
 import com.ted.service.AuctionService;
 import com.ted.service.UserService;
 import com.ted.service.XmlService;
@@ -39,92 +39,45 @@ public class XMLController {
 	XmlService xmlService;
 
 	
-	@RequestMapping(value="auction/get", method = RequestMethod.GET)
-	public @ResponseBody XmlAuctionWrapper getAuctionInXML() {
-
-		Auction auction = new Auction();
-		
-		auction.setAuctionid(1);
-		auction.setCountry("USA");
-		auction.setCurrently("$ 5.00");
-		auction.setDescription("Gaming Headset for PC, PS4 & XBOX");
-		auction.setFirstBid("$ 5.00");
-		auction.setName("Razer Headset");
-		auction.setStarted(new Date());
-		auction.setEnds(new Date());
-		auction.setBuyPrice("$ 100.00");
-		auction.setNumberOfBids(0);
-		auction.setUser(userService.getUserByUsername("geo21"));
-		
-		XmlSeller seller = new XmlSeller();
-		seller.setRating("100");
-		seller.setUsername("Auctioner");
-		
-		auction.setXmlSeller(seller);
-		
-		
-		AuctionBidding bidding = new AuctionBidding();
-		
-		bidding.setAmount("$ 10.00");
-		bidding.setId(null);
-		bidding.setUser(userService.getUserByUsername("geo21"));
-		bidding.setTime(new Date());
-		bidding.setAuction(auction);
-		
-		AuctionBidding bidding2 = new AuctionBidding();
-		
-		bidding2.setAmount("$ 12.00");
-		bidding2.setId(null);
-		bidding2.setUser(userService.getUserByUsername("geo21"));
-		bidding2.setTime(new Date());
-		bidding2.setAuction(auction);
-		
-		List<AuctionBidding> bidList = new ArrayList<AuctionBidding>();
-		bidList.add(bidding);
-		bidList.add(bidding2);
-		
-		auction.setAuctionBiddings(bidList);
-		
-		
-		Category category1 = new Category();
-		category1.setCategoryId(1);
-		category1.setName("PC");
-		category1.setAuctions(null);
-		
-		Category category2 = new Category();
-		category2.setCategoryId(2);
-		category2.setName("Headsets");
-		category2.setAuctions(null);
-		
-		List<Category> categories = new ArrayList<Category>();
-		categories.add(category1);
-		categories.add(category2);
-		
-		auction.setCategories(categories);
-		
-		
-		Location location = new Location();
-		location.setName("Athens");
-		auction.setLocation(location);
-		
-		XmlAuctionWrapper wrapper = new XmlAuctionWrapper();
-		List<Auction> auctions = new ArrayList<Auction>();
-		auctions.add(auction);
-		wrapper.setAuctions(auctions);
-		
-		System.out.println(auction.getCountry());
-		
-		return wrapper;
-
-	}
 	
-	@RequestMapping(value = "auction/put", method = RequestMethod.PUT) 
-	public @ResponseBody String newAuction(@RequestBody XmlAuctionWrapper wrapper, Model model) {
+	@RequestMapping(value = "auction/put", method = RequestMethod.POST) 
+	public @ResponseBody String putAuction(@RequestBody XmlAuctionWrapper wrapper, Model model) {
 		
-		xmlService.saveXmlAuction(wrapper.getAuctions(), 0);
+		try {
+			xmlService.saveXmlAuction(wrapper.getAuctions());
+		} catch (Exception ex) {
+			System.out.println(ex);
+			return "Error while passing data in database.";
+		}
 			
 		return "200 OK";
-
+	} 
+	
+	@RequestMapping(value = "auction/upload", method = RequestMethod.POST) 
+	public @ResponseBody String uploadAuction(@RequestParam("input1") MultipartFile multipart, Model model) {
+		
+		try {
+			JAXBContext context = JAXBContext.newInstance(XmlAuctionWrapper.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			
+			File convFile = new File( multipart.getOriginalFilename());
+	        multipart.transferTo(convFile);
+				
+			XmlAuctionWrapper wrapper = (XmlAuctionWrapper)unmarshaller.unmarshal(convFile);
+			
+			xmlService.saveXmlAuction(wrapper.getAuctions());
+			
+			int i = 0;
+			for(Auction auction : wrapper.getAuctions()) {
+				System.out.println(convFile.getName() + ": Auction" + i + ": " + auction.getName());
+				i++;
+			}
+			
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+			
+		return "{}";
 	} 
 	
 	@RequestMapping(value = "xmlAuctions", method = RequestMethod.GET)

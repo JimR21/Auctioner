@@ -1,8 +1,6 @@
 package com.ted.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +28,7 @@ import com.ted.model.FormAuction;
 import com.ted.model.Location;
 import com.ted.service.AuctionService;
 import com.ted.service.CategoryService;
+import com.ted.service.RecommendationService;
 
 @Controller
 @SessionAttributes("filter")
@@ -40,6 +39,9 @@ public class AuctionController {
 	
 	@Autowired
 	CategoryService categoryService;
+	
+	@Autowired
+	RecommendationService recommendationService;
 	
 	@Autowired
 	Filter filter;
@@ -53,6 +55,10 @@ public class AuctionController {
 		/* End time in milliseconds */
 		Long ends = auction.getEnds().getTime();
 		model.addAttribute("ends", ends);
+		
+		/* Recommendations */
+		List<Auction> recs = recommendationService.getRecommendations();
+		model.addAttribute("recs", recs);
 		
 		return "auction";
 	}
@@ -75,6 +81,8 @@ public class AuctionController {
 		
 		model.addAttribute("filter", filter);
 		
+		
+		
 		return "auctions";
 	}
 	
@@ -91,6 +99,10 @@ public class AuctionController {
 		System.out.println(filter.getSortBy());
 		
 		model.addAttribute("filter", filter);
+		
+		/* Recommendations */
+		List<Auction> recs = recommendationService.getRecommendations();
+		model.addAttribute("recs", recs);
 		
 		return "auctions";
 	}
@@ -111,7 +123,7 @@ public class AuctionController {
 		
 		System.out.println("BidPost controller");
 		
-		String msg = auctionService.bidSave(id, bidAmount);
+		String msg = auctionService.bidSave(id, new BigDecimal(bidAmount));
 		
 		if(msg != null)
 			return msg;

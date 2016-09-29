@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * The persistent class for the users database table.
- * 
+ *
  */
 @Entity
 @Table(name = "users")
@@ -45,8 +45,8 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private byte approved;
 
-	@Column(name = "bidder_rating", length = 45)
-	private String bidderRating;
+	@Column(name="bidder_rating")
+	private float bidderRating;
 
 	@NotEmpty
 	@Column(nullable = false, length = 100)
@@ -82,8 +82,14 @@ public class User implements Serializable {
 	@Column(name = "postal_code", nullable = false, length = 45)
 	private String postalCode;
 
-	@Column(name = "seller_rating", length = 45)
-	private String sellerRating;
+	@Column(name="seller_rating")
+	private float sellerRating;
+
+	@Column(name="number_of_bidder_ratings")
+	private int numberOfBidderRatings;
+
+	@Column(name="number_of_seller_ratings")
+	private int numberOfSellerRatings;
 
 	@NotEmpty
 	@Column(nullable = false, length = 45)
@@ -92,6 +98,10 @@ public class User implements Serializable {
 	// bi-directional many-to-one association to AuctionBidding
 	@OneToMany(mappedBy = "user")
 	private List<AuctionBidding> auctionBiddings;
+	
+	// bi-directional many-to-one association to AuctionBidding
+	@OneToMany(mappedBy = "user")
+	private List<Recommendation> recommendations;
 
 	// bi-directional many-to-one association to Auction
 	@OneToMany(mappedBy = "user")
@@ -100,7 +110,7 @@ public class User implements Serializable {
 	// bi-directional many-to-one association to Authority
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Authority> authorities;
-	
+
 	//bi-directional many-to-one association to AuctionPictures
 	@Transient
 	@OneToMany(mappedBy="user")
@@ -161,7 +171,7 @@ public class User implements Serializable {
 	}
 
 	@XmlAttribute(name = "Rating")
-	public String getBidderRating() {
+	public float getBidderRating() {
 		return this.bidderRating;
 	}
 
@@ -196,6 +206,16 @@ public class User implements Serializable {
 	}
 
 	@XmlTransient
+	public int getNumberOfBidderRatings() {
+		return this.numberOfBidderRatings;
+	}
+
+	@XmlTransient
+	public int getNumberOfSellerRatings() {
+		return this.numberOfSellerRatings;
+	}
+
+	@XmlTransient
 	public String getPassword() {
 		return this.password;
 	}
@@ -211,7 +231,12 @@ public class User implements Serializable {
 	}
 
 	@XmlTransient
-	public String getSellerRating() {
+	public List<Recommendation> getRecommendations() {
+		return recommendations;
+	}
+
+	@XmlTransient
+	public float getSellerRating() {
 		return this.sellerRating;
 	}
 
@@ -275,7 +300,7 @@ public class User implements Serializable {
 		this.authorities = authorities;
 	}
 
-	public void setBidderRating(String bidderRating) {
+	public void setBidderRating(float bidderRating) {
 		this.bidderRating = bidderRating;
 	}
 
@@ -303,6 +328,14 @@ public class User implements Serializable {
 		this.lastName = lastName;
 	}
 
+	public void setNumberOfBidderRatings(int numberOfBidderRatings) {
+		this.numberOfBidderRatings = numberOfBidderRatings;
+	}
+
+	public void setNumberOfSellerRatings(int numberOfSellerRatings) {
+		this.numberOfSellerRatings = numberOfSellerRatings;
+	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -315,7 +348,11 @@ public class User implements Serializable {
 		this.postalCode = postalCode;
 	}
 
-	public void setSellerRating(String sellerRating) {
+	public void setRecommendations(List<Recommendation> recommendations) {
+		this.recommendations = recommendations;
+	}
+
+	public void setSellerRating(float sellerRating) {
 		this.sellerRating = sellerRating;
 	}
 
@@ -330,5 +367,7 @@ public class User implements Serializable {
 	public void setUserPictures(List<UserPicture> userPictures) {
 		this.userPictures = userPictures;
 	}
+	
+	
 
 }

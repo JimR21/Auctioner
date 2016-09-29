@@ -1,5 +1,6 @@
 package com.ted.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -111,9 +112,9 @@ public class AuctionServiceImpl implements AuctionService {
 		}
 		else {
 			if(filter.getSearchString() == null)
-				auctions = auctionRepository.findAll(page);
+				auctions = auctionRepository.findByIsBought(false, page);
 			else
-				auctions = auctionRepository.findByNameContaining(filter.getSearchString(), page);
+				auctions = auctionRepository.findByNameContainingAndIsBought(filter.getSearchString(), false, page);
 		}
 		
 		filter.setNumberofPages(auctions.getTotalPages());
@@ -238,7 +239,7 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 
 	/* Synchronized method to avoid race condition on persisting bid and updating AuctionMapper singleton bean */
-	public synchronized String bidSave(Integer auctionId, String bidAmount) {
+	public synchronized String bidSave(Integer auctionId, BigDecimal bidAmount) {
 		
 		System.out.println("Persisting amount: " + bidAmount);
 		
@@ -249,14 +250,23 @@ public class AuctionServiceImpl implements AuctionService {
 			String msg = "The auction is already bought.";
 			return msg;
 		}
-//		if(info.getLatestBid() > bidAmount) {
-//			String msg = "Your bid must be bigger than the current price.";
-//			return msg;
-//		}
-//		if(info.getEnds() < new Date().getTime()) {
-//			String msg = "Sorry, the time has ended.";
-//			return msg;
-//		}
+		if(info.getLatestBid().compareTo(bidAmount) != -1) {
+			String msg = "Your bid must be bigger than the current price.";
+			return msg;
+		}
+		if(info.getEnds() < new Date().getTime()) {
+			String msg = "The time has ended.";
+			return msg;
+		}
+		
+		/* Check and Update Currently */
+		Auction auction = auctionRepository.findByAuctionid(auctionId);
+		if(auction.getCurrently().compareTo(bidAmount) != -1) {
+			String msg = "Your bid must be bigger than the current price.";
+			return msg;
+		}
+		auction.setCurrently(bidAmount);
+		auction.setNumberOfBids(auction.getNumberOfBids()+1);
 		
 		/* Persist Bid */
 		AuctionBidding auctionBidding = new AuctionBidding();
@@ -271,16 +281,24 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		auctionBiddingRepository.saveAndFlush(auctionBidding);
 		
+		/* Update Auction */
+		auctionRepository.saveAndFlush(auction);
+		
 		System.out.println("Updating auctionMapper: " + bidAmount);
 		
 		/* Update auctionMapper */
 		if(info.getBuyPrice() != null) {
-			// TODO: Compare buyPrice
+			if(info.getBuyPrice().compareTo(bidAmount) != 1) 
+				info.setBought(true);
+			else
+				info.setBought(false);
 		}
-		info.setBought(false);
+		else
+			info.setBought(false);
+		
 		info.setLatestBid(bidAmount);
 		info.setNumofBids(info.getNumofBids()+1);
-		info.setEnds(auctionBidding.getTime().getTime());
+//		info.setEnds(auctionBidding.getTime().getTime());
 		auctionMapper.setAuctionInfo(auctionId, info);
 		
 		System.out.println("Persisted amount: " + bidAmount);
@@ -299,9 +317,11 @@ public class AuctionServiceImpl implements AuctionService {
 			Integer numofBids = biddings.size();
 			Collections.sort(biddings, new BidTimeComparator()); 	// Sort bids
 			
+			/* Auction Info */
 			AuctionInfo info = new AuctionInfo();
 			info.setEnds(auction.getEnds().getTime());
 			info.setBuyPrice(auction.getBuyPrice());
+			info.setBought(auction.isBought());
 			info.setNumofBids(numofBids);
 			if(numofBids > 0)
 				info.setLatestBid(biddings.get(numofBids-1).getAmount());
@@ -322,6 +342,8 @@ public class AuctionServiceImpl implements AuctionService {
 			return "Please provide a Country and a location.";
 		if(formAuction.getCategoryName() == null || formAuction.getCategoryName().isEmpty())
 			return "You must select a category for the Auction.";
+		if(auction.getEnds().getTime() < new Date().getTime())
+			return "Please provide a future date as Ending date.";
 		
 		/* Seller */
 		User user = userService.getLoggedInUser();
@@ -342,6 +364,9 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		/* Starting Date */
 		auction.setStarted(new Date());
+		
+		/* IsBought */
+		auction.setBought(false);
 		
 		/* Persist Auction */
 		auction = auctionRepository.saveAndFlush(auction);

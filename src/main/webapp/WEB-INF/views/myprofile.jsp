@@ -59,7 +59,6 @@
               <!-- Desktop sidebar -->
               <div class="col-sm-3 collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
                 <h4 class="text-center">${user.username}</h4>
-                <hr />
                 <ul class="nav navbar-nav nav-pills">
                   <li class="active"><a href="#section1" data-toggle="pill">Overview<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
                   <li class="dropdown">
@@ -78,76 +77,79 @@
             </div>
          </nav>
 
-	    <div  id="loading" class="tab-content">
+	     <div  id="loading" class="tab-content">
 	    	<div class="tab-pane fade in active" id="section1" name="overview">
-			    <div class="col-sm-9">
-			      <div class="well">
-			        <h4>Dashboard</h4>
-			        <p>Some text..</p>
-			      </div>
-			      <div class="row">
-			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Users</h4>
-			            <p>1 Million</p>
-			          </div>
-			        </div>
-			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Pages</h4>
-			            <p>100 Million</p>
-			          </div>
-			        </div>
-			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Sessions</h4>
-			            <p>10 Million</p>
-			          </div>
-			        </div>
-			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Bounce</h4>
-			            <p>30%</p>
-			          </div>
-			        </div>
-			      </div>
-			      <div class="row">
-			        <div class="col-sm-4">
-			          <div class="well">
-			            <p>Text</p>
-			            <p>Text</p>
-			            <p>Text</p>
-			          </div>
-			        </div>
-			        <div class="col-sm-4">
-			          <div class="well">
-			            <p>Text</p>
-			            <p>Text</p>
-			            <p>Text</p>
-			          </div>
-			        </div>
-			        <div class="col-sm-4">
-			          <div class="well">
-			            <p>Text</p>
-			            <p>Text</p>
-			            <p>Text</p>
-			          </div>
-			        </div>
-			      </div>
-			      <div class="row">
-			        <div class="col-sm-8">
-			          <div class="well">
-			            <p>Text</p>
-			          </div>
-			        </div>
-			        <div class="col-sm-4">
-			          <div class="well">
-			            <p>Text</p>
-			          </div>
-			        </div>
-			      </div>
-			    </div>
-			</div>
+                <div class="col-md-9">
+                  <h3 class="text-center">Personal info</h3>
+                  <div class="col-md-offset-4 col-md-3">
+                      <h4 class="text-left">Name</h4>
+                  </div>
+                  <div class="col-md-4">
+                      <h4 class="text-left"><strong>${user.firstName}</strong></h4>
+                  </div>
+                  <div class="col-md-offset-4 col-md-3">
+                      <h4 class="text-left">Lastname</h4>
+                  </div>
+                  <div class="col-md-4">
+                      <h4 class="text-left"><strong>${user.lastName}</strong></h4>
+                  </div>
+                  <div class="col-md-offset-4 col-md-3">
+                      <h4 class="text-left">Country</h4>
+                  </div>
+                  <div class="col-md-4">
+                      <h4 class="text-left"><strong>${user.country}</strong></h4>
+                  </div>
+                  <div class="col-md-offset-4 col-md-3">
+                      <h4 class="text-left">City</h4>
+                  </div>
+                  <div class="col-md-4">
+                      <h4 class="text-left"><strong>${user.city}</strong></h4>
+                  </div>
+                  <div class="col-md-offset-4 col-md-3">
+                      <h4 class="text-left">Email</h4>
+                  </div>
+                  <div class="col-md-4">
+                      <h4 class="text-left"><strong>${user.email}</strong></h4>
+                  </div>
+                  <div class="col-md-offset-4 col-md-3">
+                      <h4 class="text-left">Email</h4>
+                  </div>
+                  <div class="col-md-4">
+                      <h4 class="text-left"><strong>${user.email}</strong></h4>
+                  </div>
+                  <sec:authorize ifAnyGranted="ROLE_SELLER">
+                      <div class="col-md-offset-4 col-md-3">
+                          <h4 class="text-left">Phone</h4>
+                      </div>
+                      <div class="col-md-4">
+                          <h4 class="text-left"><strong>${user.phone}</strong></h4>
+                      </div>
+                      <div class="col-md-offset-4 col-md-3">
+                          <h4 class="text-left">Address</h4>
+                      </div>
+                      <div class="col-md-4">
+                          <h4 class="text-left"><strong>${user.address}</strong></h4>
+                      </div>
+                      <div class="col-md-offset-4 col-md-3">
+                          <h4 class="text-left">Postal Code</h4>
+                      </div>
+                      <div class="col-md-4">
+                          <h4 class="text-left"><strong>${user.postalCode}</strong></h4>
+                      </div>
+                      <div class="col-md-offset-4 col-md-3">
+                          <h4 class="text-left">AFM</h4>
+                      </div>
+                      <div class="col-md-4">
+                          <h4 class="text-left"><strong>${user.afm}</strong></h4>
+                      </div>
+                  </sec:authorize>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <a href="/Auctioner/myprofile/update" class="btn btn-primary pull-right">Change Profile</a>
+                    </div>
+                </div>
+            </div>
 
 		    <div class="tab-pane fade" id="section2" name="inbox">
 
@@ -163,10 +165,13 @@
 
             <div class="tab-pane fade" id="section5" name="anouncements">
 			    <div class="col-sm-9">
-			      <div class="well">
-			        <h4>Settings</h4>
-			        <p>Some text..</p>
-			      </div>
+                    <div class="panel panel">
+                      	<div class="panel-heading">
+                      		<h4 class="panel-title">User Details</h4>
+                      	</div>
+                      	<div class="panel-body">
+
+                        </div>
 			    </div>
 		    </div>
 

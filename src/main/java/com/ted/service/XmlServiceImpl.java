@@ -1,6 +1,11 @@
 package com.ted.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +15,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,14 +68,12 @@ public class XmlServiceImpl implements XmlService {
 	AuctionRepository auctionRepository;
 	
 	@Transactional
-	public void saveXmlAuction(List<Auction> auctions, Integer j) {
-		
-		int i = 0;
+	public void saveXmlAuction(List<Auction> auctions) {
 		
 		for(Auction auction : auctions) {
 			
 			/* Seller */
-			auction.setUser(saveSellerUser(auction.getXmlSeller(), j, i));
+			auction.setUser(saveSellerUser(auction.getXmlSeller()));
 			
 			/* Location */
 			auction.setLocation(saveLocation(auction.getLocation()));
@@ -81,16 +85,23 @@ public class XmlServiceImpl implements XmlService {
 			auction.setEnds(formatString(auction.getXmlEnds()));
 			auction.setStarted(formatString(auction.getXmlStarted()));
 			
+			/* Format Auction Money */
+			auction.setBuyPrice(formatMoney(auction.getBuyPriceString()));
+			auction.setCurrently(formatMoney(auction.getCurrentlyString()));
+			auction.setFirstBid(formatMoney(auction.getFirstBidString()));
+			
+			/* IsBought */
+			auction.setBought(true);
+			
 			/*Persist Auction */
 			Auction dbauction = auctionRepository.saveAndFlush(auction);
 			
 			/* Auction Biddings */
 			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
-			int k = 0;
 			
 			for(AuctionBidding bid : xmlbiddings) {
 				
-				bid.setUser(saveBidderUser(bid.getUser(), j, i, k));	// save and return bidder
+				bid.setUser(saveBidderUser(bid.getUser()));	// save and return bidder
 				
 				bid.setAuction(dbauction);	//setAuction
 				
@@ -102,17 +113,17 @@ public class XmlServiceImpl implements XmlService {
 				
 				bid.setId(auctionBiddingPK);
 				
+				/* Format Amount Money */
+				bid.setAmount(formatMoney(bid.getAmountString()));
+				
 				auctionBiddingRepository.save(bid);
 				
-				k++;
 			}
-			
-			i++;
 		}
 	}
 
 	@Transactional
-	public User saveBidderUser(User user, Integer file_no, Integer auction_no, Integer bid_no) {
+	public User saveBidderUser(User user) {
 		
 		/* Random data */
 		String[] firstnames = {"John", "George", "Eve", "Anna", "Alan", "Frank", "Jessie"};
@@ -120,7 +131,6 @@ public class XmlServiceImpl implements XmlService {
 		String[] phones = {"6975552224", "6995554446", "6987775552", "6985556661"};
 		String[] addresses = {"Portland 23", "Cleanwater 55", "Mainland 4", "Cleverlane 78"};
 		String[] postalCodes = {"45868", "11541", "88746", "44866", "48684", "88742"};
-		String[] countries = {"USA"};
 		String[] cities = {"Atalanta", "Chicago", "New York"};
 		
 		/* Check if user exists */
@@ -148,8 +158,8 @@ public class XmlServiceImpl implements XmlService {
 		}
 		
 		/* Email & afm */
-		user.setEmail("bidder" + file_no.toString() + auction_no.toString() + bid_no.toString() + "@gmail.com");
-		user.setAfm("1111" + file_no.toString() + auction_no.toString() + bid_no.toString());
+		user.setEmail(user.getUsername() + "@gmail.com");
+		user.setAfm("111122223333");
 		
 		/* Enabled & Approved */
 		user.setEnabled((byte)1);
@@ -174,7 +184,7 @@ public class XmlServiceImpl implements XmlService {
 	}
 	
 	@Transactional
-	public User saveSellerUser(XmlSeller seller, Integer file_no, Integer auction_no) {
+	public User saveSellerUser(XmlSeller seller) {
 		
 		/* Random data */
 		String[] firstnames = {"John", "George", "Eve", "Anna", "Alan", "Frank", "Jessie"};
@@ -182,7 +192,6 @@ public class XmlServiceImpl implements XmlService {
 		String[] phones = {"6975552224", "6995554446", "6987775552", "6985556661"};
 		String[] addresses = {"Portland 23", "Cleanwater 55", "Mainland 4", "Cleverlane 78"};
 		String[] postalCodes = {"45868", "11541", "88746", "44866", "48684", "88742"};
-		String[] countries = {"USA"};
 		String[] cities = {"Atalanta", "Chicago", "New York"};
 		
 		/* Check if user exists */
@@ -231,8 +240,8 @@ public class XmlServiceImpl implements XmlService {
 		}
 		
 		/* Email & afm */
-		user.setEmail("seller" + file_no.toString() + auction_no.toString() + "@gmail.com");
-		user.setAfm("2222" + file_no.toString() + auction_no.toString());
+		user.setEmail(user.getUsername() + "@gmail.com");
+		user.setAfm("111122223333");
 		
 		/* Enabled & Approved */
 		user.setEnabled((byte)1);
@@ -315,7 +324,6 @@ public class XmlServiceImpl implements XmlService {
 		
 	}
 
-	// TODO: formatter
 	public Date formatString(String dateString) {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yy HH:mm:ss", Locale.ENGLISH);
@@ -326,12 +334,23 @@ public class XmlServiceImpl implements XmlService {
 			return date;
 			
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return null;
 			
+	}
+	
+	BigDecimal formatMoney(String moneyString) {
+		
+		if(moneyString != null) {
+			moneyString = moneyString.replaceAll("\\$", "");
+			moneyString = moneyString.replaceAll(",", "");
+			System.out.println("Money: " + moneyString);
+			return new BigDecimal(moneyString);
+		}
+		
+		return null;
 	}
 
 	public void xmlUnmarshalling() {
@@ -344,7 +363,7 @@ public class XmlServiceImpl implements XmlService {
 				
 				XmlAuctionWrapper wrapper = (XmlAuctionWrapper)unmarshaller.unmarshal(new FileReader("D:\\ebay-data\\items-" + j + ".xml"));
 				
-				saveXmlAuction(wrapper.getAuctions(), j);
+				saveXmlAuction(wrapper.getAuctions());
 				
 				int i = 0;
 				for(Auction auction : wrapper.getAuctions()) {
@@ -357,6 +376,40 @@ public class XmlServiceImpl implements XmlService {
 			System.out.println(ex);
 		}
 		
+	}
+	
+	public File xmlFileProduce(List<Integer> auctionids) {
+
+		XmlAuctionWrapper wrapper = new XmlAuctionWrapper();
+		List<Auction> auctions = auctionRepository.findByAuctionidIn(auctionids);
+		wrapper.setAuctions(auctions);
+		
+		File file = new File("auctions.xml");
+		
+		String xmlString = marshal(wrapper);
+		
+		try {
+			PrintWriter out = new PrintWriter(file);
+			out.print(xmlString);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return file;
+
+	}
+	
+	public String marshal(XmlAuctionWrapper wrapper) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(XmlAuctionWrapper.class);
+			Marshaller marshaller = context.createMarshaller();
+			StringWriter stringWriter = new StringWriter();
+			marshaller.marshal(wrapper, stringWriter);
+			return stringWriter.toString();
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 }

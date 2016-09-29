@@ -69,8 +69,8 @@
                </sec:authorize>
                 <sec:authorize ifNotGranted="ROLE_ADMIN">
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href=
-                        "#" id="account">My Account (<sec:authentication property="name" />) <span class=
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+                            id="account">My Account (<sec:authentication property="name" />) <span class=
                         "caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/Auctioner/myprofile">Account Settings</a></li>

@@ -38,7 +38,7 @@ public class XmlMarshalling {
 				
 				XmlAuctionWrapper wrapper = (XmlAuctionWrapper)unmarshaller.unmarshal(new FileReader("D:\\ebay-data\\items-" + j + ".xml"));
 				
-				xmlService.saveXmlAuction(wrapper.getAuctions(), j);
+				xmlService.saveXmlAuction(wrapper.getAuctions());
 				
 				int i = 0;
 				for(Auction auction : wrapper.getAuctions()) {
