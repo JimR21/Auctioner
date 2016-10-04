@@ -235,12 +235,13 @@
                              <div class="row content-row">
                                  <div class="text-center">
                                      <p class="lead">We will review your information and an email will be send when your account is approved.</p>
-                                     <p class="lead">Press Save and and become a Bidder in Auctioner!</p>
+                                     <p class="lead">Press Finish and and become a Bidder in Auctioner!</p>
                                  </div>
                              </div>
                              <div class="row top-buffer">
                                  <ul class="list-inline pull-right">
-                                     <li><button name="submit" type="submit" value="submit" class="btn btn-lg btn-success">Save Auction</button></li>
+                                     <li><button type="button" class="btn btn-lg btn-default prev-step">Back</button></li>
+                                     <li><button name="submit" type="submit" value="submit" class="btn btn-lg btn-success">Finish</button></li>
                                  </ul>
                              </div>
                          </div>

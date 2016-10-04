@@ -236,6 +236,7 @@
                              <div class="row top-buffer">
                                  <ul class="list-inline pull-right">
                                      <form:input type="hidden" name='auctionid' path="auction.auctionid" class="form-control" />
+                                     <li><button type="button" class="btn btn-lg btn-default prev-step">Back</button></li>
                                      <li><button name="submit" type="submit" value="submit" class="btn btn-lg btn-success">Save Auction</button></li>
                                  </ul>
                              </div>
