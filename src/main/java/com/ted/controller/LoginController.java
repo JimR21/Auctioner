@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ted.model.User;
 import com.ted.service.CategoryService;
 import com.ted.service.LoginService;
+import com.ted.service.UserService;
 
 @Controller
 public class LoginController {
@@ -28,6 +29,9 @@ public class LoginController {
 	
 	@Autowired
 	CategoryService categoryService;
+	
+	@Autowired
+	UserService userService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login (Model model) {
@@ -46,7 +50,7 @@ public class LoginController {
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(Model model) {
-		return "logout";
+		return "index";
 	}
 	
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -82,6 +86,9 @@ public class LoginController {
 	
 	@RequestMapping(value = "/upgrade", method = RequestMethod.GET)
 	public String getUpgrade(Model model) {
+		
+		User user = userService.getLoggedInUser();
+		model.addAttribute("user", user);
 		
 		return "upgrade";
 	}

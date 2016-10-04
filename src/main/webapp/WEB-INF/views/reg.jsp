@@ -26,11 +26,12 @@
 
 <body>
 
-   	 <%@ include file="/resources/template/menu-top.jsp" %>
      <link href=<c:url value="/resources/css/bootstrap-select.min.css" /> rel="stylesheet" type="text/css">
      <link href=<c:url value="/resources/css/bootstrap-datetimepicker.min.css" /> rel="stylesheet" type="text/css">
      <link href=<c:url value="/resources/css/fileinput.min.css" /> rel="stylesheet" type="text/css">
      <link href=<c:url value="/resources/css/form.css" /> rel="stylesheet" type="text/css">
+
+      <%@ include file="/resources/template/menu-top.jsp" %>
 
      <div class="container">
         <div class="row">
@@ -230,11 +231,11 @@
                               </div>
                          </div>
                          <div class="tab-pane" role="tabpanel" id="complete">
-                             <h2 class="text-center">Auction creation completed!</h2>
+                             <h2 class="text-center">User Registration Completed.</h2>
                              <div class="row content-row">
                                  <div class="text-center">
-                                     <p class="lead">You have successfully completed all steps.</p>
-                                     <p class="lead">Press Save and your auction will become available for bidding.</p>
+                                     <p class="lead">We will review your information and an email will be send when your account is approved.</p>
+                                     <p class="lead">Press Save and and become a Bidder in Auctioner!</p>
                                  </div>
                              </div>
                              <div class="row top-buffer">

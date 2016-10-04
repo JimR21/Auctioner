@@ -27,17 +27,14 @@
                 class="info"
             </c:if>>
                 <td><c:out value="${message.messageId}"></c:out></td>
-                <td><c:out value="${message.receiver.username}"></c:out></td>
-				<td><c:out value="${message.sender.username}"></c:out></td>
+                <td><c:out value="${message.receiverUsername}"></c:out></td>
+				<td><c:out value="${message.senderUsername}"></c:out></td>
 				<td class="text-right"><fmt:formatDate pattern="hh:mm dd-MMM-yyyy" value="${message.date}" /></td>
                 <td><c:out value="${message.message}"></c:out></td>
 			</tr>
 			</c:forEach>
 			</tbody>
 		</table>
-	</div>
-	<div class="panel-footer">
-		<input class="btn btn-success col-md-offset-10" type="submit" value="New Message" id="appr-btn"></input>
 	</div>
   </div>
 </div>
@@ -49,7 +46,7 @@
       		<h4 id="header" class="panel-title"></h4>
       	</div>
       	<div class="panel-body">
-      		<button id="back" class="btn btn-sm btn-active"><span class="glyphicon glyphicon-arrow-left"></span></button>
+      		<button id="back" class="btn btn-sm btn-default btn-active"><span class="glyphicon glyphicon-arrow-left"></span></button>
             <br />
             <p>
                 <span id="sender"></span><br/>
@@ -61,12 +58,13 @@
             </div>
     	</div>
     	<div class="panel-footer">
+            <a id="delete" href="" class="btn btn-sm btn-danger col-md-offset-10">Delete</a>
             <%-- Prepare Response --%>
             <sec:authorize ifAnyGranted="ROLE_ADMIN">
-                <a id = "reply" href="/Auctioner/admin-new-message" class="btn btn-sm btn-success col-md-offset-11">Reply</a>
+                <a id = "reply" href="/Auctioner/admin-new-message" class="btn btn-sm btn-success">Reply</a>
             </sec:authorize>
             <sec:authorize ifNotGranted="ROLE_ADMIN">
-                <a id = "reply" href="/Auctioner/myprofile-new-message" class="btn btn-sm btn-success col-md-offset-11">Reply</a>
+                <a id = "reply" href="/Auctioner/myprofile-new-message" class="btn btn-sm btn-success">Reply</a>
             </sec:authorize>
     	</div>
     </div>
@@ -117,12 +115,14 @@
             row = $(this);
 
         /* Table data */
-        var receiver = data[1],
+        var id = data[0],
+            receiver = data[1],
             sender = data[2],
             date = data[3],
             message = data[4];
 
         /* Populate Message View */
+        $('#delete').attr("href", "/Auctioner/messaging/delete/" + id);
         $('#header').text(date);
         $('#sender').text('From: '+ sender);
         $('#receiver').text('To: ' + receiver);
@@ -160,5 +160,10 @@
     	 $('#message').hide();
          $('#messages').show();
     });
+
+    // /* Delete Message */
+    // $('#delete').on('click', function() {
+    //     console.log("Delete");
+    // });
 
 </script>

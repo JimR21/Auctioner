@@ -15,7 +15,7 @@
 // });
 
 /* Navbar affix */
-$('.navbar-lower').affix({
+$('.nav-wrapper').affix({
   offset: {top: 50}
 });
 
@@ -50,3 +50,7 @@ $('.mega-dropdown').on('show.bs.dropdown', function(e){
         });
     });
 })(jQuery);
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});

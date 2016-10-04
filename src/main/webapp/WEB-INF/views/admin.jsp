@@ -34,8 +34,18 @@
         opacity: 0.1
      }*/
 
-     li > a {
+     /*li > a {
          margin-right: 15px;
+     }*/
+
+     .dash-number {
+         font-size: 35px;
+         text-shadow: 2px 2px 1px #999;
+     }
+
+     .list-item {
+         border-top: 1px orange;
+         border-bottom: 1px orange;
      }
 
     </style>
@@ -65,9 +75,9 @@
               <div class="col-sm-3 collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
                 <h4 class="text-center">Admin Panel</h4>
                 <ul class="nav navbar-nav nav-pills">
-                  <li class="active"><a href="#section1" data-toggle="pill">Overview<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-dashboard"></span></a></li>
+                  <li class="active"><a class="left-color" href="#section1" data-toggle="pill">Overview<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-dashboard"></span></a></li>
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a>
+                    <a class="left-color" href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a>
                     <ul class="dropdown-menu forAnimate" role="menu">
                       <li><a href="/Auctioner/messaging/inbox" data-target="#section2" id="inbox_tab" data-toggle="pill" rel="tooltip">Inbox</a></li>
                       <li><a href="/Auctioner/messaging/new-message" data-target="#section3" id="newMessage_tab" data-toggle="pill" rel="tooltip">New Message</a></li>
@@ -77,9 +87,9 @@
                       <li><a href="/Auctioner/messaging/new-anouncement" data-target="#section6" id="newAnouncement_tab" data-toggle="pill" rel="tooltip">New Anouncement</a></li>
                     </ul>
                   </li>
-                  <li ><a href="admin/users" data-target="#section7" id="users_tab" data-toggle="pill" rel="tooltip">Users<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
+                  <li ><a class="left-color" href="admin/users" data-target="#section7" id="users_tab" data-toggle="pill" rel="tooltip">Users<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Auctions <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity icon-hammer2"></span></a>
+                    <a class="left-color" href="#" class="dropdown-toggle" data-toggle="dropdown">Auctions <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity icon-hammer2"></span></a>
                     <ul class="dropdown-menu forAnimate" role="menu">
                       <li><a href="/Auctioner/admin/auctions" data-target="#section8" id="auctions_tab" data-toggle="pill" rel="tooltip">View Auctions</a></li>
                       <li><a href="/Auctioner/admin/xmlUpload" data-target="#section9" id="xml_tab" data-toggle="pill" rel="tooltip">XML Upload</a></li>
@@ -93,70 +103,86 @@
 	    <div id="loading" class="tab-content">
 	    	<div class="tab-pane fade in active" id="section1">
 			    <div class="col-sm-9">
-			      <div class="well">
-			        <h4>Dashboard</h4>
-                    <p><span class="glyphicon glyphicon-alert text-danger" style="margin-right:10px;"></span><strong >${dashboard.nonApprovedUsers}</strong> non approved <strong >Users</strong>.</p>
-                    <p><span class="glyphicon glyphicon-info-sign text-info" style="margin-right:10px;"></span><strong>${dashboard.newAuctions}</strong> new <strong>Auctions</strong> in the last 3 days.</p>
-			      </div>
+			      <div class="panel panel-primary">
+                      <div class="panel-heading">
+                          <h4 class="panel-title">Dashboard</h4>
+                      </div>
+                      <div class="panel-body">
+                          <p><span class="glyphicon glyphicon-alert text-danger" style="margin-right:10px;"></span><strong >${dashboard.nonApprovedUsers}</strong> non approved <strong >Users</strong>.</p>
+                          <p><span class="glyphicon glyphicon-info-sign text-info" style="margin-right:10px;"></span><strong>${dashboard.newAuctions}</strong> new <strong>Auctions</strong> in the last 3 days.</p>
+                      </div>
+                  </div>
 			      <div class="row">
 			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Users</h4>
-			            <p>${dashboard.userNum}</p>
-			          </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Users</h4>
+                            </div>
+                            <div class="panel-body">
+			                    <span class="dash-number text-center">${dashboard.userNum}</span>
+                            </div>
+                        </div>
 			        </div>
 			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Bidders</h4>
-			            <p>${dashboard.bidders}</p>
-			          </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Bidders</h4>
+                            </div>
+                            <div class="panel-body">
+                                <span class="dash-number text-center">${dashboard.bidders}</span>
+                            </div>
+                        </div>
 			        </div>
 			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Auctioneers</h4>
-			            <p>${dashboard.sellers}</p>
-			          </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Auctioneers</h4>
+                            </div>
+                            <div class="panel-body">
+                                <span class="dash-number text-center">${dashboard.sellers}</span>
+                            </div>
+                        </div>
 			        </div>
 			        <div class="col-sm-3">
-			          <div class="well">
-			            <h4>Auctions</h4>
-			            <p>${dashboard.auctionNum}</p>
-			          </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Auctions</h4>
+                            </div>
+                            <div class="panel-body">
+                                <span class="dash-number text-center">${dashboard.auctionNum}</span>
+                            </div>
+                        </div>
 			        </div>
 			      </div>
 			      <div class="row">
 			        <div class="col-sm-4">
-			          <div class="well">
-                          <h4>Latest Users</h4>
-                          <ul class="list-group">
-                            <c:forEach items="${dashboard.newUsers}" var="newuser">
-                            <li class="list-group-item"><a href="/Auctioner/profile/${newuser.userid}">${newuser.username}</a></li>
-                            </c:forEach>
-                          </ul>
-			          </div>
-			        </div>
-			        <div class="col-sm-8">
-			          <div class="well">
-                          <h4>Latest Auctions</h4>
-                          <ul class="list-group">
-                            <c:forEach items="${dashboard.latestAuctions}" var="latestAuction">
-                            <li class="list-group-item"><a href="/Auctioner/profile/${latestAuction.auctionid}">${latestAuction.name}</a></li>
-                            </c:forEach>
-                          </ul>
-			          </div>
-			        </div>
-			      </div>
-			      <div class="row">
-                      <div class="col-sm-12">
-                          <div class="well">
-                              <h4>Latest Bids</h4>
+                      <div class="panel panel-primary">
+                          <div class="panel-heading">
+                              <h4 class="panel-title">Latest Users</h4>
+                          </div>
+                          <div class="panel-body">
                               <ul class="list-group">
-                                <c:forEach items="${dashboard.latestBids}" var="latestBid">
-                                <li class="list-group-item"><a href="/Auctioner/auction/${latestAuction.auctionid}">${latestBid.auction.name}</a> <a href="/Auctioner/auction/${latestAuction.auctionid}">${latestBid.user.username}</a> ${latestBid.amount}</li>
+                                <c:forEach items="${dashboard.newUsers}" var="newuser">
+                                <li class="list-group-item list-item"><a href="/Auctioner/profile/${newuser.userid}">${newuser.username}</a></li>
                                 </c:forEach>
                               </ul>
                           </div>
                       </div>
+			        </div>
+			        <div class="col-sm-8">
+                      <div class="panel panel-primary">
+                          <div class="panel-heading">
+                              <h4 class="panel-title">Latest Auctions</h4>
+                          </div>
+                          <div class="panel-body">
+                              <ul class="list-group">
+                                <c:forEach items="${dashboard.latestAuctions}" var="latestAuction">
+                                <li class="list-group-item list-item"><a href="/Auctioner/profile/${latestAuction.auctionid}">${latestAuction.name}</a></li>
+                                </c:forEach>
+                              </ul>
+                          </div>
+                      </div>
+			        </div>
 			      </div>
 			    </div>
 			</div>
@@ -235,7 +261,11 @@
         }).on('fileuploaded', function(event, data, id, index) {
             var fname = data.files[index].name,
                 out = '<li>' + 'Uploaded file # ' + (index + 1) + ' - '  +
-                    fname + ' successfully.' + '</li>';
+                    fname + ' successfully.' + '</li>'+
+                    '<li>' + data.auctions + ' new Auctions</li>' +
+                    '<li>' + data.users + " new Users</li>" +
+                    '<li>' + data.bids + " new Bids</li>" +
+                    '<li>' + data.categories + " new Categories</li>";
             $('#success-1 ul').append(out);
             $('#success-1').fadeIn('slow');
         });

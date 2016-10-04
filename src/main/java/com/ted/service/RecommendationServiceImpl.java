@@ -3,6 +3,7 @@ package com.ted.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,11 +55,19 @@ public class RecommendationServiceImpl implements RecommendationService {
 	@PersistenceContext
     private EntityManager entityManager;
 	
-//	@Scheduled(fixedDelay = 200000)
+//	@Scheduled(fixedDelay = 3600000)		// Every hour
 	@Transactional
 	public void updateSimilarUsers() {
 		
 		List<User> users = userRepository.findAll();
+		HashMap<Integer, User> userMap = new HashMap<>();
+		for(User user : users)
+			userMap.put(user.getUserid(), user);
+		
+		List<CommonBid> allBidsCounts = auctionBiddingRepository.getAllBidsCount();
+		HashMap<Integer, Long> countsMap = new HashMap<>();
+		for(CommonBid countBids : allBidsCounts)
+			countsMap.put(countBids.getUserid(), countBids.getCount());
 		
 		/* Compare all users loop*/
 		for(User user1 : users) {
@@ -67,13 +77,16 @@ public class RecommendationServiceImpl implements RecommendationService {
 			
 			List<CommonBid> commonBids = auctionBiddingRepository.getCommonBidsCount(user1.getUserid());
 				
-			Long user1Bids = auctionBiddingRepository.countByUser(user1);
+//			Long user1Bids = auctionBiddingRepository.countByUser(user1);
+			Long user1Bids = countsMap.get(user1.getUserid());
 			
 			for(CommonBid commonBid : commonBids) {
 				
-				User user2 = userRepository.findByUserid(commonBid.getUserid());
+				User user2 = userMap.get(commonBid.getUserid());
+//				Long user2Bids = auctionBiddingRepository.countByUser(user2);
+				Long user2Bids = countsMap.get(user2.getUserid());
 				
-				Double similarity = similarity(user1, user2, commonBid.getCount(), user1Bids);		// get similarity from cosine
+				Double similarity = similarity(commonBid.getCount(), user1Bids, user2Bids);		// get similarity from cosine
 				if(similarity < 1.0) {
 					if(similarUsers.size() >= 20) {														// Neighborhood size <= 20
 						if(similarity > min.getSimilarity()) {
@@ -113,14 +126,17 @@ public class RecommendationServiceImpl implements RecommendationService {
 			
 			/* Persist top User Similarities */
 			for(Similar similar : similarUsers) {
-				similarRepository.saveAndFlush(similar);
+				similarRepository.save(similar);
 			}
 		}
+		System.out.println("UpdateSimilarUsers Ended.");
+		updateRecommendations();
 	}
 	
+//	@Scheduled(fixedDelay = 2000000)
 	public void  updateRecommendations() {
 		
-		List<User> users = userRepository.findAll();
+		List<User> users = similarRepository.getUsersWithSimilarity();
 		for(User user : users) {
 			
 			List<Recommendation> recs = new ArrayList<>();
@@ -176,11 +192,10 @@ public class RecommendationServiceImpl implements RecommendationService {
 				}
 			}
 		}
+		System.out.println("UpdateRecommentations Ended");
 	}
 	
-	double similarity(User user1, User user2, Long commonBids, Long user1Bids) {
-		
-		Long user2Bids = auctionBiddingRepository.countByUser(user2);
+	double similarity(Long commonBids, Long user1Bids, Long user2Bids) {
 		
 		if(user1Bids == 0 || user2Bids == 0)
 			return 0;
@@ -210,7 +225,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 			recAuctionsIds = recommendationRepository.getRecommendedAuctionsIds(user.getUserid());
 		
 			if(recAuctionsIds.size() < 16) {
-				List<Integer> topAuctionsIds = auctionRepository.getTopAuctionsIds(15 - recAuctionsIds.size());
+				List<Integer> topAuctionsIds = auctionRepository.getTopAuctionsIds(16 - recAuctionsIds.size());
 				recAuctionsIds.addAll(topAuctionsIds);
 			}
 		}

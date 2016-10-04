@@ -27,5 +27,7 @@ public interface UserService {
 	void rateSeller(Integer id, float rating);
 	
 	void rateBidder(Integer id, float rating);
+	
+	String getUserPicture(User user);
 
 }

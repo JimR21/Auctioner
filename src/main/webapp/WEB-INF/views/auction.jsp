@@ -21,7 +21,12 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link href=<c:url value="/resources/css/auction.css" /> rel="stylesheet" type="text/css">
+    <style>
+    div#map_container{
+    	width:690px;
+    	height:400px;
+    }
+    </style>
 
     <title>Auctioner</title>
 
@@ -31,8 +36,16 @@
 
    	 <%@ include file="/resources/template/menu-top.jsp" %>
 
-
     <div class="container single-item-content">
+
+        <link href=<c:url value="/resources/css/auction.css" /> rel="stylesheet" type="text/css">
+        <link href=<c:url value="/resources/css/star-rating.min.css" /> rel="stylesheet" type="text/css">
+
+        <c:if test="${modify == 1}">
+            <div class="col-md-offset-10 col-md-2">
+                <a href="/Auctioner/update-auction/${auction.auctionid}" class="btn btn-warning">Modify Auction</a>
+            </div>
+        </c:if>
 
         <div class="row">
             <div class="col-xs-5 single-content-left">
@@ -46,17 +59,22 @@
                                         <div class="carousel slide" id="myCarousel">
                                             <!-- Carousel items -->
                                             <div class="carousel-inner">
-                                                <div class="active item single-item-img" data-slide-number="0">
-                                                <img src="http://placehold.it/480x480&text=two"></div>
-
-                                                <div class="item single-item-img" data-slide-number="1">
-                                                <img src="http://placehold.it/480x480&text=two"></div>
-
-                                                <div class="item single-item-img" data-slide-number="2">
-                                                <img src="http://placehold.it/480x480&text=three"></div>
-
-                                                <div class="item single-item-img" data-slide-number="3">
-                                                <img src="http://placehold.it/480x480&text=four"></div>
+                                                <c:if test="${not empty images}">
+                                                    <c:forEach items="${images}" var="image" varStatus="loop">
+                                                        <c:if test="${loop.count == 1}">
+                                                            <div class="active item single-item-img" data-slide-number="0">
+                                                            <img src="data:image/jpeg;base64,${image}"></div>
+                                                        </c:if>
+                                                        <c:if test="${loop.count != 1}">
+                                                            <div class="item single-item-img" data-slide-number="${loop.index}">
+                                                            <img src="data:image/jpeg;base64,${image}"></div>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${empty images}">
+                                                    <div class="active item single-item-img" data-slide-number="0">
+                                                    <img src="<c:url value="/resources/images/hammer1.png"/>"/></div>
+                                                </c:if>
                                             </div><!-- Carousel nav -->
                                             <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
                                                 <span class="glyphicon glyphicon-chevron-left"></span>
@@ -73,80 +91,190 @@
                         <div class="row hidden-xs" id="slider-thumbs">
                                 <!-- Bottom switcher of slider -->
                                 <ul class="hide-bullets">
-                                    <li class="col-sm-3">
-                                        <a class="thumbnail" id="carousel-selector-0"><img src="http://placehold.it/200x200&text=two"></a>
-                                    </li>
-
-                                    <li class="col-sm-3">
-                                        <a class="thumbnail" id="carousel-selector-1"><img src="http://placehold.it/200x200&text=two"></a>
-                                    </li>
-
-                                    <li class="col-sm-3">
-                                        <a class="thumbnail" id="carousel-selector-2"><img src="http://placehold.it/200x200&text=three"></a>
-                                    </li>
-
-                                    <li class="col-sm-3">
-                                        <a class="thumbnail" id="carousel-selector-3"><img src="http://placehold.it/200x200&text=four"></a>
-                                    </li>
-
-                                    <li class="col-sm-3">
-                                        <a class="thumbnail" id="carousel-selector-3"><img src="http://placehold.it/200x200&text=four"></a>
-                                    </li>
-
-                                    <li class="col-sm-3">
-                                        <a class="thumbnail" id="carousel-selector-3"><img src="http://placehold.it/200x200&text=four"></a>
-                                    </li>
+                                    <c:if test="${not empty images}">
+                                        <c:forEach items="${images}" var="image" varStatus="loop">
+                                            <li class="col-sm-3">
+                                                <%-- <div class="small-img-div"> --%>
+                                                    <a class="thumbnail" id="carousel-selector-${loop.index}"><img src="data:image/jpeg;base64,${image}"></a>
+                                                <%-- </div> --%>
+                                            </li>
+                                        </c:forEach>
+                                    </c:if>
+                                    <c:if test="${empty images}">
+                                        <li class="col-sm-3">
+                                            <a class="thumbnail" id="carousel-selector-${loop.index}"><img src="<c:url value="/resources/images/hammer1.png"/>"/></a>
+                                        </li>
+                                    </c:if>
                                 </ul>
                         </div>
                     </div>
             </div>
             <div class="col-xs-7 single-content-right" >
-                <h2 class="text-uppercase">${auction.name}</h2>
-                <br />
-                <p>
-                    ${auction.description}
-                </p>
-                <br />
-                <br />
-                <h3>Starting Price: ${auction.firstBid}</h3>
-                <br />
-                <c:if test="${auction.buyPrice != null}">
-                    <div class="col-md-4">
-                        <h3> Buy it now!</h3>
-                        <button class="btn btn-default btn-block">${auction.buyPrice}</button>
-                        <br />
-                    </div>
-                </c:if>
-            </div>
-            <div class="col-md-3">
-                <h3>Current Price</h3>
-                <h3 id="currentPrice"></h3>
-                <h3>Auction Ends In</h3>
-                <div class="panel panel-default"  data-placement="top">
-                  <div class="panel-body" style="text-align: center;">
-                    <div class="lead" id="clock"></div>
-                  </div>
-                </div>
-                <h3>Place Bid</h3>
-                <form id role="form">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="bidInput" placeholder="Amount">
+                <div class="col-md-12">
+                    <h2 class="text-uppercase title">${auction.name}</h2>
+                    <div id="soldto-div" class="hidden">
+                        <div class="alert alert-success">
+                             <span id="soldto"></span>
                         </div>
                     </div>
-                    <div class="col-md-6" data-pg-collapsed>
-                        <button id="bidButton" type="button" class="btn btn-default btn-block">Bid</button>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Starting Price</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="price-number text-center">$${auction.firstBid}</div>
+                        </div>
                     </div>
-                </form>
-            </div>
-            <div class="col-md-4">
-                <h3>Bids</h3>
-                <div class="well bids-well">
-                    <ul id="liveFeed" class="list-group">
-                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Starting Date</h4>
+                        </div>
+                        <div class="panel-body">
+                            <span class="date-number text-center">${auction.started}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Ending Date</h4>
+                        </div>
+                        <div class="panel-body">
+                            <span class="date-number text-center">${auction.ends}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="clock-div panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Auction Ends In</h4>
+                        </div>
+                        <div class="panel-body" style="text-align: center;">
+                            <div class="lead clock" id="clock" class="clock"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="bid-pricing" class="col-md-6 <c:if test='${empty user}'>hidden</c:if>">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Current Price</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="price-number text-center"><span id="currentPrice">$${auction.firstBid}</span></div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="col-md-9" style="padding-left: 0px;">
+                                <div class="form-group" style="margin-bottom: 0px;">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="text" class="form-control" id="bidInput" placeholder="Place Bid">
+                                        <span class="input-group-addon">.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 bid-button" style="padding-right: 0px;">
+                                <c:if test="${user.approved == 1}">
+                                    <c:if test="${user.userid == auction.user.userid}">
+                                        <button class="btn btn-success btn-block" data-toggle="tooltip" data-placement="top" title="You cannot bid your own Auction" disabled="disabled">Bid</button>
+                                    </c:if>
+                                    <c:if test="${user.userid != auction.user.userid}">
+                                        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#bidModal">Bid</button>
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${user.approved == 0}">
+                                    <button class="btn btn-success btn-block" data-toggle="tooltip" data-placement="top" title="You need an approved account for this action." disabled="disabled">Bid</button>
+                                </c:if>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <c:if test="${auction.buyPrice != null}">
+                    <div id="buy-pricing" class="col-md-6 <c:if test='${empty user}'>hidden</c:if>">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Buy Price</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="price-number text-center">$${auction.buyPrice}</div>
+                            </div>
+                            <div class="panel-footer">
+                                <c:if test="${user.approved == 1}">
+                                    <c:if test="${user.userid != auction.user.userid}">
+                                        <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#buyModal"><i><span class="icon-hammer2"></i></span>Buy Now!</button>
+                                    </c:if>
+                                    <c:if test="${user.userid == auction.user.userid}">
+                                        <button class="btn btn-primary btn-block" data-toggle="tooltip" data-placement="top" title="You cannot bid your own Auction." disabled="disabled"><i><span class="icon-hammer2"></i></span>Buy Now!</button>
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${user.approved == 0}">
+                                    <button class="btn btn-primary btn-block" data-toggle="tooltip" data-placement="top" title="You need an approved account for this action." disabled="disabled"><i><span class="icon-hammer2"></i></span>Buy Now!</button>
+                                </c:if>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </c:if>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Bids</h4>
+                        </div>
+                        <div class="panel-body">
+                            <ul id="liveFeed" class="list-group"></ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Bid Modal -->
+          <div class="modal fade" id="bidModal" role="dialog">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to continue? This action cannot be cancelled later.</p>
+                </div>
+                <div class="modal-footer">
+                  <button id="bidButton" type="button" class="btn btn-primary" data-dismiss="modal">Bid</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- Buy Modal -->
+            <div class="modal fade" id="buyModal" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you sure you want to continue? This action cannot be cancelled later.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button id="buy-button" type="button" class="btn btn-primary" data-dismiss="modal">Bid</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
         <div class="row">
             <div class="col-sm-12">
                 <ul class="nav nav-tabs">
@@ -157,7 +285,7 @@
 
                 <div class="tab-content">
                     <div class="well tab-pane active" id="detailsTab">
-                        <h4>Description</h4>
+                        <h3>Description</h3>
                         <p>
                             ${auction.description}
                         </p>
@@ -182,18 +310,23 @@
                             <h2>${auction.user.username}</h2>
                             <div class="col-sm-6">
                                 <p class="lead">
-                                    Name: ${auction.user.firstName} <br />
-                                    Lastname: ${auction.user.lastName} <br />
-                                    <span class="icon-phone"></span>: ${auction.user.phone} <br /><br />
-                                    Country: ${auction.user.country} <br />
-                                    City: ${auction.user.city}
+                                    ${auction.user.firstName} <br />
+                                    ${auction.user.lastName} <br />
+                                    <span class="icon-phone"></span> ${auction.user.phone} <br /><br />
+                                    ${auction.user.country} <br />
+                                    ${auction.user.city}
                                 </p>
                             </div>
                             <div class="col-sm-6">
-                                <h3>User Rating</h3>
+                                <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+                                    <label for="seller-rating" class="control-label"><h3>Auctioneer Rating</h3></label>
+                                    <input id="seller-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${auction.user.sellerRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">
+                                    <label for="bidder-rating" class="control-label"><h3>Bidder Rating</h3></label>
+                                    <input id="bidder-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${auction.user.bidderRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">
+                                </sec:authorize>
                             </div>
                             <div class="col-sm-11">
-                                <a href="/Auctioner/profile/${auction.user.userid}" class="btn btn-default pull-right">View Profile</a>
+                                <a href="/Auctioner/profile/${auction.user.userid}" class="btn btn-primary pull-right">View Profile</a>
                             </div>
                         </div>
                     </div>
@@ -214,9 +347,8 @@
                         <div class="col-md-3">
                             <!-- Controls -->
                             <div class="controls pull-right hidden-xs">
-                                <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example"
-                                    data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example"
-                                        data-slide="next"></a>
+                                <a class="left btn btn-primary" href="#carousel-example" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                                <a class="right btn btn-primary" href="#carousel-example" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
                             </div>
                         </div>
                     </div>
@@ -231,27 +363,26 @@
                                 <div class="col-sm-3">
                                     <div class="col-item">
                                         <div class="photo">
-                                            <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
+                                            <c:if test="${not empty rec.primaryImage}">
+                                                <a href="/Auctioner/auction/${rec.auctionid}"><img src="data:image/jpeg;base64,${rec.primaryImage}" alt="auction-image" /></a>
+                                            </c:if>
+                                            <c:if test="${empty rec.primaryImage}">
+                                                <a href="/Auctioner/auction/${rec.auctionid}"><img src="<c:url value="/resources/images/hammer1.png"/>" alt="hammer-image" /></a>
+                                            </c:if>
                                         </div>
                                         <div class="info">
                                             <div class="row">
-                                                <div class="price col-md-6">
-                                                    <h5>${rec.name}</h5>
-                                                    <h5 class="price-text-color">${rec.firstBid}</h5>
+                                                <div class="price col-md-12">
+                                                    <div class="text-limit">
+                                                        <h4>${rec.name}</h4>
+                                                    </div>
                                                 </div>
-                                                <div class="rating hidden-sm col-md-6">
-                                                    <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
-                                                    </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
-                                                    </i><i class="fa fa-star"></i>
+                                                <div class="col-xs-12 col-md-6">
+                                                    <p class="lead">$${rec.firstBid}</p>
                                                 </div>
-                                            </div>
-                                            <div class="separator clear-left">
-                                                <p class="btn-add">
-                                                    <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a></p>
-                                                <p class="btn-details">
-                                                    <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a></p>
-                                            </div>
-                                            <div class="clearfix">
+                                                <div class="col-xs-12 col-md-6">
+                                                    <a class="btn btn-primary" href="/Auctioner/auction/${auction.auctionid}">View More</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -280,6 +411,8 @@
     <script src=<c:url value="/resources/js/jquery.countdown.min.js" />></script>
     <script src=<c:url value="/resources/js/auction-carousels.js" />></script>
     <script src=<c:url value="/resources/js/date.format.js" />></script>
+    <script src=<c:url value="/resources/js/bootstrap-confirmation.js" />></script>
+    <script src=<c:url value="/resources/js/star-rating.min.js" />></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDluUfh1eXZmSKvXQJ1Ctd9nYucJgPIcVo"></script>
 
     <script>
@@ -304,6 +437,8 @@
             request.abort();  // abort any pending request
         }
 
+        console.log("Polling for bids");
+
         var request = $.ajax({
             url: url,
             type: "GET",
@@ -311,13 +446,23 @@
             timeout:45000,
             success: function( data ) {
 
-                if (data.info.numofBids == numberofBids)
-                    console.log("No new bids")
+                if (data.info.numofBids == numberofBids) {
+                    console.log("No new bids: " + data.info.buyer);
+                    if(data.info.bought){
+                        if(data.info.buyer == null)
+                            updateOver();
+                        else
+                            updateBought(data);
+                    }
+                }
                 else {
                     console.log('New bids: ' + (data.info.numofBids - numberofBids));
                     console.log(data.bids);
                     numberofBids = data.info.numofBids;
                     updatePriceAndLiveFeed(data);
+                    console.log(data.info.buyer);
+                    if(data.info.bought)
+                        updateBought(data);
                 }
                 pollforBids();  // Recursion
             },
@@ -329,7 +474,7 @@
     }
 
     function updatePriceAndLiveFeed(data) {
-        $('#currentPrice').text(data.info.latestBid);
+        $('#currentPrice').text("$"+ data.info.latestBid);
 
         var bids = data.bids;
         var bid;
@@ -340,21 +485,37 @@
             var time = new Date(bid.time);
             var formattedTime = time.format("isoTime");
 
-            $('#liveFeed').prepend('<li class="list-group-item">'+ formattedTime + ' ' + bid.username + ' bidded '+ bid.amount + '</li>');
+            $('#liveFeed').prepend('<li class="list-group-item">'+ formattedTime + ' ' + bid.username + ' bidded $'+ bid.amount + '</li>');
         }
+    }
+
+    function updateBought(data) {
+        $('.clock-div').addClass('hidden');
+        $('#soldto').text("Auction was sold to " + data.info.buyer + " for $" + data.info.latestBid);
+        $('#soldto-div').removeClass('hidden');
+        $('#bid-pricing').addClass('hidden');
+        $('#buy-pricing').addClass('hidden');
+
+        stopFlag = 1;
+    }
+
+    function updateOver() {
+        $('.clock-div').addClass('hidden');
+        $('#soldto').text("The Auction has ended without any buyers.");
+        $('#soldto-div').removeClass('hidden');
+        $('#bid-pricing').addClass('hidden');
+        $('#buy-pricing').addClass('hidden');
+
+        stopFlag = 1;
     }
 
     window.addEventListener('load',
       function() {
         pollforBids();
+        <c:if test="${not empty auction.location.latitude}">
         loadMap();
+        </c:if>
     }, false);
-
-    /* On button click call bidPost() */
-    $('#bidButton').on('click', function(){
-        console.log("bidButton clicked")
-        bidPost();
-    });
 
     /* Function to ajax post the bid */
     function bidPost() {
@@ -377,7 +538,31 @@
         });
     }
 
+    <c:if test="${auction.buyPrice != null}">
+    /* Function to ajax post the purchase */
+    function buyPost() {
+
+        var bidUrl = "/Auctioner/auction/bid/" + auctionId;
+
+        var amount = ${auction.buyPrice};
+        console.log("Amount: " + amount);
+
+        $.ajax({
+            url: bidUrl,
+            type: "POST",
+            data: {bidAmount : amount},
+            success: function( data ) {
+                console.log("bidPost: " + data);
+            },
+            error: function(data){
+                console.log("ERROR: " + data.responseText);
+            }
+        });
+    }
+    </c:if>
+
     /* Google Maps */
+    <c:if test="${not empty auction.location.latitude}">
     var lat = ${auction.location.latitude},
         long = ${auction.location.longitude};
 
@@ -401,6 +586,73 @@
           title: "Auction Location"
         });
     }
+    </c:if>
+
+    /* Confirmation */
+
+    /* On button click call bidPost() */
+    $('#bidButton').on('click', function(){
+        console.log("bidButton clicked")
+        bidPost();
+    });
+
+    /* Buy Auction */
+    $('#buy-button').on('click', function() {
+        console.log("buy-button clicked")
+        buyPost();
+    });
+
+    /* Rating */
+    <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+    $('#seller-rating').on('rating.change', function(event, value, caption) {
+        console.log(value);
+        sellerRatingPost(value);
+    });
+
+    $('#bidder-rating').on('rating.change', function(event, value, caption) {
+        console.log(value);
+        bidderRatingPost(value);
+    });
+
+    userId = "${auction.user.userid}";
+
+    /* Function to ajax post the Seller Rating */
+    function sellerRatingPost(value) {
+
+        var url = "/Auctioner/rate/seller/" + userId;
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {rating : value},
+            success: function( data ) {
+                console.log("ratingPost: " + data);
+            },
+            error: function(data){
+                console.log("ERROR: " + data.responseText);
+            }
+        });
+    }
+
+    /* Function to ajax post the Bidder Rating */
+    function bidderRatingPost(value) {
+
+        var url = "/Auctioner/rate/bidder/" + userId;
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {rating : value},
+            success: function( data ) {
+                console.log("ratingPost: " + data);
+            },
+            error: function(data){
+                console.log("ERROR: " + data.responseText);
+            }
+        });
+    }
+    </sec:authorize>
+
 
     </script>
 

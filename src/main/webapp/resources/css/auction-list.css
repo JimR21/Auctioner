@@ -55,3 +55,20 @@
 {
     margin: 0 0 11px;
 }
+
+.text-limit {
+    height: 4.5em;
+    overflow: hidden;
+}
+
+.item-shadow:hover {
+    /*box-shadow: 3px 3px 4px darkorange, -3px -3px 4px darkorange;*/
+    -moz-box-shadow: 0 0 5px #999;
+    -webkit-box-shadow: 0 0 5px #999;
+    box-shadow: 0 0 5px #999;
+}
+
+.price-tag {
+    font-size: 24px;
+    text-shadow:2px 2px 1px #999;
+}

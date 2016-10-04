@@ -44,7 +44,7 @@
                      <div class="row">
                          <%-- Left Column --%>
                          <div class="col-md-3 col-sm-3">
-                             <div class="panel panel-default">
+                             <div class="panel panel-primary">
                                  <div class="panel-heading">
                                      <h4 class="panel-title">Categories</h4>
                                  </div>
@@ -52,7 +52,7 @@
                                      <div class="fancy-collapse-panel">
                                          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                              <c:forEach items="${filter.category.categories}" var="childCategory" varStatus="loop">
-                                             <div class="panel panel-default">
+                                             <div class="panel">
                                                  <div class="panel-heading" role="tab" id="heading${loop.index}">
                                                      <h4 class="panel-title">
                                                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse${loop.index}" aria-expanded="false" aria-controls="#collapse${loop.index}">${childCategory.name}</a>
@@ -71,25 +71,6 @@
                                              </c:forEach>
                                          </div>
                                      </div>
-                                 </div>
-                             </div>
-                             <div class="panel panel-default">
-                                 <div class="panel-heading">
-                                     <h4 class="panel-title">Price</h4>
-                                 </div>
-                                 <div class="panel-body">
-                                     <div data-role="main" class="ui-content">
-                                        <form method="post" action="demoform.asp">
-                                            <div data-role="rangeslider">
-                                                <label for="price-min">Price:</label>
-                                                <input type="range" name="price-min" id="price-min" value="200" min="0" max="1000">
-                                                <label for="price-max">Price:</label>
-                                                <input type="range" name="price-max" id="price-max" value="800" min="0" max="1000">
-                                            </div>
-                                            <input type="submit" data-inline="true" value="Submit">
-                                            <p>The range slider can be useful for allowing users to select a specific price range when browsing products.</p>
-                                        </form>
-                                    </div>
                                  </div>
                              </div>
                          </div>

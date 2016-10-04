@@ -11,6 +11,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
 import javax.persistence.SqlResultSetMapping;
@@ -43,11 +44,15 @@ import javax.xml.bind.annotation.XmlType;
 @Entity
 @Table(name = "auction_bidding")
 @NamedQuery(name = "AuctionBidding.findAll", query = "SELECT a FROM AuctionBidding a")
+@NamedNativeQueries({
+//@NamedNativeQuery(name = "AuctionBidding.getAllBidsCount", 
+//	query = "SELECT bidder_userid, COUNT(*) FROM auction_bidding GROUP BY bidder_userid", resultSetMapping = "CommonBidMapping"),
 @NamedNativeQuery(name = "AuctionBidding.getCommonBidsCount", 
 		query = "select similar.bidder_userid as userid, count(*) as count from auction_bidding target "
 		+ "join auction_bidding similar on target.auctionid = similar.auctionid and target.bidder_userid != similar.bidder_userid "
 		+ "where (target.bidder_userid = :userid)"
 		+ "group by similar.bidder_userid", resultSetMapping = "CommonBidMapping")
+})
 @XmlType(propOrder = {"user", "xmlTime", "amountString"})
 @XmlRootElement(name = "bid")
 public class AuctionBidding implements Serializable {
@@ -55,10 +60,6 @@ public class AuctionBidding implements Serializable {
 
 	@EmbeddedId
 	private AuctionBiddingPK id;
-
-	@NotNull
-	@Column(name="amount", columnDefinition="Decimal(15,2)")
-	private BigDecimal amount;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
@@ -81,11 +82,6 @@ public class AuctionBidding implements Serializable {
 	private String amountString;
 
 	public AuctionBidding() {
-	}
-
-	@XmlTransient
-	public BigDecimal getAmount() {
-		return this.amount;
 	}
 
 	@XmlElement(name = "Amount")
@@ -116,10 +112,6 @@ public class AuctionBidding implements Serializable {
 	@XmlElement(name = "Time")
 	public String getXmlTime() {
 		return xmlTime;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
 	}
 
 	public void setAmountString(String amountString) {

@@ -13,6 +13,16 @@ public class AuctionInfo {
 	BigDecimal buyPrice;
 	
 	Long ends; 
+	
+	String buyer;
+
+	public String getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
+	}
 
 	public BigDecimal getBuyPrice() {
 		return buyPrice;

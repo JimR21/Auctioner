@@ -18,6 +18,8 @@ public interface AuctionBiddingRepository extends JpaRepository<AuctionBidding, 
 	
 	List<AuctionBidding> findByUser(User user);
 	
+	List<AuctionBidding> findByAuction(Auction auction);
+	
 	Long countByUser(User user);
 	
 //	@Query(value = "SELECT count(*) FROM AuctionBidding a1, AuctionBidding a2 WHERE a1.user = :user1 AND a2.user = :user2 AND a1.auction = a2.auction")
@@ -28,6 +30,11 @@ public interface AuctionBiddingRepository extends JpaRepository<AuctionBidding, 
 //			+ "where target.bidder_userid = :userid"
 //			+ "group by similar.bidder_userid", nativeQuery=true)
 	List<CommonBid> getCommonBidsCount(@Param("userid") int userid);
+	
+//	List<CommonBid> getAllBidsCount();
+	
+	@Query(value = "SELECT NEW com.ted.model.CommonBid(a.user.userid, COUNT(*)) FROM AuctionBidding as a GROUP BY a.user")
+	List<CommonBid> getAllBidsCount();
 	
 	@Query(value = "SELECT a.auction FROM AuctionBidding a WHERE a.user = :user")
 	List<Auction> findAuctionsByUser(@Param("user") User user);

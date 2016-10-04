@@ -24,6 +24,8 @@ public interface MessageService {
 	
 	List<GlobalMessage> getAllGlobalMessages();
 	
-	Integer checkNewMessages();
+	Integer checkNewMessages(User user);
+	
+	void deleteMessage(Message message, String username);
 
 }

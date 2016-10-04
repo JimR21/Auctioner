@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -82,7 +83,7 @@ public class XmlServiceImpl implements XmlService {
 			auction.setCategories(saveCategories(auction.getCategories()));
 			
 			/* Date Format */
-			auction.setEnds(formatString(auction.getXmlEnds()));
+			auction.setEnds(formatEndString(auction.getXmlEnds()));		// Ends in 2017
 			auction.setStarted(formatString(auction.getXmlStarted()));
 			
 			/* Format Auction Money */
@@ -91,7 +92,10 @@ public class XmlServiceImpl implements XmlService {
 			auction.setFirstBid(formatMoney(auction.getFirstBidString()));
 			
 			/* IsBought */
-			auction.setBought(true);
+			if(auction.getEnds().getTime() < new Date().getTime())
+				auction.setBought(true);
+			else
+				auction.setBought(false);
 			
 			/*Persist Auction */
 			Auction dbauction = auctionRepository.saveAndFlush(auction);
@@ -99,6 +103,7 @@ public class XmlServiceImpl implements XmlService {
 			/* Auction Biddings */
 			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
 			
+			int i = 1;
 			for(AuctionBidding bid : xmlbiddings) {
 				
 				bid.setUser(saveBidderUser(bid.getUser()));	// save and return bidder
@@ -110,14 +115,23 @@ public class XmlServiceImpl implements XmlService {
 				AuctionBiddingPK auctionBiddingPK = new AuctionBiddingPK();
 				auctionBiddingPK.setAuctionid(dbauction.getAuctionid());
 				auctionBiddingPK.setBidderUserid(bid.getUser().getUserid());
+				/* Format Amount Money */
+				auctionBiddingPK.setAmount(formatMoney(bid.getAmountString()));
 				
 				bid.setId(auctionBiddingPK);
 				
 				/* Format Amount Money */
-				bid.setAmount(formatMoney(bid.getAmountString()));
+//				bid.setAmount(formatMoney(bid.getAmountString()));
 				
 				auctionBiddingRepository.save(bid);
 				
+				/* Buyer */
+				if(i == dbauction.getNumberOfBids()) {
+					dbauction.setBuyer(bid.getUser());
+					auctionRepository.saveAndFlush(dbauction);
+				}
+				
+				i++;
 			}
 		}
 	}
@@ -164,6 +178,11 @@ public class XmlServiceImpl implements XmlService {
 		/* Enabled & Approved */
 		user.setEnabled((byte)1);
 		user.setApproved((byte)0);
+		
+		/* Rating Zero */
+		float r = 0;
+		user.setBidderRating(r);
+		user.setSellerRating(r);
 		
 		/* Persist User */
 		userRepository.save(user);
@@ -247,6 +266,11 @@ public class XmlServiceImpl implements XmlService {
 		user.setEnabled((byte)1);
 		user.setApproved((byte)0);
 		
+		/* Rating Zero */
+		float r = 0;
+		user.setBidderRating(r);
+		user.setSellerRating(r);
+		
 		/* Persist User */
 		userRepository.save(user);
 		
@@ -299,25 +323,34 @@ public class XmlServiceImpl implements XmlService {
 	public List<Category> saveCategories(List<Category> categories) {
 		
 		List<Category> returnList = new ArrayList<Category>();
+		List<Category> allCategories = categoryRepository.findAll();
+		
+		HashMap<String, Category> categoryMap = new HashMap<>();
+		
+		for(Category cat : allCategories) {
+			categoryMap.put(cat.getName(), cat);
+		}
 		
 		Category cat;
 		Category parent = null;
 		
 		for(Category category : categories) {
 			category.setCategory(parent);
-			cat = categoryRepository.findByName(category.getName());
+			cat = categoryMap.get(category.getName());
 			if(cat == null) {
-				categoryRepository.save(category);
+				cat = categoryRepository.save(category);
+				categoryMap.put(cat.getName(), cat);
 				parent = category;
 			}
 			else {
 				if(category.getCategory() != null) {
 					cat.setCategory(category.getCategory());
-					categoryRepository.save(cat);
+					cat = categoryRepository.save(cat);
+					categoryMap.put(cat.getName(), cat);
 				}
 				parent = cat;
 			}
-			returnList.add(categoryRepository.findByName(category.getName()));
+			returnList.add(cat);
 		}
 		
 		return returnList;
@@ -329,16 +362,28 @@ public class XmlServiceImpl implements XmlService {
 		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yy HH:mm:ss", Locale.ENGLISH);
 
 		try {
-			
 			Date date = formatter.parse(dateString);
 			return date;
-			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		return null;	
+	}
+	
+	public Date formatEndString(String dateString) {
 		
-		return null;
-			
+		dateString = dateString.replaceAll("01 ", "17 ");
+		System.out.println("Date: " + dateString);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yy HH:mm:ss", Locale.ENGLISH);
+
+		try {
+			Date date = formatter.parse(dateString);
+			return date;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;	
 	}
 	
 	BigDecimal formatMoney(String moneyString) {
@@ -378,10 +423,18 @@ public class XmlServiceImpl implements XmlService {
 		
 	}
 	
+	@Transactional
 	public File xmlFileProduce(List<Integer> auctionids) {
 
 		XmlAuctionWrapper wrapper = new XmlAuctionWrapper();
 		List<Auction> auctions = auctionRepository.findByAuctionidIn(auctionids);
+		
+		/* Eager Fetch */
+		for(Auction auction : auctions) {
+			auction.setAuctionBiddings(auctionBiddingRepository.findByAuction(auction));
+			auction.setCategories(categoryRepository.findByAuction(auction));
+		}
+		
 		wrapper.setAuctions(auctions);
 		
 		File file = new File("auctions.xml");

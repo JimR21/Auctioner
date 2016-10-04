@@ -42,7 +42,7 @@
       		<h4 id="header_an" class="panel-title"></h4>
       	</div>
       	<div class="panel-body">
-      		<button id="back_an" class="btn btn-sm btn-active"><span class="glyphicon glyphicon-arrow-left"></span></button>
+      		<button id="back_an" class="btn btn-sm btn-default btn-active"><span class="glyphicon glyphicon-arrow-left"></span></button>
             <div class="well">
             	<p id="content_an"></p>
             </div>

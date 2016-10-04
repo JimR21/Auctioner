@@ -1,9 +1,10 @@
 package com.ted.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ted.model.Auction;
 import com.ted.model.User;
+import com.ted.service.AuctionService;
 import com.ted.service.LoginService;
 import com.ted.service.UserService;
 
@@ -28,6 +31,9 @@ public class UserController {
 	@Autowired
 	LoginService loginService;
 	
+	@Autowired
+	AuctionService auctionService;
+	
 	
 	@RequestMapping(value = "/myprofile", method = RequestMethod.GET)
 	public String getMyProfile(Model model) {
@@ -37,6 +43,32 @@ public class UserController {
 		if(user == null)
 			return "index";
 		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
 		model.addAttribute("user", user);
 		
 		return "myprofile";
@@ -50,6 +82,10 @@ public class UserController {
 		if(user == null)
 			return "index";
 		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
 		model.addAttribute("user", user);
 		
 		return "update-profile";
@@ -57,26 +93,80 @@ public class UserController {
 	
 	@RequestMapping(value = "/myprofile/update", method = RequestMethod.POST)
 	public String postMyProfileUpdate(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
-			@RequestParam(value = "input1", required=false) MultipartFile image) {
+			@RequestParam("input1") MultipartFile image) {
 		
 		if(result.hasErrors()) {
 			return "update-profile";
 		}
 		
-//		String msg = loginService.checkEmailUsername(user);
-//		if(msg != null)	// Check if email already exists
-//		{
-//			model.addAttribute("msg", msg);
-//			return "update-profile";
-//		}
-		
 		loginService.updateUser(user, image);
+		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
+		model.addAttribute("user", user);
 		
 		return "myprofile";
 	}
 	
 	@RequestMapping(value = "/myprofile-inbox", method = RequestMethod.GET)
 	public String getMyProfileInbox(Model model) {
+		
+		User user = userService.getLoggedInUser();
+		
+		if(user == null)
+			return "index";
+		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
+		model.addAttribute("user", user);
 		
 		model.addAttribute("button", "inbox_tab");
 		
@@ -86,6 +176,39 @@ public class UserController {
 	@RequestMapping(value = "/myprofile-new-message", method = RequestMethod.GET)
 	public String getMyProfileNewMessage(Model model) {
 		
+		User user = userService.getLoggedInUser();
+		
+		if(user == null)
+			return "index";
+		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
+		model.addAttribute("user", user);
+		
 		model.addAttribute("button", "newMessage_tab");
 	
 		return "myprofile";
@@ -94,7 +217,38 @@ public class UserController {
 	@RequestMapping(value = "/myprofile-new-message/{receiver}", method = RequestMethod.GET)
 	public String getMyProfileNewMessageReply(Model model, @PathVariable(value="receiver") String receiver) {
 		
-		System.out.println("Receiver: " + receiver);
+		User user = userService.getLoggedInUser();
+		
+		if(user == null)
+			return "index";
+		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
+		model.addAttribute("user", user);
 		
 		model.addAttribute("button", "newMessage_tab");
 		model.addAttribute("receiver", receiver);
@@ -105,6 +259,39 @@ public class UserController {
 	@RequestMapping(value = "/myprofile-sent", method = RequestMethod.GET)
 	public String getMyProfileSent(Model model) {
 		
+		User user = userService.getLoggedInUser();
+		
+		if(user == null)
+			return "index";
+		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
+		model.addAttribute("user", user);
+		
 		model.addAttribute("button", "sent_tab");
 	
 		return "myprofile";
@@ -113,15 +300,81 @@ public class UserController {
 	@RequestMapping(value = "/myprofile-anouncements", method = RequestMethod.GET)
 	public String getMyProfileAnouncements(Model model) {
 		
+		User user = userService.getLoggedInUser();
+		
+		if(user == null)
+			return "index";
+		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
+		model.addAttribute("user", user);
+		
 		model.addAttribute("button", "anouncements_tab");
 	
 		return "myprofile";
 	}
 	
-	@RequestMapping(value = "/myprofile-settings", method = RequestMethod.GET)
-	public String getMyProfileSettings(Model model) {
+	@RequestMapping(value = "/myprofile-auctions", method = RequestMethod.GET)
+	public String getMyProfileAuctions(Model model) {
 		
-		model.addAttribute("button", "settings_tab");
+		User user = userService.getLoggedInUser();
+		
+		if(user == null)
+			return "index";
+		
+		/* Auctions if Seller */
+		String msg = null;
+		List<Auction> auctions = auctionService.getUserAuctions(user);
+		if(auctions == null)
+			msg = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("auctions", auctions);
+		
+		/* Bought auctions */
+		String msg2 = null;
+		auctions = auctionService.getBuyerAuctions(user);
+		if(auctions == null)
+			msg2 = "No Auctions found.";
+		else
+			auctions = auctionService.putPrimaryImage(auctions);
+		
+		model.addAttribute("boughtAuctions", auctions);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(user);
+		
+		model.addAttribute("avatar", base64Picture);
+		model.addAttribute("msg", msg);
+		model.addAttribute("msg2", msg2);
+		model.addAttribute("user", user);
+		
+		model.addAttribute("button", "auctions_tab");
 	
 		return "myprofile";
 	}
@@ -130,6 +383,10 @@ public class UserController {
 	public String getProfile(Model model, @PathVariable Integer id) {
 		
 		User usr = userService.getUserById(id);
+		
+		/* User Picture */
+		String base64Picture = userService.getUserPicture(usr);
+		model.addAttribute("avatar", base64Picture);
 		
 		model.addAttribute("usr", usr);
 		

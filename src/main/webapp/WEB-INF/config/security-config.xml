@@ -21,19 +21,19 @@
 			default-target-url="/" />
 		<logout logout-success-url="/logout"/>
 		<access-denied-handler error-page="/403"/>
-		<intercept-url pattern="/login" access="permitAll"/>
-		<intercept-url pattern="/loginFailed" access="permitAll"/>
-		<intercept-url pattern="/logout" access="permitAll"/>
-		<intercept-url pattern="/registration" access="permitAll"/>
-		<intercept-url pattern="/403" access="permitAll"/>
-		<intercept-url pattern="/resources/**" access="permitAll"/>
-		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/myprofile/**" access="hasAnyRole('ROLE_BIDDER', 'ROLE_SELLER')"/>
-		<intercept-url pattern="/upgrade" access="hasRole('ROLE_BIDDER')"/>
-		<intercept-url pattern="/myauctions/**" access="hasRole('ROLE_SELLER')"/>
-		<intercept-url pattern="/new-auction" access="hasRole('ROLE_SELLER')"/>
+		<intercept-url pattern="/login" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/loginFailed" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/logout" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/registration" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/403" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/resources/**" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/myprofile/**" access="hasAnyRole('ROLE_BIDDER', 'ROLE_SELLER')" requires-channel="https"/>
+		<intercept-url pattern="/upgrade" access="hasRole('ROLE_BIDDER')" requires-channel="https"/>
+		<intercept-url pattern="/myauctions/**" access="hasRole('ROLE_SELLER')" requires-channel="https"/>
+		<intercept-url pattern="/new-auction" access="hasRole('ROLE_SELLER')" requires-channel="https"/>
 <!-- 		<intercept-url pattern="/messaging" access="hasRole('ROLE_BIDDER', 'ROLE_ADMIN')"/> -->
-		<intercept-url pattern="/**" access="permitAll"/>
+		<intercept-url pattern="/**" access="permitAll" requires-channel="https"/>
 		
 		<!-- 
 		<intercept-url pattern="/loginFailed" access="permitAll"/>

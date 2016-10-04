@@ -30,8 +30,8 @@
                                 <li><a href="Profile">Details</a>
                                 <li><a href="Profile">Seller</a>
                                 <li><a href="api/auctions/${auction.auctionid}">Auction XML</a>
-                                <li class="divider"></li>
-                                <li id="deleteU"><a href="#">Delete</a>
+                                <%-- <li class="divider"></li>
+                                <li id="deleteU"><a href="#">Delete</a> --%>
                             </ul>
                         </div>
                         </td>
@@ -45,20 +45,6 @@
 		</div>
       </div>
     </form>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="well">
-                <h4>New Users</h4>
-                <p>Some text...</p>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="well">
-                <h4>Highest Rating Users</h4>
-                <p>Some text...</p>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script src=<c:url value="/resources/js/xmlExport.js" />></script>

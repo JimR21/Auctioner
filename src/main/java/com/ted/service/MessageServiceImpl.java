@@ -3,6 +3,7 @@ package com.ted.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +31,13 @@ public class MessageServiceImpl implements MessageService {
 
 	public List<Message> getByReceiver(User receiver) {
 		
-		return messageRepository.findByReceiverOrderByDateDesc(receiver);
+		return messageRepository.findByReceiverAndReceiverDeleteOrderByDateDesc(receiver, (byte)0);
 		
 	}
 
 	public List<Message> getBySender(User sender) {
 
-		return messageRepository.findBySenderOrderByDateDesc(sender);
+		return messageRepository.findBySenderAndSenderDeleteOrderByDateDesc(sender, (byte)0);
 		
 	}
 
@@ -48,11 +49,10 @@ public class MessageServiceImpl implements MessageService {
 
 	public boolean isMessageOwner(String username, Message message) {
 		
-		if(username.equals(message.getSender().getUsername()) || username.equals(message.getReceiver().getUsername()))
+		if(username.equals(message.getSenderUsername()) || username.equals(message.getReceiverUsername()))
 			return true;
 		
 		return false;
-		
 	}
 
 	@Transactional
@@ -79,6 +79,8 @@ public class MessageServiceImpl implements MessageService {
 		
 		message.setReceiver(receiver);
 		message.setSender(sender);
+		message.setReceiverUsername(receiver.getUsername());
+		message.setSenderUsername(sender.getUsername());
 		
 		messageRepository.saveAndFlush(message);	
 		
@@ -98,12 +100,7 @@ public class MessageServiceImpl implements MessageService {
 		
 	}
 
-	public Integer checkNewMessages() {
-		
-		User user = userService.getLoggedInUser();
-		
-		if(user == null)
-			return 0;
+	public Integer checkNewMessages(User user) {
 		
 		Integer newMessages;
 		
@@ -117,12 +114,33 @@ public class MessageServiceImpl implements MessageService {
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
 		return 0;
+	}
+
+	@Modifying
+	@Transactional
+	public void deleteMessage(Message message, String username) {
+
+		if(username.equals(message.getSenderUsername())) {
+			message.setSenderDelete((byte)1);
+		}
+		else {
+			message.setReceiverDelete((byte)1);
+		}
+		
+		if(message.getReceiverDelete() == (byte)1 && message.getSenderDelete() == (byte)1) {
+			messageRepository.delete(message);
+		}
+		else {
+			messageRepository.save(message);
+		}
+		
+		return;
+
 	}
 	
 	

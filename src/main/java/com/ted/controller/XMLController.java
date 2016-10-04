@@ -2,12 +2,10 @@ package com.ted.controller;
 
 
 import java.io.File;
-import java.io.FileReader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ted.model.Auction;
+import com.ted.model.UploadInfo;
 import com.ted.model.XmlAuctionWrapper;
+import com.ted.repository.AuctionBiddingRepository;
+import com.ted.repository.AuctionRepository;
+import com.ted.repository.AuthorityRepository;
+import com.ted.repository.CategoryRepository;
+import com.ted.repository.LocationRepository;
+import com.ted.repository.UserRepository;
 import com.ted.service.AuctionService;
 import com.ted.service.UserService;
 import com.ted.service.XmlService;
@@ -37,6 +42,18 @@ public class XMLController {
 	
 	@Autowired
 	XmlService xmlService;
+	
+	@Autowired
+	AuctionBiddingRepository auctionBiddingRepository;
+	
+	@Autowired
+	CategoryRepository categoryRepository;
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
+	AuctionRepository auctionRepository;
 
 	
 	
@@ -54,7 +71,12 @@ public class XMLController {
 	} 
 	
 	@RequestMapping(value = "auction/upload", method = RequestMethod.POST) 
-	public @ResponseBody String uploadAuction(@RequestParam("input1") MultipartFile multipart, Model model) {
+	public @ResponseBody UploadInfo uploadAuction(@RequestParam("input1") MultipartFile multipart, Model model) {
+		
+		Long auctions = auctionRepository.count();
+		Long users = userRepository.count();
+		Long bids = auctionBiddingRepository.count();
+		Long categories = categoryRepository.count();
 		
 		try {
 			JAXBContext context = JAXBContext.newInstance(XmlAuctionWrapper.class);
@@ -76,8 +98,14 @@ public class XMLController {
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
+		
+		UploadInfo info = new UploadInfo();
+		info.setAuctions(auctionRepository.count() - auctions);
+		info.setBids(auctionBiddingRepository.count() - bids);
+		info.setCategories(categoryRepository.count() - categories);
+		info.setUsers(userRepository.count() - users);
 			
-		return "{}";
+		return info;
 	} 
 	
 	@RequestMapping(value = "xmlAuctions", method = RequestMethod.GET)
@@ -93,7 +121,9 @@ public class XMLController {
 		
 		Auction auction = auctionService.getAuctionById(id);
 		
-		Hibernate.initialize(auction);
+		/* Eager Fetch */
+		auction.setAuctionBiddings(auctionBiddingRepository.findByAuction(auction));
+		auction.setCategories(categoryRepository.findByAuction(auction));
 		
 		return auction;
 		

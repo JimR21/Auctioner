@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -88,7 +87,7 @@ public class Auction implements Serializable {
 	private Date started;
 
 	// bi-directional many-to-one association to AuctionBidding
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "auction")
+	@OneToMany( mappedBy = "auction")
 	private List<AuctionBidding> auctionBiddings;
 	
 	// bi-directional many-to-one association to Recommendation
@@ -99,9 +98,14 @@ public class Auction implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "seller_userid", nullable = false)
 	private User user;
+	
+	// bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name = "buyer_id", nullable = true)
+	private User buyer;
 
 	// bi-directional many-to-many association to Category
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany()
 	@JoinTable(name = "auction_categories", joinColumns = {
 			@JoinColumn(name = "auction_id", nullable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "category_id", nullable = false) })
@@ -116,14 +120,17 @@ public class Auction implements Serializable {
 	@Column(name="isBought")
 	boolean isBought;
 	
+	@Column(name="buyer_notified")
+	boolean buyerNotified;
+	
 	//bi-directional many-to-one association to AuctionPictures
 	@Transient
 	@OneToMany(mappedBy="auction")
-	private List<AuctionPicture> auctionPicture;
-	
+	private List<AuctionPicture> auctionPictures;
+
 	@Transient
 	private XmlSeller xmlSeller;
-	
+
 	@Transient
 	private String xmlStarted;
 	
@@ -138,16 +145,20 @@ public class Auction implements Serializable {
 	
 	@Transient
 	private String firstBidString;
-
+	
+	@Transient
+	private String primaryImage;
+	
 	public Auction() {
 	}
-
+	
 	public AuctionBidding addAuctionBidding(AuctionBidding auctionBidding) {
 		getAuctionBiddings().add(auctionBidding);
 		auctionBidding.setAuction(this);
 
 		return auctionBidding;
 	}
+
 
 	@XmlElementWrapper(name = "Bids", required = true)
 	@XmlElement(name = "Bid")
@@ -161,8 +172,13 @@ public class Auction implements Serializable {
 	}
 
 	@XmlTransient
-	public List<AuctionPicture> getAuctionPicture() {
-		return auctionPicture;
+	public List<AuctionPicture> getAuctionPictures() {
+		return auctionPictures;
+	}
+
+	@XmlTransient
+	public User getBuyer() {
+		return buyer;
 	}
 
 	@XmlTransient
@@ -231,6 +247,11 @@ public class Auction implements Serializable {
 	}
 
 	@XmlTransient
+	public String getPrimaryImage() {
+		return primaryImage;
+	}
+
+	@XmlTransient
 	public List<Recommendation> getRecommendations() {
 		return recommendations;
 	}
@@ -239,7 +260,7 @@ public class Auction implements Serializable {
 	public Date getStarted() {
 		return this.started;
 	}
-	
+
 	@XmlTransient
 	public User getUser() {
 		return this.user;
@@ -259,10 +280,15 @@ public class Auction implements Serializable {
 	public String getXmlStarted() {
 		return xmlStarted;
 	}
-
+	
 	@XmlTransient
 	public boolean isBought() {
 		return isBought;
+	}
+
+	@XmlTransient
+	public boolean isBuyerNotified() {
+		return buyerNotified;
 	}
 
 	public AuctionBidding removeAuctionBidding(AuctionBidding auctionBidding) {
@@ -280,12 +306,20 @@ public class Auction implements Serializable {
 		this.auctionid = auctionid;
 	}
 
-	public void setAuctionPicture(List<AuctionPicture> auctionPicture) {
-		this.auctionPicture = auctionPicture;
+	public void setAuctionPictures(List<AuctionPicture> auctionPicture) {
+		this.auctionPictures = auctionPicture;
 	}
 
 	public void setBought(boolean isBought) {
 		this.isBought = isBought;
+	}
+
+	public void setBuyer(User buyer) {
+		this.buyer = buyer;
+	}
+
+	public void setBuyerNotified(boolean buyerNotified) {
+		this.buyerNotified = buyerNotified;
 	}
 
 	public void setBuyPrice(BigDecimal buyPrice) {
@@ -338,6 +372,10 @@ public class Auction implements Serializable {
 
 	public void setNumberOfBids(int numberOfBids) {
 		this.numberOfBids = numberOfBids;
+	}
+
+	public void setPrimaryImage(String primaryImage) {
+		this.primaryImage = primaryImage;
 	}
 
 	public void setRecommendations(List<Recommendation> recommendations) {

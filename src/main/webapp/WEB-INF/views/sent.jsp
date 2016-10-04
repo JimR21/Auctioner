@@ -47,7 +47,7 @@
       		<h4 id="header_sent" class="panel-title"></h4>
       	</div>
       	<div class="panel-body">
-      		<button id="back_sent" class="btn btn-sm btn-active"><span class="glyphicon glyphicon-arrow-left"></span></button>
+      		<button id="back_sent" class="btn btn-sm btn-default btn-active"><span class="glyphicon glyphicon-arrow-left"></span></button>
             <br />
             <p>
                 <span id="sender_sent"></span><br/>
@@ -59,7 +59,8 @@
             </div>
     	</div>
     	<div class="panel-footer">
-    		<input class="btn btn-sm btn-success col-md-offset-11" type="submit" value="Reply" id="appr-btn"></input>
+            <a id="delete-sent" href="" class="btn btn-sm btn-danger col-md-offset-10">Delete</a>
+    		<input class="btn btn-sm btn-success" type="submit" value="Reply" id="appr-btn"></input>
     	</div>
     </div>
 </div>
@@ -108,12 +109,14 @@ $('#sent tbody').on('click', 'tr', function () {
         row = $(this);
 
     /* Table data */
-    var receiver = data[1],
+    var id = data[0],
+        receiver = data[1],
         sender = data[2],
         date = data[3],
         message = data[4];
 
     /* Populate Message View */
+    $('#delete-sent').attr("href", "/Auctioner/messaging/delete/" + id);
     $('#header_sent').text(date);
     $('#sender_sent').text('From: '+ sender);
     $('#receiver_sent').text('To: ' + receiver);

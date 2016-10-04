@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ted.model.Message;
 import com.ted.model.User;
@@ -18,10 +19,13 @@ public interface MessageRepository extends JpaRepository<Message, Long>{
             nativeQuery=true)
     public Integer newMessagesCount(@Param("id") Integer id);
 	
-	List<Message> findByReceiverOrderByDateDesc(User receiver);
+	List<Message> findByReceiverAndReceiverDeleteOrderByDateDesc(User receiver, byte delete);
 	
-	List<Message> findBySenderOrderByDateDesc(User sender);
-	
+	List<Message> findBySenderAndSenderDeleteOrderByDateDesc(User sender, byte delete);
+
 	Message findByMessageId(int id);
+	
+	@Transactional
+	Integer deleteBymessageId(int id);
 
 }

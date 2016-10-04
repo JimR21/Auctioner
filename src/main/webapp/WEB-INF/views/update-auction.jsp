@@ -140,7 +140,7 @@
                                              <label for="firstBid" class="input-label col-md-3">Starting Price:</label>
                                              <div class="col-lg-8">
                                                  <div class="input-group">
-                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
+                                                     <span class="input-group-addon">&euro;</span>
                                                      <form:input type="text" name="firstBid" path="auction.firstBid" id="firstBid" class="form-control" placeholder="Required" />
                                                      <span class="input-group-addon">.00</span>
                                              		<%-- <form:errors path="auction.name" cssClass="error" /> --%>
@@ -155,9 +155,9 @@
                                              <label for="buyPrice" class="input-label col-md-3">Buy Price:</label>
                                              <div class="col-lg-8">
                                                  <div class="input-group">
-                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
+                                                     <span class="input-group-addon">&euro;</span>
                                                      <form:input type="text" name="buyPrice" path="auction.buyPrice" id="buyPrice" class="form-control" placeholder="Optional" />
-                                                     <span class="input-group-addon">.00</span>
+                                                     <span class="input-group-addon"> <span class="glyphicon glyphicon-euro"></span></span>
                                                      <%-- <form:errors path="auction.name" cssClass="error" /> --%>
                                                  </div>
                                              </div>
@@ -214,9 +214,31 @@
                               </div>
                          </div>
                          <div class="tab-pane" role="tabpanel" id="step3">
-                             <h2 class="text-center">Upload Pictures</h2>
+                             <h2 class="text-center">Pictures</h2>
+                             <div class="row">
+                                 <c:if test="${not empty imageInfos}">
+                                 <c:forEach var="imageInfo" items="${imageInfos}" varStatus="loop">
+                                     <div id="item-${imageInfo.id}" class="item  col-xs-3 col-lg-3">
+                                         <div class="thumbnail">
+                                             <div class="auction-list-img-div">
+                                                <img src="data:image/jpeg;base64,${imageInfo.image}" alt="auction-image" />
+                                             </div>
+                                             <div class="caption">
+                                                 <div class="row">
+                                                     <div class="col-md-offset-8 col-md-4">
+                                                         <button id="${imageInfo.id}" type="button" class="btn btn-danger pull-right delete-img"><i><span class="glyphicon glyphicon-trash"></span></i>Delete</button>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                </c:forEach>
+                                </c:if>
+                             </div>
                              <div class="row content-row">
+                                 <h2 class="text-center">Upload new pictures</h2>
                                  <input id="input-1" name="input1" type="file" class="file-loading" multiple accept="image/x-png, image/jpeg"/>
+                                 <p>At least one picture is required.</p>
                               </div>
                               <div class="row top-buffer">
                                   <ul class="list-inline pull-right">
@@ -319,6 +341,32 @@
             removeLabel: "Delete",
             removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> "
             // allowedFileTypes: "image",
+        });
+    });
+
+    /* Delete Image */
+    $(document).on('ready', function() {
+        $(".delete-img").on('click', function() {
+
+            var id = $(this).attr('id');
+            console.log("Delete " + id)
+
+            var url = "/Auctioner/delete-image/" + id;
+
+            $.ajax({
+        		url: url,
+           		type: 'GET',
+        	    success: function(data)
+        	    {
+                    console.log("Succesfully deleted");
+                    $("#item-" + id).addClass("hidden");
+        	    },
+        		error: function(data)
+        		{
+        			console.log("Error on deletion");
+        		}
+        	});
+
         });
     });
 

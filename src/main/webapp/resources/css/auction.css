@@ -47,7 +47,7 @@ max-height: 480px;
 {
     border: 1px solid #E1E1E1;
     border-radius: 5px;
-    background: #FFF;
+    background: #4e5d6c;
 }
 .col-item .photo img
 {
@@ -62,9 +62,9 @@ max-height: 480px;
     margin-top: 1px;
 }
 
-.col-item:hover .info {
+/*.col-item:hover .info {
     background-color: #F5F5DC;
-}
+}*/
 .col-item .price
 {
     /*width: 50%;*/
@@ -140,14 +140,62 @@ max-height: 480px;
 }
 .controls
 {
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 [data-slide="prev"]
 {
     margin-right: 10px;
 }
 
-div#map_container{
-	width:690;
-	height:400px;
+.small-img-div {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.small-img-div a img {
+    height: 100%;
+    transform: translateX(-50%);
+    margin-left: 50%;
+}
+
+.text-limit {
+    height: 4.5em;
+    overflow: hidden;
+}
+
+.price {
+    font-size: 18px;
+}
+
+.price-panel {
+    text-align: center;
+}
+
+.bid-button {
+    padding-left: 0px;
+}
+
+.clock {
+    margin-bottom: 0px;
+}
+
+.price-number {
+    font-size: 35px;
+    text-shadow: 2px 2px 1px #999;
+    font-weight: bold;
+}
+
+.date-number {
+    font-size: 16px;
+    text-shadow: 2px 2px 1px #999;
+}
+
+.list-item {
+    border-top: 1px orange;
+    border-bottom: 1px orange;
+}
+
+.title {
+    margin-bottom: 20px
 }

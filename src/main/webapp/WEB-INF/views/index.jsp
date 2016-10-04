@@ -34,11 +34,58 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <h1>Welcome <sec:authentication property="name" /></h1>
-                <p class="lead">Buy and Sell Anything!</p>
-            </div>
+            <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+                <sec:authorize ifNotGranted="ROLE_ADMIN">
+                    <div class="col-lg-12 text-center intro-div">
+                        <h1>Welcome to Auctioner <sec:authentication property="name" />!</h1>
+                        <p class="lead">Buy and Sell Anything</p>
+                        <div class="col-md-offset-3 col-md-2">
+                            <a class="btn btn-lg btn-success btn-block" href="/Auctioner/myprofile">My Account</a>
+                        </div>
+                        <sec:authorize ifAnyGranted="ROLE_SELLER">
+                        <div class="col-md-2">
+                            <a class="btn btn-lg btn-info btn-block" href="/Auctioner/myprofile-auctions">My Auctions</a>
+                        </div>
+                        </sec:authorize>
+                        <sec:authorize ifNotGranted="ROLE_SELLER">
+                        <div class="col-md-2">
+                            <a class="btn btn-lg btn-info btn-block" href="/Auctioner/upgrade">Auctioneer</a>
+                        </div>
+                        </sec:authorize>
+                        <div class="col-md-2">
+                            <a class="btn btn-lg btn-primary btn-block" href="/Auctioner/auctions?categoryId=all">Search</a>
+                        </div>
+                    </div>
+                </sec:authorize>
+                <sec:authorize ifAnyGranted="ROLE_ADMIN">
+                    <div class="col-lg-12 text-center intro-div">
+                        <h1>Welcome Admin!</h1>
+                        <div class="col-md-offset-3 col-md-2">
+                            <a class="btn btn-lg btn-success btn-block" href="/Auctioner/admin-users">Users</a>
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn btn-lg btn-info btn-block" href="/Auctioner/admin">Dashboard</a>
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn btn-lg btn-primary btn-block" href="/Auctioner/admin-auctions">Auctions</a>
+                        </div>
+                    </div>
+                </sec:authorize>
+            </sec:authorize>
+            <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
+                <div class="col-lg-12 text-center intro-div">
+                    <h1>Welcome to Auctioner!</h1>
+                    <p class="lead">Buy and Sell Anything</p>
+                    <div class="col-md-offset-4 col-md-2">
+                        <a class="btn btn-lg btn-success btn-block" href="/Auctioner/login">Login</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-lg btn-primary btn-block" href="/Auctioner/registration">Join us!</a>
+                    </div>
+                </div>
+            </sec:authorize>
         </div>
+
 
     </div>
 

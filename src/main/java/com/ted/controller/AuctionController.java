@@ -25,10 +25,16 @@ import com.ted.model.BidResponse;
 import com.ted.model.Category;
 import com.ted.model.Filter;
 import com.ted.model.FormAuction;
+import com.ted.model.ImageInfo;
 import com.ted.model.Location;
+import com.ted.model.User;
+import com.ted.repository.AuctionBiddingRepository;
+import com.ted.repository.CategoryRepository;
+import com.ted.service.AuctionPictureService;
 import com.ted.service.AuctionService;
 import com.ted.service.CategoryService;
 import com.ted.service.RecommendationService;
+import com.ted.service.UserService;
 
 @Controller
 @SessionAttributes("filter")
@@ -38,10 +44,22 @@ public class AuctionController {
 	AuctionService auctionService;
 	
 	@Autowired
+	UserService userService;
+	
+	@Autowired
 	CategoryService categoryService;
 	
 	@Autowired
 	RecommendationService recommendationService;
+	
+	@Autowired
+	AuctionPictureService auctionPictureService;
+	
+	@Autowired
+	AuctionBiddingRepository auctionBiddingRepository;
+	
+	@Autowired
+	CategoryRepository categoryRepository;
 	
 	@Autowired
 	Filter filter;
@@ -58,7 +76,25 @@ public class AuctionController {
 		
 		/* Recommendations */
 		List<Auction> recs = recommendationService.getRecommendations();
+		recs = auctionService.putPrimaryImage(recs);
 		model.addAttribute("recs", recs);
+		
+		/* Auction Images */
+		List<String> images = auctionPictureService.getAuctionPictures(auction);
+		model.addAttribute("images", images);
+		
+		/* User */
+		User user = userService.getLoggedInUser();
+		model.addAttribute("user", user);
+		
+		/* Check modify */
+		if(user != null) {
+			
+			/* Eager Fetch */
+			auction.setAuctionBiddings(auctionBiddingRepository.findByAuction(auction));
+			if(user.getUserid() == auction.getUser().getUserid() && auction.getAuctionBiddings().isEmpty() && !auction.isBought())
+				model.addAttribute("modify", 1);
+		}
 		
 		return "auction";
 	}
@@ -75,13 +111,13 @@ public class AuctionController {
 		auctionService.updateFilter(request);
 		
 		Page<Auction> auctions = auctionService.pageAuctions(request);
-		model.addAttribute("auctions", auctions.getContent());
+		List<Auction> auctionList = auctions.getContent();
+		auctionList = auctionService.putPrimaryImage(auctionList);
+		model.addAttribute("auctions", auctionList);
 		
 		System.out.println(filter.getSortBy());
 		
 		model.addAttribute("filter", filter);
-		
-		
 		
 		return "auctions";
 	}
@@ -123,6 +159,9 @@ public class AuctionController {
 		
 		System.out.println("BidPost controller");
 		
+		if(bidAmount == null || bidAmount.isEmpty())
+			return "Please provide a price.";
+		
 		String msg = auctionService.bidSave(id, new BigDecimal(bidAmount));
 		
 		if(msg != null)
@@ -151,24 +190,114 @@ public class AuctionController {
 	
 	@RequestMapping(value = "new-auction",  method = RequestMethod.POST)
 	public String newAuctionPost(@Valid @ModelAttribute("formAuction") FormAuction formAuction, BindingResult result, Model model,
-			@RequestParam("input1") MultipartFile[] images) {
+			@RequestParam(value = "input1", required = false) MultipartFile[] images) {
 		
-		if(result.hasErrors()) {
-			return "new-auction";
-		}
 		
 		formAuction.setFiles(images);
 		
 		String error = auctionService.saveFormAuction(formAuction);
 		
 		if(error != null) {
+			List<Category> categories = categoryService.getAllCategories();
+			model.addAttribute("categories", categories);
 			model.addAttribute("error", error);
 			return "new-auction";
 		}
 		
 		System.out.println("Auction Saved! " + formAuction.getAuction().getName());
 		
-		return "new-auction";
+		return "redirect:/myprofile-auctions";
 	}
+	
+	@RequestMapping(value = "update-auction/{id}", method = RequestMethod.GET)
+	public String updateAuctionGet(Model model,  @PathVariable Integer id) {
+		
+		User user = userService.getLoggedInUser();
+		Auction auction = auctionService.getAuctionById(id);
+		
+		/* Eager Fetch */
+		auction.setCategories(categoryRepository.findByAuction(auction));
+		auction.setAuctionBiddings(auctionBiddingRepository.findByAuction(auction));
+		
+		/* Security Check */
+		if(user == null || user.getUserid() != auction.getUser().getUserid())
+			return "403";
+		
+		/* Check if there are bids */
+		if(!auction.getAuctionBiddings().isEmpty())
+			return "403";
+		
+		/* Check if bought */
+		if(auction.isBought())
+			return "403";
+		
+		/* Initialize FormAuction */
+		FormAuction formAuction = new FormAuction();
+		Location location = auction.getLocation();
+		List<Category> auctionCategories = auction.getCategories();
+		List<Category> categories = categoryService.getAllCategories();
+		
+		auction.setLocation(location);
+		formAuction.setAuction(auction);
+		formAuction.setCategoryName(categories.get(auctionCategories.size()-1).getName());
+		
+		/* Initialize images */
+		List<ImageInfo> imageInfos = auctionPictureService.getAuctionImageInfo(auction);
+		model.addAttribute("imageInfos", imageInfos);
+		
+		model.addAttribute("formAuction", formAuction);
+		model.addAttribute("categories", categories);
+		
+		return "update-auction";
+	}
+	
+	@RequestMapping(value = "update-auction/{id}",  method = RequestMethod.POST)
+	public String updateAuctionPost(@Valid @ModelAttribute("formAuction") FormAuction formAuction, BindingResult result, Model model,
+			@RequestParam(value = "input1", required = false) MultipartFile[] images, @PathVariable Integer id) {
+		
+		Auction perAuction = auctionService.getAuctionById(id);
+		
+		/* Check if there are bids */
+		if(!perAuction.getAuctionBiddings().isEmpty())
+			return "403";
+		
+		formAuction.setFiles(images);
+		
+		String error = auctionService.updateFormAuction(formAuction);
+		
+		if(error != null) {
+			
+			/* Eager Fetch */
+			perAuction.setCategories(categoryRepository.findByAuction(perAuction));
+			perAuction.setAuctionBiddings(auctionBiddingRepository.findByAuction(perAuction));
+			
+			/* Check if there are bids */
+			if(!perAuction.getAuctionBiddings().isEmpty())
+				return "403";
+			
+			/* Initialize images */
+			List<ImageInfo> imageInfos = auctionPictureService.getAuctionImageInfo(perAuction);
+			model.addAttribute("imageInfos", imageInfos);
+			
+			List<Category> categories = categoryService.getAllCategories();
+			model.addAttribute("categories", categories);
+			model.addAttribute("error", error);
+			return "update-auction";
+		}
+		
+		System.out.println("Auction Saved! " + formAuction.getAuction().getName());
+		
+		return "redirect:/myprofile-auctions";
+	}
+	
+	@RequestMapping(value = "delete-image/{id}",  method = RequestMethod.GET)
+	public @ResponseBody String deleteImage(@PathVariable Integer id) {
+		
+		String response = auctionPictureService.deleteImage(id);
+		
+		return response;
+	}
+	
+	
 
 }

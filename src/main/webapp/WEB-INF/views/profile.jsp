@@ -28,11 +28,10 @@
 <body>
 
    	 <%@ include file="/resources/template/menu-top.jsp" %>
-     <link href=<c:url value="/resources/css/star-rating.min.css" /> rel="stylesheet" type="text/css">
-
 
     <!-- Page Content -->
     <div class="container">
+        <link href=<c:url value="/resources/css/star-rating.min.css" /> rel="stylesheet" type="text/css">
 
         <div class="row">
             <div class="col-sm-12 text-center">
@@ -40,17 +39,28 @@
                     <h1 class="page-header"><strong>${usr.username}</strong></h1>
                     <div class="row">
                         <!-- left column -->
-                        <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
                           <div class="text-center">
-                            <img src="http://lorempixel.com/200/200/people/9/" class="avatar img-circle img-thumbnail" alt="avatar">
-                            <label for="seller-rating" class="control-label"><h3>Auctioneer Rating</h3></label>
-                            <input id="seller-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${usr.sellerRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">(${usr.numberOfSellerRatings})
-                            <label for="bidder-rating" class="control-label"><h3>Bidder Rating</h3></label>
-                            <input id="bidder-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${usr.bidderRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">(${usr.numberOfBidderRatings})
+                            <c:if test="${not empty avatar}">
+                            <div class="avatar-div">
+                              <img src="data:image/jpeg;base64,${avatar}" class="avatar img-circle img-thumbnail" alt="avatar">
+                            </div>
+                            </c:if>
+                            <c:if test="${empty avatar}">
+                            <div class="avatar-div">
+                              <img src="<c:url value="/resources/images/default_avatar.png"/>" class="avatar img-circle img-thumbnail" alt="avatar">
+                            </div>
+                            </c:if>
+                            <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+                                <label for="seller-rating" class="control-label"><h3>Auctioneer Rating</h3></label>
+                                <input id="seller-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${usr.sellerRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">
+                                <label for="bidder-rating" class="control-label"><h3>Bidder Rating</h3></label>
+                                <input id="bidder-rating" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="${usr.bidderRating}" data-min="0" data-max="5" data-step="0.5" data-size="xs">
+                            </sec:authorize>
                           </div>
                         </div>
                         <!-- edit form column -->
-                        <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
+                        <div class="col-md-9 col-sm-6 col-xs-12 personal-info">
                           <h3>Personal info</h3>
                           <div class="col-md-offset-4 col-md-3">
                             <h4 class="text-left">Name</h4>
@@ -86,12 +96,11 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-11">
-                            <a href="/Auctioner/auctions/bySeller/${usr.userid}" class="btn btn-default pull-right">View User's Auctions</a>
                             <sec:authorize ifAnyGranted="ROLE_ADMIN">
-                                <a href="/Auctioner/admin-new-message/${usr.username}" class="btn btn-default pull-right">Send Message</a>
+                                <a href="/Auctioner/admin-new-message/${usr.username}" class="btn btn-success pull-right">Send Message</a>
                             </sec:authorize>
                             <sec:authorize ifNotGranted="ROLE_ADMIN">
-                                <a href="/Auctioner/myprofile-new-message/${usr.username}" class="btn btn-default pull-right">Send Message</a>
+                                <a href="/Auctioner/myprofile-new-message/${usr.username}" class="btn btn-success pull-right">Send Message</a>
                             </sec:authorize>
                         </div>
                     </div>

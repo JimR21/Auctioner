@@ -35,7 +35,7 @@
 
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h4 class="text-center">Sorry, you are not authorized for this action.</h4>
+                <h4 class="text-center">Sorry, this page doesn't exist.</h4>
                 <div class="row text-center">
                     <a href="/Auctioner/" class="btn btn-primary">Back To Homepage</a>
                 </div>

@@ -18,20 +18,25 @@
     <div id="products" class="row list-group">
         <c:forEach items="${auctions}" var="auction">
             <div class="item  col-xs-4 col-lg-4">
-                <div class="thumbnail">
-                    <a href="/Auctioner/auction/${auction.auctionid}"><img src="http://placehold.it/400x250/000/fff" alt="auction-hammer" /></a>
+                <div class="thumbnail item-shadow">
+                    <div class="auction-list-img-div">
+                        <c:if test="${not empty auction.primaryImage}">
+                            <a href="/Auctioner/auction/${auction.auctionid}"><img src="data:image/jpeg;base64,${auction.primaryImage}" alt="auction-image" /></a>
+                        </c:if>
+                        <c:if test="${empty auction.primaryImage}">
+                            <a href="/Auctioner/auction/${auction.auctionid}"><img src="<c:url value="/resources/images/hammer1.png"/>" alt="hammer-image" /></a>
+                        </c:if>
+                    </div>
                     <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            ${auction.name}</h4>
-                        <%-- <p class="group inner list-group-item-text">
-                            ${auction.description}</p> --%>
+                        <div class="text-limit">
+                            <h4 class="group inner list-group-item-heading">${auction.name}</h4>
+                        </div>
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    ${auction.firstBid}</p>
+                                <p class="price-tag"><strong>&#36;${auction.firstBid}</strong></p>
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <a class="btn btn-success" href="/Auctioner/auction/${auction.auctionid}">View More</a>
+                                <a class="btn btn-primary" href="/Auctioner/auction/${auction.auctionid}">View More</a>
                             </div>
                         </div>
                     </div>

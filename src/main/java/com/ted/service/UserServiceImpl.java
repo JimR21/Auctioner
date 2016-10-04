@@ -1,6 +1,5 @@
 package com.ted.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +10,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ted.model.AuctionBidding;
 import com.ted.model.Authority;
 import com.ted.model.BidderRating;
 import com.ted.model.BidderRatingPK;
 import com.ted.model.SellerRating;
 import com.ted.model.SellerRatingPK;
 import com.ted.model.User;
+import com.ted.model.UserPicture;
 import com.ted.repository.BidderRatingRepository;
 import com.ted.repository.SellerRatingRepository;
+import com.ted.repository.UserPictureRepository;
 import com.ted.repository.UserRepository;
 
 @Service("userService")
@@ -33,6 +33,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	BidderRatingRepository bidderRatingRepository;
+	
+	@Autowired
+	UserPictureRepository userPictureRepository;
+	
+	@Autowired
+	ImageService imageService;
 
 	public User getLoggedInUser() {
 		
@@ -204,6 +210,17 @@ public class UserServiceImpl implements UserService {
 		/* Update rated User */
 		userRepository.saveAndFlush(rated);
 		
+	}
+
+	public String getUserPicture(User user) {
+		
+		UserPicture userPicture = userPictureRepository.findByUser(user);
+		if(userPicture == null)
+			return null;
+		
+		String base64Picture = imageService.imageToBase64(userPicture.getContent());
+		
+		return base64Picture;
 	}
 	
 }

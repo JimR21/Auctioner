@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +79,7 @@ public class LoginServiceImpl implements LoginService {
 		return user;
 	}
 	
+	@Modifying
 	@Transactional
 	public User updateUser(User user, MultipartFile file) {
 		
@@ -102,21 +104,21 @@ public class LoginServiceImpl implements LoginService {
 		
 		System.out.println("Password: " + user.getPassword());
 		
-		
 		// Persist user
 		user = userRepository.saveAndFlush(perUser);
 		
-//		// Picture
-//		if(!file.isEmpty()) {
-//			UserPicture picture = new UserPicture();
-//			try {
-//				picture.setContent(file.getBytes());
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			picture.setUser(user);
-//			userPictureRepository.saveAndFlush(picture);
-//		}
+		// Picture
+		if(!file.isEmpty()) {
+			UserPicture picture = new UserPicture();
+			try {
+				picture.setContent(file.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			picture.setUser(user);
+			userPictureRepository.deleteByUser(user);
+			userPictureRepository.saveAndFlush(picture);
+		}
 		
 		return user;
 	}
