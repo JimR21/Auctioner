@@ -54,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
 				
 				/* Second Category Start HTML */
 				html += "<li class=\"col-sm-3\"><ul>"
-						+"<li class=\"dropdown-header\"><a class=\"orange\" href=\"/Auctioner/auctions?categoryId=" + category2.getCategoryId() + "\">" + category2.getName() + "</a>"
+						+"<li class=\"dropdown-header hvr-grow\"><a href=\"/Auctioner/auctions?categoryId=" + category2.getCategoryId() + "\"><i class=\"glyphicon glyphicon-chevron-right\"></i>" + category2.getName() + "</a>"
 						+"</li>";
 				
 				
@@ -63,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
 				for(Category category3 : categories3) {
 					
 					/* Third Category HTML */
-					html += "<li><a class=\"bottom-color\" href=\"/Auctioner/auctions?categoryId=" + category3.getCategoryId() + "\">"
+					html += "<li><a class=\"hvr-grow\" href=\"/Auctioner/auctions?categoryId=" + category3.getCategoryId() + "\">"
 							+category3.getName()
 							+"</a></li>";
 					
@@ -86,6 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
 			html += "</div>\r\n                     </div>\r\n                  </ul>\r\n               </li>";
 					
 		}
+		
 		
 		return html;
 		

@@ -15,18 +15,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import javax.servlet.ServletContext;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ted.model.Auction;
-import com.ted.model.AuctionBidding;
-import com.ted.model.AuctionBiddingPK;
 import com.ted.model.Authority;
 import com.ted.model.AuthorityPK;
 import com.ted.model.Category;
@@ -68,71 +68,127 @@ public class XmlServiceImpl implements XmlService {
 	@Autowired
 	AuctionRepository auctionRepository;
 	
+	@Autowired
+	CategoryService categoryService;
+	
+	@Autowired
+	ServletContext servletContext;
+	
+	@Value("${template.path}")
+	private String templatePath;
+	
 	@Transactional
 	public void saveXmlAuction(List<Auction> auctions) {
 		
+//		for(Auction auction : auctions) {
+//			
+//			/* Seller */
+//			auction.setUser(saveSellerUser(auction.getXmlSeller()));
+//			
+//			/* Location */
+//			auction.setLocation(saveLocation(auction.getLocation()));
+//			
+//			/*Categories */
+//			auction.setCategories(saveCategories(auction.getCategories()));
+//			
+//			/* Date Format */
+//			auction.setEnds(formatEndString(auction.getXmlEnds()));		// Ends in 2017
+//			auction.setStarted(formatString(auction.getXmlStarted()));
+//			
+//			/* Format Auction Money */
+//			auction.setBuyPrice(formatMoney(auction.getBuyPriceString()));
+//			auction.setCurrently(formatMoney(auction.getCurrentlyString()));
+//			auction.setFirstBid(formatMoney(auction.getFirstBidString()));
+//			
+//			/* IsBought */
+//			if(auction.getEnds().getTime() < new Date().getTime())
+//				auction.setBought(true);
+//			else
+//				auction.setBought(false);
+//			
+//			/*Persist Auction */
+//			Auction dbauction = auctionRepository.saveAndFlush(auction);
+//			
+//			/* Auction Biddings */
+//			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
+//			
+//			int i = 1;
+//			for(AuctionBidding bid : xmlbiddings) {
+//				
+//				bid.setUser(saveBidderUser(bid.getUser()));	// save and return bidder
+//				
+//				bid.setAuction(dbauction);	//setAuction
+//				
+//				bid.setTime(formatString(bid.getXmlTime()));
+//				
+//				AuctionBiddingPK auctionBiddingPK = new AuctionBiddingPK();
+//				auctionBiddingPK.setAuctionid(dbauction.getAuctionid());
+//				auctionBiddingPK.setBidderUserid(bid.getUser().getUserid());
+//				/* Format Amount Money */
+//				auctionBiddingPK.setAmount(formatMoney(bid.getAmountString()));
+//				
+//				bid.setId(auctionBiddingPK);
+//				
+//				auctionBiddingRepository.save(bid);
+//				
+//				/* Buyer */
+//				if(i == dbauction.getNumberOfBids()) {
+//					dbauction.setBuyer(bid.getUser());
+//					auctionRepository.saveAndFlush(dbauction);
+//				}
+//				
+//				i++;
+//			}
+//		}
+		
+		/* Update Server categories.jsp */
+		String html = categoryService.getMenuHtml();
+		
+		try {
+			
+			File fileOld = new File(servletContext.getRealPath("/resources/template"), "categories.jsp");
+			fileOld.delete();
+			File fileNew = new File(servletContext.getRealPath("/resources/template"), "categories.jsp");
+			
+			PrintWriter out = new PrintWriter(fileNew);
+			
+			out.print(html);
+			
+			out.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		/* Update Application categories.jsp */
+		
+		try {
+			
+			File fileOld = new File(templatePath, "categories.jsp");
+			fileOld.delete();
+			File fileNew = new File(templatePath, "categories.jsp");
+			
+			PrintWriter out = new PrintWriter(fileNew);
+			
+			out.print(html);
+			
+			out.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Transactional
+	public void saveXmlCategories(List<Auction> auctions) {
+		
 		for(Auction auction : auctions) {
 			
-			/* Seller */
-			auction.setUser(saveSellerUser(auction.getXmlSeller()));
-			
-			/* Location */
-			auction.setLocation(saveLocation(auction.getLocation()));
-			
 			/*Categories */
-			auction.setCategories(saveCategories(auction.getCategories()));
+			saveCategories(auction.getCategories());
 			
-			/* Date Format */
-			auction.setEnds(formatEndString(auction.getXmlEnds()));		// Ends in 2017
-			auction.setStarted(formatString(auction.getXmlStarted()));
-			
-			/* Format Auction Money */
-			auction.setBuyPrice(formatMoney(auction.getBuyPriceString()));
-			auction.setCurrently(formatMoney(auction.getCurrentlyString()));
-			auction.setFirstBid(formatMoney(auction.getFirstBidString()));
-			
-			/* IsBought */
-			if(auction.getEnds().getTime() < new Date().getTime())
-				auction.setBought(true);
-			else
-				auction.setBought(false);
-			
-			/*Persist Auction */
-			Auction dbauction = auctionRepository.saveAndFlush(auction);
-			
-			/* Auction Biddings */
-			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
-			
-			int i = 1;
-			for(AuctionBidding bid : xmlbiddings) {
-				
-				bid.setUser(saveBidderUser(bid.getUser()));	// save and return bidder
-				
-				bid.setAuction(dbauction);	//setAuction
-				
-				bid.setTime(formatString(bid.getXmlTime()));
-				
-				AuctionBiddingPK auctionBiddingPK = new AuctionBiddingPK();
-				auctionBiddingPK.setAuctionid(dbauction.getAuctionid());
-				auctionBiddingPK.setBidderUserid(bid.getUser().getUserid());
-				/* Format Amount Money */
-				auctionBiddingPK.setAmount(formatMoney(bid.getAmountString()));
-				
-				bid.setId(auctionBiddingPK);
-				
-				/* Format Amount Money */
-//				bid.setAmount(formatMoney(bid.getAmountString()));
-				
-				auctionBiddingRepository.save(bid);
-				
-				/* Buyer */
-				if(i == dbauction.getNumberOfBids()) {
-					dbauction.setBuyer(bid.getUser());
-					auctionRepository.saveAndFlush(dbauction);
-				}
-				
-				i++;
-			}
 		}
 	}
 

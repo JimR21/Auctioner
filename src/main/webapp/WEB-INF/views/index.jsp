@@ -37,7 +37,7 @@
             <sec:authorize ifNotGranted="ROLE_ANONYMOUS">
                 <sec:authorize ifNotGranted="ROLE_ADMIN">
                     <div class="col-lg-12 text-center intro-div">
-                        <h1>Welcome to Auctioner <sec:authentication property="name" />!</h1>
+                        <h1 style="font-size: 63px;">Welcome to Auctioner <sec:authentication property="name" />!</h1>
                         <p class="lead">Buy and Sell Anything</p>
                         <div class="col-md-offset-3 col-md-2">
                             <a class="btn btn-lg btn-success btn-block" href="/Auctioner/myprofile">My Account</a>
@@ -59,7 +59,7 @@
                 </sec:authorize>
                 <sec:authorize ifAnyGranted="ROLE_ADMIN">
                     <div class="col-lg-12 text-center intro-div">
-                        <h1>Welcome Admin!</h1>
+                        <h1 style="font-size: 63px;">Welcome Admin!</h1>
                         <div class="col-md-offset-3 col-md-2">
                             <a class="btn btn-lg btn-success btn-block" href="/Auctioner/admin-users">Users</a>
                         </div>
@@ -74,7 +74,7 @@
             </sec:authorize>
             <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
                 <div class="col-lg-12 text-center intro-div">
-                    <h1>Welcome to Auctioner!</h1>
+                    <h1 style="font-size: 63px;">Welcome to Auctioner!</h1>
                     <p class="lead">Buy and Sell Anything</p>
                     <div class="col-md-offset-4 col-md-2">
                         <a class="btn btn-lg btn-success btn-block" href="/Auctioner/login">Login</a>

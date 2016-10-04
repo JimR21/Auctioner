@@ -416,5 +416,13 @@ public class UserController {
 		
 		return "200";
 	}
+	
+	@RequestMapping(value = "/rate/bidder/{id}", method = RequestMethod.POST)
+	public @ResponseBody String rateBidder(Model model, @PathVariable Integer id, @RequestParam("rating") Float rating) {
+		
+		userService.rateBidder(id, rating);
+		
+		return "200";
+	}
 
 }

@@ -3,8 +3,9 @@
 <link href=<c:url value="/resources/css/bootstrap-custom.css" /> rel="stylesheet" type="text/css">
 <link href=<c:url value="/resources/css/iconmoon.css" /> rel="stylesheet" type="text/css">
 <link href=<c:url value="/resources/css/jquery.mCustomScrollbar.min.css" /> rel="stylesheet" type="text/css">
-<link href=<c:url value="/resources/css/topnav.css" /> rel="stylesheet" type="text/css">
+<link href=<c:url value="/resources/css/hover.css" /> rel="stylesheet" type="text/css">
 <link href=<c:url value="/resources/css/style.css" /> rel="stylesheet" type="text/css">
+<link href=<c:url value="/resources/css/topnav.css" /> rel="stylesheet" type="text/css">
 
 
 <%--Top Navbar --%>

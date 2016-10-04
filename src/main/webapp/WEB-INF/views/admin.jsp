@@ -119,7 +119,7 @@
                                 <h4 class="panel-title">Users</h4>
                             </div>
                             <div class="panel-body">
-			                    <span class="dash-number text-center">${dashboard.userNum}</span>
+			                    <div class="dash-number text-center">${dashboard.userNum}</div>
                             </div>
                         </div>
 			        </div>
@@ -129,7 +129,7 @@
                                 <h4 class="panel-title">Bidders</h4>
                             </div>
                             <div class="panel-body">
-                                <span class="dash-number text-center">${dashboard.bidders}</span>
+                                <div class="dash-number text-center">${dashboard.bidders}</div>
                             </div>
                         </div>
 			        </div>
@@ -139,7 +139,7 @@
                                 <h4 class="panel-title">Auctioneers</h4>
                             </div>
                             <div class="panel-body">
-                                <span class="dash-number text-center">${dashboard.sellers}</span>
+                                <div class="dash-number text-center">${dashboard.sellers}</div>
                             </div>
                         </div>
 			        </div>
@@ -149,7 +149,7 @@
                                 <h4 class="panel-title">Auctions</h4>
                             </div>
                             <div class="panel-body">
-                                <span class="dash-number text-center">${dashboard.auctionNum}</span>
+                                <div class="dash-number text-center">${dashboard.auctionNum}</div>
                             </div>
                         </div>
 			        </div>
@@ -259,13 +259,14 @@
         }).on('filebatchpreupload', function(event, data, id, index) {
             $('#success-1').html('<h4>Upload Status</h4><ul></ul>').hide();
         }).on('fileuploaded', function(event, data, id, index) {
+            console.log(JSON.stringify(data));
             var fname = data.files[index].name,
                 out = '<li>' + 'Uploaded file # ' + (index + 1) + ' - '  +
                     fname + ' successfully.' + '</li>'+
-                    '<li>' + data.auctions + ' new Auctions</li>' +
-                    '<li>' + data.users + " new Users</li>" +
-                    '<li>' + data.bids + " new Bids</li>" +
-                    '<li>' + data.categories + " new Categories</li>";
+                    '<li>' + data.response.auctions + ' new Auctions</li>' +
+                    '<li>' + data.response.users + " new Users</li>" +
+                    '<li>' + data.response.bids + " new Bids</li>" +
+                    '<li>' + data.response.categories + " new Categories</li>";
             $('#success-1 ul').append(out);
             $('#success-1').fadeIn('slow');
         });

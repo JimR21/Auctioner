@@ -35,6 +35,12 @@
 		class="org.springframework.context.support.ResourceBundleMessageSource" 
 		p:basename="messages">
 	</bean>
+	
+	<bean name="auctionerProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	    <property name="locations">
+	            <value>classpath*:auctioner.properties</value>
+	    </property>
+	</bean>
 
 
 </beans>

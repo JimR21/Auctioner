@@ -203,8 +203,8 @@ public class UserServiceImpl implements UserService {
 		bidderRatingRepository.saveAndFlush(bidderRating);
 		
 		/* Update Overall Rating */
-		float newAvgRating = sellerRatingRepository.userAvgRating(rated);
-		rated.setSellerRating(newAvgRating);
+		float newAvgRating = bidderRatingRepository.userAvgRating(rated);
+		rated.setBidderRating(newAvgRating);
 		rated.setNumberOfBidderRatings(rated.getNumberOfBidderRatings()+1);
 		
 		/* Update rated User */
