@@ -1,6 +1,6 @@
 var auctionIds = [];
 
-$(':checkbox').change(function() {
+$('.auc:checkbox').change(function() {
 	if(this.checked) {
 		/* Add class="info" (Blue color) */
 		$(this).closest('tr').addClass('info', '200');
@@ -9,7 +9,7 @@ $(':checkbox').change(function() {
 	    var id = $(this).val();
 	    auctionIds.push(id);
 
-        console.log('ids: ' + auctionIds);
+        console.log('id: ' + auctionIds);
 	}
 	else {
 		/* Remove class="info" (Blue Color) */

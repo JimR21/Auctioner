@@ -27,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ted.model.Auction;
+import com.ted.model.AuctionBidding;
+import com.ted.model.AuctionBiddingPK;
 import com.ted.model.Authority;
 import com.ted.model.AuthorityPK;
 import com.ted.model.Category;
@@ -77,69 +79,91 @@ public class XmlServiceImpl implements XmlService {
 	@Value("${template.path}")
 	private String templatePath;
 	
+	private HashMap<String, User> userMap = new HashMap<>();
+	
+	private HashMap<String, Location> locationMap = new HashMap<>();
+	
+	private HashMap<String, Category> categoryMap = new HashMap<>();
+	
 	@Transactional
 	public void saveXmlAuction(List<Auction> auctions) {
 		
-//		for(Auction auction : auctions) {
-//			
-//			/* Seller */
-//			auction.setUser(saveSellerUser(auction.getXmlSeller()));
-//			
-//			/* Location */
-//			auction.setLocation(saveLocation(auction.getLocation()));
-//			
-//			/*Categories */
-//			auction.setCategories(saveCategories(auction.getCategories()));
-//			
-//			/* Date Format */
-//			auction.setEnds(formatEndString(auction.getXmlEnds()));		// Ends in 2017
-//			auction.setStarted(formatString(auction.getXmlStarted()));
-//			
-//			/* Format Auction Money */
-//			auction.setBuyPrice(formatMoney(auction.getBuyPriceString()));
-//			auction.setCurrently(formatMoney(auction.getCurrentlyString()));
-//			auction.setFirstBid(formatMoney(auction.getFirstBidString()));
-//			
-//			/* IsBought */
-//			if(auction.getEnds().getTime() < new Date().getTime())
-//				auction.setBought(true);
-//			else
-//				auction.setBought(false);
-//			
-//			/*Persist Auction */
-//			Auction dbauction = auctionRepository.saveAndFlush(auction);
-//			
-//			/* Auction Biddings */
-//			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
-//			
-//			int i = 1;
-//			for(AuctionBidding bid : xmlbiddings) {
-//				
-//				bid.setUser(saveBidderUser(bid.getUser()));	// save and return bidder
-//				
-//				bid.setAuction(dbauction);	//setAuction
-//				
-//				bid.setTime(formatString(bid.getXmlTime()));
-//				
-//				AuctionBiddingPK auctionBiddingPK = new AuctionBiddingPK();
-//				auctionBiddingPK.setAuctionid(dbauction.getAuctionid());
-//				auctionBiddingPK.setBidderUserid(bid.getUser().getUserid());
-//				/* Format Amount Money */
-//				auctionBiddingPK.setAmount(formatMoney(bid.getAmountString()));
-//				
-//				bid.setId(auctionBiddingPK);
-//				
-//				auctionBiddingRepository.save(bid);
-//				
-//				/* Buyer */
-//				if(i == dbauction.getNumberOfBids()) {
-//					dbauction.setBuyer(bid.getUser());
-//					auctionRepository.saveAndFlush(dbauction);
-//				}
-//				
-//				i++;
-//			}
-//		}
+		/* User HashMap */
+		List<User> users = userRepository.findAll();
+		for(User user : users)
+			userMap.put(user.getUsername(), user);
+		
+		/* Location HashMap */
+		List<Location> locations = locationRepository.findAll();
+		for(Location location : locations)
+			locationMap.put(location.getName(), location);
+		
+		/* Categories HashMap */
+		List<Category> allCategories = categoryRepository.findAll();
+		for(Category cat : allCategories) {
+			categoryMap.put(cat.getName(), cat);
+		}
+		
+		for(Auction auction : auctions) {
+			
+			/* Seller */
+			auction.setUser(saveSellerUser(auction.getXmlSeller()));
+			
+			/* Location */
+			auction.setLocation(saveLocation(auction.getLocation()));
+			
+			/*Categories */
+			auction.setCategories(saveCategories(auction.getCategories()));
+			
+			/* Date Format */
+			auction.setEnds(formatEndString(auction.getXmlEnds()));		// Ends in 2017
+			auction.setStarted(formatString(auction.getXmlStarted()));
+			
+			/* Format Auction Money */
+			auction.setBuyPrice(formatMoney(auction.getBuyPriceString()));
+			auction.setCurrently(formatMoney(auction.getCurrentlyString()));
+			auction.setFirstBid(formatMoney(auction.getFirstBidString()));
+			
+			/* IsBought */
+			if(auction.getEnds().getTime() < new Date().getTime())
+				auction.setBought(true);
+			else
+				auction.setBought(false);
+			
+			/*Persist Auction */
+			Auction dbauction = auctionRepository.saveAndFlush(auction);
+			
+			/* Auction Biddings */
+			List<AuctionBidding> xmlbiddings = auction.getAuctionBiddings();
+			
+			int i = 1;
+			for(AuctionBidding bid : xmlbiddings) {
+				
+				bid.setUser(saveBidderUser(bid.getUser()));	// save and return bidder
+				
+				bid.setAuction(dbauction);	//setAuction
+				
+				bid.setTime(formatString(bid.getXmlTime()));
+				
+				AuctionBiddingPK auctionBiddingPK = new AuctionBiddingPK();
+				auctionBiddingPK.setAuctionid(dbauction.getAuctionid());
+				auctionBiddingPK.setBidderUserid(bid.getUser().getUserid());
+				/* Format Amount Money */
+				auctionBiddingPK.setAmount(formatMoney(bid.getAmountString()));
+				
+				bid.setId(auctionBiddingPK);
+				
+				auctionBiddingRepository.save(bid);
+				
+				/* Buyer */
+				if(i == dbauction.getNumberOfBids()) {
+					dbauction.setBuyer(bid.getUser());
+					auctionRepository.saveAndFlush(dbauction);
+				}
+				
+				i++;
+			}
+		}
 		
 		/* Update Server categories.jsp */
 		String html = categoryService.getMenuHtml();
@@ -204,7 +228,7 @@ public class XmlServiceImpl implements XmlService {
 		String[] cities = {"Atalanta", "Chicago", "New York"};
 		
 		/* Check if user exists */
-		User dbuser = userRepository.findByUsername(user.getUsername());
+		User dbuser = userMap.get(user.getUsername());
 		if(dbuser != null)
 			return dbuser;
 		
@@ -241,7 +265,8 @@ public class XmlServiceImpl implements XmlService {
 		user.setSellerRating(r);
 		
 		/* Persist User */
-		userRepository.save(user);
+		user = userRepository.save(user);
+		userMap.put(user.getUsername(), user);
 		
 		/* Authority Role */
 		AuthorityPK authorityPK = new AuthorityPK();
@@ -255,7 +280,7 @@ public class XmlServiceImpl implements XmlService {
 		/* Persist authority */
 		authorityRepository.saveAndFlush(authority);
 		
-		return userRepository.findByUsername(user.getUsername());
+		return user;
 	}
 	
 	@Transactional
@@ -270,7 +295,7 @@ public class XmlServiceImpl implements XmlService {
 		String[] cities = {"Atalanta", "Chicago", "New York"};
 		
 		/* Check if user exists */
-		User dbuser = userRepository.findByUsername(seller.getUsername());
+		User dbuser = userMap.get(seller.getUsername());
 		if(dbuser != null) {
 		
 			/* Add ROLE_SELLER */
@@ -328,7 +353,8 @@ public class XmlServiceImpl implements XmlService {
 		user.setSellerRating(r);
 		
 		/* Persist User */
-		userRepository.save(user);
+		user = userRepository.save(user);
+		userMap.put(user.getUsername(), user);
 		
 		/* Authorities Role */
 		AuthorityPK authorityPK = new AuthorityPK();
@@ -351,7 +377,7 @@ public class XmlServiceImpl implements XmlService {
 		authorityRepository.save(authority);
 		authorityRepository.save(authority2);
 		
-		return userRepository.findByUsername(user.getUsername());
+		return user;
 	}
 	
 	
@@ -363,29 +389,28 @@ public class XmlServiceImpl implements XmlService {
 	@Transactional
 	public Location saveLocation(Location location) {
 		
-		Location loc = locationRepository.findByName(location.getName());
+		Location loc = locationMap.get(location.getName());
 		
+		if(loc == null) 
+			loc = locationRepository.findByName(location.getName());
+			
 		if(loc == null)
-			locationRepository.save(location);
+			loc = locationRepository.saveAndFlush(location);
 		else if(location.getLatitude() != null || location.getLongitude() != null) {
 			loc.setLatitude(location.getLatitude());
 			loc.setLongitude(location.getLongitude());
-			locationRepository.save(loc);
+			loc = locationRepository.saveAndFlush(loc);
 		}
-		return locationRepository.findByName(location.getName());
+		
+		locationMap.put(loc.getName(), loc);
+		
+		return loc;
 	}
 	
 	@Transactional
 	public List<Category> saveCategories(List<Category> categories) {
 		
 		List<Category> returnList = new ArrayList<Category>();
-		List<Category> allCategories = categoryRepository.findAll();
-		
-		HashMap<String, Category> categoryMap = new HashMap<>();
-		
-		for(Category cat : allCategories) {
-			categoryMap.put(cat.getName(), cat);
-		}
 		
 		Category cat;
 		Category parent = null;

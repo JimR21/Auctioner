@@ -17,7 +17,7 @@
 					<c:forEach items="${users}" var="user">
 					<tr>
 						<td><c:out value="${user.username}"></c:out></td><td><c:out value="${user.firstName}"></c:out></td><td><c:out value="${user.lastName}"></c:out></td><td><c:out value="${user.email}"></c:out></td>
-						<td style="text-align: right">
+						<td id="us">
 							<input type="checkbox" id="approved" name="approved" value="${user.userid }"
 								<c:if test="${user.approved==1}">
 									checked disabled="disabled"
@@ -46,8 +46,6 @@
     </form>
 </div>
 
-<script src=<c:url value="/resources/js/approve.js" />></script>
-
 <script>
 
 	/* All Users Table */
@@ -61,5 +59,68 @@
 			 ]
 		});
 	});
+
+    var namesToApprove = [];
+
+    $('input:checkbox[id^="approved"]').change(function() {
+    	if(this.checked) {
+    		/* Add class="info" (Blue color) */
+    		$(this).closest('tr').addClass('info', '200');
+
+    		/* Add name in Array */
+    	    var Name = $(this).closest('tr').find('td:eq(0)').text();
+            console.log("Name: " + Name);
+    	    namesToApprove.push(Name);
+    	}
+    	else {
+    		/* Remove class="info" (Blue Color) */
+    		$(this).closest('tr').removeClass('info', '200');
+    		var Name = $(this).closest('tr').find('td:eq(0)').text();
+
+    		/* Remove name from Array */
+    		var index = namesToApprove.indexOf(Name);
+    		namesToApprove.splice(index,1);
+    	}
+
+        console.log("names lentgh: " + namesToApprove.length);
+
+    	/* Approve Button Check */
+    	if(namesToApprove.length > 0) {
+    		$('#appr-btn').removeAttr('disabled');
+    	}
+    	else {
+    		$('#appr-btn').attr('disabled', 'disabled');
+    	}
+    });
+
+    /* Ajax Submit */
+    $("#authorize-form").submit(function(e) {
+
+    	e.preventDefault();
+
+    	$.ajax({
+    		url: '/Auctioner/approveUsers',
+       		type: 'POST',
+       		data: {
+    	    	names: namesToApprove
+    	    },
+    	    success: function(data)
+    	    {
+    	    	/* Remove class="info" and name from Array */
+    	    	$('.info').each(function() {
+    	    		$(this).find('input:checkbox').attr('disabled', 'disabled');
+    				$(this).removeClass('info');
+    				namesToApprove = [];
+                    $('#appr-btn').attr('disabled', 'disabled');
+    		   	});
+    	    },
+    		error: function(data)
+    		{
+    			// Debug
+    			alert('error');
+    		}
+    	});
+    });
+
 
 </script>

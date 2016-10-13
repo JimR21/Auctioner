@@ -300,7 +300,6 @@
                                 </p>
                             </div>
                             <div class="col-sm-8" id="map_container">
-                                GoogleMaps
                             </div>
                         </div>
                     </div>
@@ -413,7 +412,6 @@
     <script src=<c:url value="/resources/js/date.format.js" />></script>
     <script src=<c:url value="/resources/js/bootstrap-confirmation.js" />></script>
     <script src=<c:url value="/resources/js/star-rating.min.js" />></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDluUfh1eXZmSKvXQJ1Ctd9nYucJgPIcVo"></script>
 
     <script>
 
@@ -512,9 +510,6 @@
     window.addEventListener('load',
       function() {
         pollforBids();
-        <c:if test="${not empty auction.location.latitude}">
-        loadMap();
-        </c:if>
     }, false);
 
     /* Function to ajax post the bid */
@@ -653,9 +648,11 @@
     }
     </sec:authorize>
 
-
     </script>
 
+    <c:if test="${not empty auction.location.latitude}">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDluUfh1eXZmSKvXQJ1Ctd9nYucJgPIcVo&callback=loadMap" async defer></script>
+    </c:if>
     <script src=<c:url value="/resources/js/auction.js" />></script>
 
 </body>
