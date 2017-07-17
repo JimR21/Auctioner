@@ -1,19 +1,34 @@
 # Auctioner
 Live Auction Web Application 2016
 
+Course: Technology of Web Applications
+
 Professor: Dr. Hamodrakas
 
-# Info
+## Info
 Java Web Application for live auctions. Supports users of 2 roles (Sellers, Bidders) and an administrator. Offers messaging, rating system, real-time bidding, profile and auction customization. Restricted access depending on the user and the visitor.
 
-# Tools Used
+## Technologies and Frameworks Used
+*   JavaEE
+*   JSP
+*   Spring MVC
+*   Spring Security
+*   Spring Data
+*   MySQL
+*   HTML
+*   CSS
+*   Bootstrap
+*   JavaScript
+*   Ajax
+
+## Tools Used
 
 1.  Spring STS - <https://spring.io/tools/sts/all>
 2.  Tomcat 8 Core - <https://tomcat.apache.org/download-80.cgi>
 3.  Mysql
 4.  Trello - <https://trello.com/>
 
-# Helpful Turorials
+## Helpful Tutorials
 
 PluralSight account through DreamSpark - <https://www.dreamspark.com/Product/Product.aspx?productid=21>
 
